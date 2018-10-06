@@ -1,17 +1,22 @@
 package fr.univangers.pacman.model;
 
-public class PositionAgent {
+import java.io.Serializable;
+
+public class PositionAgent implements Serializable {
+
+	private static final long serialVersionUID = -2240234555555290641L;
+
+	public enum Dir { NORTH, SOUTH, EAST, WEST }
 	
 	private int x;
 	private int y;
-	private int dir;
+	private Dir dir;
 	
-	public PositionAgent(int x, int y, int dir) {
-		this.x=x;
-		this.y=y;
-		this.dir=dir;
+	public PositionAgent(int x, int y, Dir dir) {
+		this.x = x;
+		this.y = y;
+		this.dir = dir;
 	}
-
 	
 	public int getX() {
 		return x;
@@ -29,11 +34,11 @@ public class PositionAgent {
 		this.y = y;
 	}
 
-	public int getDir() {
+	public Dir getDir() {
 		return dir;
 	}
 
-	public void setDir(int dir) {
+	public void setDir(Dir dir) {
 		this.dir = dir;
 	}
 	

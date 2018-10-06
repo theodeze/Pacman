@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
+import fr.univangers.pacman.model.Maze;
 import fr.univangers.pacman.model.PositionAgent;
 
 public class PanelPacmanGame extends JPanel{
@@ -110,7 +111,7 @@ public class PanelPacmanGame extends JPanel{
 		
 	}
 
-	void drawPacmans(Graphics g, int px, int py, int pacmanDirection, Color color)
+	void drawPacmans(Graphics g, int px, int py, PositionAgent.Dir pacmanDirection, Color color)
 	{
 
 		int dx = getSize().width;
@@ -132,19 +133,19 @@ public class PanelPacmanGame extends JPanel{
 		int sa=0;
 		int fa=0;
 		
-		if (pacmanDirection==Maze.NORTH)
+		if (pacmanDirection==PositionAgent.Dir.NORTH)
 		{
 			sa=70; fa=-320;
 		}
-		if (pacmanDirection==Maze.SOUTH)
+		if (pacmanDirection==PositionAgent.Dir.SOUTH)
 		{
 			sa=250; fa=-320;
 		}
-		if (pacmanDirection==Maze.EAST)
+		if (pacmanDirection==PositionAgent.Dir.EAST)
 		{
 			sa=340; fa=-320;				
 		}
-		if (pacmanDirection==Maze.WEST)
+		if (pacmanDirection==PositionAgent.Dir.WEST)
 		{
 			sa=160; fa=-320;
 		}

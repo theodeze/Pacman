@@ -8,6 +8,7 @@ import fr.univangers.pacman.view.View;
 public abstract class Game implements Model, Runnable {
 
 	private static final long serialVersionUID = -5712731745471369390L;
+	
 	private List<View> views = new ArrayList<>();
 	private boolean isRunning = false;
 	private boolean isOver = false;

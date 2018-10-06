@@ -1,7 +1,9 @@
 package fr.univangers.pacman.view;
 
 import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
+import java.awt.Point;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -45,6 +47,13 @@ public class ViewCommande extends JFrame implements View {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(2,1));
 
+        Dimension windowSize = getSize();
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        Point centerPoint = ge.getCenterPoint();
+        int dx = centerPoint.x - windowSize.width / 2 ;
+        int dy = centerPoint.y - windowSize.height / 2 - 350;
+        setLocation(dx, dy);   
+        
         panelBtn = new JPanel();
         panelBtn.setLayout(new GridLayout(1,4));
         btnRestart = new JButton(new ImageIcon("res/icons/icon_restart.png"));
