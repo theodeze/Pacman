@@ -49,11 +49,6 @@ public abstract class Game implements Model, Runnable {
 		if(nbTurn < maxTurn) {
 			incNbTurn();
 			takeTurn();
-			try {
-				Thread.sleep((long)time);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
 		} else {
 			isOver = true;
 			gameOver();
@@ -75,6 +70,11 @@ public abstract class Game implements Model, Runnable {
 	public void run() {
 		while(!isOver && isRunning) {
 			step();
+			try {
+				Thread.sleep((long)time);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
 		}
 		isRunning = false;
 	}
