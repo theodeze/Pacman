@@ -11,10 +11,41 @@ public class Agent implements AgentAction, Serializable {
 	private Type type;
 	private PositionAgent position;
 	
-	public Agent(Type type) {
-		this.type = type;
+	public PositionAgent position() {
+		return position;
 	}
-
+	
+	public Agent(Type type, PositionAgent position) {
+		this.type = type;
+		this.position = position;
+	}
+	
+	public PositionAgent newPosition() {
+		PositionAgent newPosition = new PositionAgent(position.getX(), position.getY(), position.getDir());
+		switch(newPosition.getDir()) {
+		case EAST:
+			newPosition.setX(newPosition.getX() + 1);
+			break;
+		case NORTH:
+			newPosition.setY(newPosition.getY() - 1);
+			break;
+		case SOUTH:
+			newPosition.setY(newPosition.getY() + 1);
+			break;
+		case WEST:
+			newPosition.setX(newPosition.getX() - 1);
+			break;
+		default:
+			break;
+		}
+		return newPosition;
+	}
+	
+	@Override
+	public void move() {
+		position = newPosition();
+	}
+	
 	@Override
 	public void goUp() {
 		position.setDir(PositionAgent.Dir.NORTH);

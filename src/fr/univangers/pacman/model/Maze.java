@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Maze implements Serializable{
 	
@@ -32,8 +33,8 @@ public class Maze implements Serializable{
 	/** 
 	 * Les positions initiales des agents
 	 */
-	private ArrayList<PositionAgent> pacman_start;
-	private ArrayList<PositionAgent> ghosts_start;
+	private List<PositionAgent> pacman_start;
+	private List<PositionAgent> ghosts_start;
 
 	
 	public Maze(String filename) throws Exception
@@ -64,8 +65,8 @@ public class Maze implements Serializable{
 			food=new boolean[size_x][size_y];
 			capsules=new boolean[size_x][size_y];
 			
-			pacman_start=new ArrayList<PositionAgent>();
-			ghosts_start =new ArrayList<PositionAgent>();
+			pacman_start =new ArrayList<>();
+			ghosts_start =new ArrayList<>();
 			
 			//Lecture du fichier pour mettre a jour le labyrinthe
 			 ips=new FileInputStream(filename); 
@@ -172,19 +173,19 @@ public class Maze implements Serializable{
 	}
 	
 	
-	public ArrayList<PositionAgent> getPacman_start() {
+	public List<PositionAgent> getPacman_start() {
 		return pacman_start;
 	}
 
-	public void setPacman_start(ArrayList<PositionAgent> pacman_start) {
+	public void setPacman_start(List<PositionAgent> pacman_start) {
 		this.pacman_start = pacman_start;
 	}
 
-	public ArrayList<PositionAgent> getGhosts_start() {
+	public List<PositionAgent> getGhosts_start() {
 		return ghosts_start;
 	}
 
-	public void setGhosts_start(ArrayList<PositionAgent> ghosts_start) {
+	public void setGhosts_start(List<PositionAgent> ghosts_start) {
 		this.ghosts_start = ghosts_start;
 	}
 	

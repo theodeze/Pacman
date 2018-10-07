@@ -15,7 +15,9 @@ public abstract class Game implements Model, Runnable {
 	private int time = 1000;
 	private int nbTurn = 0;
 	private int maxTurn;
-	
+	protected List<PositionAgent> positionPacman = new ArrayList<>();
+	protected List<PositionAgent> positionGhosts = new ArrayList<>();
+
 	public int nbTurn() {
 		return nbTurn;
 	}
@@ -32,6 +34,14 @@ public abstract class Game implements Model, Runnable {
 	
 	public void setTime(int time) {
 		this.time = time;
+	}
+	
+	public List<PositionAgent> positionPacman() {
+		return positionPacman;
+	}
+	
+	public List<PositionAgent> positionGhosts() {
+		return positionGhosts;
 	}
 	
 	public Game(int maxTurn) {

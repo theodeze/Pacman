@@ -17,8 +17,9 @@ public class ViewGame extends JFrame implements View {
 	private static final long serialVersionUID = -2187636929128362263L;
 	private Game game;
 	private JLabel labelCurrentTurn;
+	private PanelPacmanGame panelPacmanGame;
 	
-	public ViewGame(Game game) {
+	public ViewGame(Game game, Maze maze) {
 		super();
 		this.game = game;
 		this.game.addView(this);
@@ -37,18 +38,18 @@ public class ViewGame extends JFrame implements View {
         
         labelCurrentTurn = new JLabel("current turn " + game.nbTurn(), SwingConstants.CENTER);
 		add(labelCurrentTurn, BorderLayout.NORTH);
-        try {
-			add(new PanelPacmanGame(new Maze("res/layouts/originalClassic.lay")), BorderLayout.CENTER);
-		} catch (Exception e) {
-			System.err.println(e.toString());
-		}
-        
+		panelPacmanGame = new PanelPacmanGame(maze);
+		add(panelPacmanGame, BorderLayout.CENTER);
+			
         setVisible(true);
 	}
 	
 	@Override
 	public void update() {
         labelCurrentTurn.setText("current turn " + game.nbTurn());
+        panelPacmanGame.setPacmans_pos(game.positionPacman());
+        panelPacmanGame.setGhosts_pos(game.positionGhosts());
+        panelPacmanGame.repaint();
 	}
 
 }

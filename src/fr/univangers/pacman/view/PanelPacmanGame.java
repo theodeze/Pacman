@@ -3,6 +3,8 @@ package fr.univangers.pacman.view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JPanel;
 
 import fr.univangers.pacman.model.Maze;
@@ -29,8 +31,8 @@ public class PanelPacmanGame extends JPanel{
 
 	Maze m;
 	
-	private ArrayList<PositionAgent> pacmans_pos;
-	private ArrayList<PositionAgent> ghosts_pos;
+	private List<PositionAgent> pacmans_pos;
+	private List<PositionAgent> ghosts_pos;
 	
 	
 	private boolean ghostsScarred;
@@ -193,19 +195,19 @@ public class PanelPacmanGame extends JPanel{
 	}
 	
 
-	public ArrayList<PositionAgent> getPacmans_pos() {
+	public List<PositionAgent> getPacmans_pos() {
 		return pacmans_pos;
 	}
 
-	public void setPacmans_pos(ArrayList<PositionAgent> pacmans_pos) {
+	public void setPacmans_pos(List<PositionAgent> pacmans_pos) {
 		this.pacmans_pos = pacmans_pos;
 	}
 
-	public ArrayList<PositionAgent> getGhosts_pos() {
+	public List<PositionAgent> getGhosts_pos() {
 		return ghosts_pos;
 	}
 
-	public void setGhosts_pos(ArrayList<PositionAgent> ghosts_pos) {
+	public void setGhosts_pos(List<PositionAgent> ghosts_pos) {
 		this.ghosts_pos = ghosts_pos;
 	}
 
