@@ -19,7 +19,7 @@ public class TestPacmanGame {
 		PacmanGameController pacmanGameController = new PacmanGameController(pacmanGame);
 		ViewCommande viewCommande = new ViewCommande(pacmanGame); 
 		viewCommande.setGameController(pacmanGameController);
-		new ViewGame(pacmanGame, maze);
+		new ViewGame(pacmanGame, pacmanGameController, maze);
 	}
 
 }

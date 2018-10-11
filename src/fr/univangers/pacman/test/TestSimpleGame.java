@@ -19,7 +19,7 @@ public class TestSimpleGame {
 		SimpleGameController simpleGameController = new SimpleGameController(simpleGame);
 		ViewCommande viewCommande = new ViewCommande(simpleGame); 
 		viewCommande.setGameController(simpleGameController);
-		new ViewGame(simpleGame, maze);
+		new ViewGame(simpleGame, simpleGameController, maze);
 	}
 
 }

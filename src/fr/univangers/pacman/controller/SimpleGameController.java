@@ -1,5 +1,6 @@
 package fr.univangers.pacman.controller;
 
+import fr.univangers.pacman.model.PositionAgent.Dir;
 import fr.univangers.pacman.model.SimpleGame;
 
 public class SimpleGameController implements GameController {
@@ -34,6 +35,11 @@ public class SimpleGameController implements GameController {
 	@Override
 	public void step() {
 		simpleGame.step();
+	}
+
+	@Override
+	public void movePacmanPlayer1(Dir dir) {
+		throw new UnsupportedOperationException();
 	}
 
 }

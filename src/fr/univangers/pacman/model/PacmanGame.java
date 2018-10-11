@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import fr.univangers.pacman.model.PositionAgent.Dir;
+
 public class PacmanGame extends Game {
 
 	private static final long serialVersionUID = 998416452804755455L;
@@ -12,6 +14,7 @@ public class PacmanGame extends Game {
 	private List<Agent> pacmans = new ArrayList<>();
 	private List<Agent> ghosts = new ArrayList<>();
 	private Random r = new Random();
+	private int nbTurnVulnerables;
 	
 	public int score() {
 		return score;
@@ -24,13 +27,13 @@ public class PacmanGame extends Game {
 	}
 	
 	private void updatePosition() {
-		positionPacman.clear();
+		clearPositionPacman();
 		for(Agent pacman : pacmans) {
-			positionPacman.add(pacman.position());
+			addPositionPacman(pacman.position());
 		}
-		positionGhosts.clear();
+		clearPositionGhosts();
 		for(Agent ghost : ghosts) {
-			positionGhosts.add(ghost.position());
+			addPositionGhosts(ghost.position());
 		}
 		notifyViews();
 	}
@@ -40,10 +43,30 @@ public class PacmanGame extends Game {
 		return !maze.isWall(newPosition.getX(), newPosition.getY());
 	}
 	
+	public void movePacmanPlayer1(Dir dir) {
+		Agent p1 = pacmans.get(0);
+		switch(dir) {
+		case EAST:
+			p1.goRight();
+			break;
+		case NORTH:
+			p1.goUp();
+			break;
+		case SOUTH:
+			p1.goDown();
+			break;
+		case WEST:
+			p1.goLeft();
+			break;
+		default:
+			break;
+		}
+	}
+	
 	public void moveAgent(Agent agent) {
 		if(isLegalMove(agent)) {
 			agent.move();
-		} else {
+		} /*else {
 			switch(r.nextInt(4)) {
 			case 0:
 				agent.goUp();
@@ -60,7 +83,7 @@ public class PacmanGame extends Game {
 			default:
 				break;
 			}
-		}
+		}*/
 	}
 	
 	@Override
@@ -78,6 +101,11 @@ public class PacmanGame extends Game {
 
 	@Override
 	public void takeTurn() {
+		if(nbTurnVulnerables == 0) {
+			setGhostsScarred(false);
+		} else {
+			nbTurnVulnerables--;
+		}
 		for(Agent pacman : pacmans) {
 			moveAgent(pacman);
 			if(maze.isFood(pacman.position().getX(), pacman.position().getY())) {
@@ -86,6 +114,8 @@ public class PacmanGame extends Game {
 			}
 			if(maze.isCapsule(pacman.position().getX(), pacman.position().getY())) {
 				maze.setCapsule(pacman.position().getX(), pacman.position().getY(), false);
+				setGhostsScarred(true);
+				nbTurnVulnerables = 20;
 				score += 10;
 			}
 		}
@@ -98,10 +128,10 @@ public class PacmanGame extends Game {
 	@Override
 	public void gameOver() {
 		if(pacmans.isEmpty()) {
-			System.out.println("Les fantomes ont gagnée");
+			System.out.println("Les fantomes ont gagnï¿½e");
 		}
 		if(ghosts.isEmpty()) {
-			System.out.println("Les pacmans ont gagnée");
+			System.out.println("Les pacmans ont gagnï¿½e");
 		}
 	}
 

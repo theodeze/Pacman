@@ -1,6 +1,7 @@
 package fr.univangers.pacman.controller;
 
 import fr.univangers.pacman.model.PacmanGame;
+import fr.univangers.pacman.model.PositionAgent.Dir;
 
 public class PacmanGameController implements GameController {
 	
@@ -34,6 +35,11 @@ public class PacmanGameController implements GameController {
 	@Override
 	public void step() {
 		pacmanGame.step();
+	}
+
+	@Override
+	public void movePacmanPlayer1(Dir dir) {
+		pacmanGame.movePacmanPlayer1(dir);
 	}
 
 
