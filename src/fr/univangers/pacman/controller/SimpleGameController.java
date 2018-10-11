@@ -38,7 +38,12 @@ public class SimpleGameController implements GameController {
 	}
 
 	@Override
-	public void movePacmanPlayer1(Dir dir) {
+	public void movePlayer1(Dir dir) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void movePlayer2(Dir dir) {
 		throw new UnsupportedOperationException();
 	}
 

@@ -2,21 +2,25 @@ package fr.univangers.pacman.model;
 
 import java.io.Serializable;
 
+import fr.univangers.pacman.model.state.State;
+import fr.univangers.pacman.model.state.Vulnerable;
+import fr.univangers.pacman.model.state.Death;
+import fr.univangers.pacman.model.state.Life;
+
 public class Agent implements AgentAction, Serializable {
 	
 	private static final long serialVersionUID = 1968499836498466437L;
 	
 	public enum Type { PACMAN, GHOST }
 	
-	private Etat etatVie;
-	private Etat etatMort;
-	private Etat etatInverse;
+	private State etatVie;
+	private State etatMort;
+	private State etatInverse;
 	
-	private Etat etatActuel;
+	private State etatActuel;
 	
 	private Type type;
 	private PositionAgent position;
-	private PacmanGame game;
 	private int nbTurnDeath;
 	
 	public PositionAgent position() {
@@ -27,9 +31,9 @@ public class Agent implements AgentAction, Serializable {
 		this.type = type;
 		this.position = position;
 		this.nbTurnDeath = 0;
-		this.etatVie= new EtatVie(this);
-		this.etatMort= new EtatMort(this);
-		this.etatInverse= new EtatInverse(this);
+		this.etatVie= new Life(this);
+		this.etatMort= new Death(this);
+		this.etatInverse= new Vulnerable(this);
 		
 		vivant();	
 		}
@@ -86,31 +90,29 @@ public class Agent implements AgentAction, Serializable {
 	
 	
 	public void vivant() {
-		// TODO Auto-generated method stub
-		etatActuel=etatVie;
+		etatActuel = etatVie;
 	}
 
 	public void mort() {
-		// TODO Auto-generated method stub
-		etatActuel=etatMort;
+		etatActuel = etatMort;
 	}
 	
 	public void inversion() {
-		// TODO Auto-generated method stub
-		etatActuel=etatInverse;
+		etatActuel = etatInverse;
 	}
 	
-	public Etat getEtatActuel() {
+	public State getEtatActuel() {
 		return etatActuel;
 	}
 
 	public void deathTurn() {
-		if(etatActuel==etatMort) {
-			System.out.println("nbtour : "+nbTurnDeath);
-			if(nbTurnDeath>=20)
+		if(etatActuel == etatMort) {
+			if(nbTurnDeath >= 20) {
 				vivant();
-			else 
+				nbTurnDeath = 0;
+			} else { 
 				nbTurnDeath++;
+			}
 		}
 	}
 

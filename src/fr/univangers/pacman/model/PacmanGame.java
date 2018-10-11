@@ -11,11 +11,10 @@ import fr.univangers.pacman.model.PositionAgent.Dir;
 public class PacmanGame extends Game {
 
 	private static final long serialVersionUID = 998416452804755455L;
-	public final static int VIVANT=0;
-	public final static int MORT=1;
-	public final static int INVERSE=2;	
-	public final static int nbVieMax=3;
-
+	public static final int VIVANT=0;
+	public static final int MORT=1;
+	public static final int INVERSE=2;	
+	public static final int nbVieMax=3;
 	
 	private Maze maze;
 	private int score = 0;
@@ -24,7 +23,9 @@ public class PacmanGame extends Game {
 	private List<Integer> nbViePacmans = new ArrayList<>();
 	private Random r = new Random();
 	private int nbTurnVulnerables;
-
+	private int nbFood = 0;
+	private int scorePerGhosts = 200;
+	
 	public int score() {
 		return score;
 	}
@@ -128,6 +129,12 @@ public class PacmanGame extends Game {
 		for(PositionAgent position : maze.getGhosts_start()) {
 			ghosts.add(new Agent(Agent.Type.GHOST, position));
 		}
+		nbFood = 0;
+		for(int x = 0; x < maze.getSizeX(); x++) {
+			for(int y = 0; y < maze.getSizeY(); y++) {
+				nbFood += maze.isFood(x, y) ? 1 : 0;
+			}
+		}
 	}
 
 	@Override
@@ -143,7 +150,9 @@ public class PacmanGame extends Game {
 					ghost.vivant();
 			}
 			nbTurnVulnerables--;
-		} else {
+			scorePerGhosts = 200;
+		} 
+		if(nbTurnVulnerables > 0) {
 			nbTurnVulnerables--;
 		}
 		for(Agent pacman : pacmans) {
@@ -151,6 +160,7 @@ public class PacmanGame extends Game {
 			if(maze.isFood(pacman.position().getX(), pacman.position().getY())) {
 				maze.setFood(pacman.position().getX(), pacman.position().getY(), false);
 				score += 10;
+				nbFood--;
 			}
 			if(maze.isCapsule(pacman.position().getX(), pacman.position().getY())) {
 				maze.setCapsule(pacman.position().getX(), pacman.position().getY(), false);
@@ -161,7 +171,7 @@ public class PacmanGame extends Game {
 						ghost.inversion();
 				}
 				nbTurnVulnerables = 20;
-				score += 10;
+				score += 50;
 			}
 		}
 		for(Agent ghost : ghosts) {
@@ -176,10 +186,10 @@ public class PacmanGame extends Game {
 	@Override
 	public void gameOver() {
 		if(pacmans.isEmpty()) {
-			System.out.println("Les fantomes ont gagn�e");
+			System.out.println("Les fantomes ont gagnée");
 		}
-		if(ghosts.isEmpty()) {
-			System.out.println("Les pacmans ont gagn�e");
+		if(nbFood == 0) {
+			System.out.println("Les pacmans ont gagnée");
 		}
 	}
 	
@@ -209,6 +219,8 @@ public class PacmanGame extends Game {
 				if ((ghost.position().getX()==pacman.position().getX())&&(ghost.position().getY()==pacman.position().getY())) {
 					if (pacman.getEtatActuel().getEtat()==INVERSE) {
 						ghost.mort();
+						score += scorePerGhosts;
+						scorePerGhosts *= 2;
 					}
 					
 					else {
@@ -226,7 +238,9 @@ public class PacmanGame extends Game {
 		if(pacmans.isEmpty()) {
 			over();
 		}
-		
+		if(nbFood == 0) {
+			over();
+		}
 	}
 	
 	

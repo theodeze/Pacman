@@ -27,6 +27,7 @@ public class ViewGame extends JFrame implements View, KeyListener {
 	private JPanel panelInfo;
 	private JLabel labelCurrentTurn;
 	private JLabel labelScore;
+	private JLabel labelLife;
 	private PanelPacmanGame panelPacmanGame;
 	
 	public ViewGame(Game game, GameController gameController, Maze maze) {
@@ -55,6 +56,8 @@ public class ViewGame extends JFrame implements View, KeyListener {
         labelCurrentTurn = new JLabel("Current turn " + game.nbTurn(), SwingConstants.CENTER);
         panelInfo.add(labelCurrentTurn);
 		if(game instanceof PacmanGame) {
+			labelLife = new JLabel("Vie " + ((PacmanGame)game).getNbViePacman(0), SwingConstants.CENTER);
+			panelInfo.add(labelLife);
 			labelScore = new JLabel("Score " + ((PacmanGame)game).score(), SwingConstants.CENTER);
 			panelInfo.add(labelScore);
 		}
@@ -70,6 +73,7 @@ public class ViewGame extends JFrame implements View, KeyListener {
 	public void update() {
         labelCurrentTurn.setText("current turn " + game.nbTurn());
 		if(game instanceof PacmanGame) {
+			labelLife.setText("Vie " + ((PacmanGame)game).getNbViePacman(0));
 			labelScore.setText("Score " + ((PacmanGame)game).score());
 		}
         panelPacmanGame.setPacmans_pos(game.positionPacman());
@@ -81,15 +85,38 @@ public class ViewGame extends JFrame implements View, KeyListener {
 	@Override
 	public void keyPressed(KeyEvent keyEvent) {
         int code = keyEvent.getKeyCode();
-        if (code == KeyEvent.VK_LEFT) {
-            gameController.movePacmanPlayer1(Dir.WEST);
-        } else if(code == KeyEvent.VK_UP) {
-            gameController.movePacmanPlayer1(Dir.NORTH);
-        } else if(code == KeyEvent.VK_DOWN) {
-            gameController.movePacmanPlayer1(Dir.SOUTH);
-        } else if(code == KeyEvent.VK_RIGHT) {
-            gameController.movePacmanPlayer1(Dir.EAST);
+        switch(code) {
+        case KeyEvent.VK_LEFT:
+            gameController.movePlayer1(Dir.WEST);
+        	break;
+        case KeyEvent.VK_UP:
+            gameController.movePlayer1(Dir.NORTH);
+        	break;
+        case KeyEvent.VK_DOWN:
+            gameController.movePlayer1(Dir.SOUTH);
+        	break;
+        case KeyEvent.VK_RIGHT:
+            gameController.movePlayer1(Dir.EAST);
+        	break;
+        case KeyEvent.VK_Q:
+            gameController.movePlayer2(Dir.WEST);
+        	break;
+        case KeyEvent.VK_Z:
+            gameController.movePlayer2(Dir.NORTH);
+        	break;
+        case KeyEvent.VK_S:
+            gameController.movePlayer2(Dir.SOUTH);
+        	break;
+        case KeyEvent.VK_D:
+            gameController.movePlayer2(Dir.WEST);
+        	break;
+        case KeyEvent.VK_P:
+        	gameController.pause();
+        	break;
+        default:
+        	break;
         }
+        
 	}
 
 	@Override
