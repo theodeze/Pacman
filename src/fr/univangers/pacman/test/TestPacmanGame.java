@@ -2,6 +2,7 @@ package fr.univangers.pacman.test;
 
 import java.awt.BorderLayout;
 import java.io.File;
+import java.util.Vector;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -18,19 +19,37 @@ public class TestPacmanGame {
 
 	public static void main(String[] args) {
 		File directory = new File("res/layouts");
-	    JComboBox<File> list = new JComboBox<>(directory.listFiles());
-	    JPanel panel = new JPanel(new BorderLayout());
-	    panel.add(new JLabel("Choix map :"), BorderLayout.NORTH);
-	    panel.add(list);
-        JOptionPane.showMessageDialog(null, panel, "Choix map", JOptionPane.QUESTION_MESSAGE);
-	    File choice = (File) list.getSelectedItem();
-	    
+	    JComboBox<File> layouts = new JComboBox<>(directory.listFiles());
+	    JPanel panelLayouts = new JPanel(new BorderLayout());
+	    panelLayouts.add(new JLabel("Choix map :"), BorderLayout.NORTH);
+	    panelLayouts.add(layouts);
+        JOptionPane.showMessageDialog(null, panelLayouts, "Choix map", JOptionPane.QUESTION_MESSAGE);
+	    File choiceLayout = (File) layouts.getSelectedItem();
+
 		Maze maze;
 		try {
-			maze = new Maze(choice.toString());
+			maze = new Maze(choiceLayout.toString());
 		} catch (Exception e) {
 			return;
-		}
+		} 
+		
+	    Vector<String> listModes = new Vector<>();
+	    if(!maze.getPacman_start().isEmpty()) {
+	    	listModes.add("Un joueur");
+	    }
+	    if(maze.getPacman_start().size() >= 2) {
+	    	listModes.add("Deux joueurs (Comperatif)");
+	    }
+	    if((!maze.getPacman_start().isEmpty()) && (!maze.getGhosts_start().isEmpty())) {
+	    	listModes.add("Deux joueurs (Opposition)");
+	    }
+	    
+	    JComboBox<String> modes = new JComboBox<>(listModes);
+	    JPanel panelMode = new JPanel(new BorderLayout());
+	    panelMode.add(new JLabel("Choix mode :"), BorderLayout.NORTH);
+	    panelMode.add(modes);
+        JOptionPane.showMessageDialog(null, panelMode, "Choix mode", JOptionPane.QUESTION_MESSAGE);
+        
 		PacmanGame pacmanGame = new PacmanGame(250,maze);
 		PacmanGameController pacmanGameController = new PacmanGameController(pacmanGame);
 		ViewCommande viewCommande = new ViewCommande(pacmanGame); 
