@@ -3,17 +3,20 @@ package fr.univangers.pacman.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import fr.univangers.pacman.controller.GameController;
 import fr.univangers.pacman.model.Game;
 import fr.univangers.pacman.model.Maze;
+import fr.univangers.pacman.model.PacmanGame;
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
 public class ViewGame extends JFrame implements View, KeyListener {
@@ -21,7 +24,9 @@ public class ViewGame extends JFrame implements View, KeyListener {
 	private static final long serialVersionUID = -2187636929128362263L;
 	private Game game;
 	private GameController gameController;
+	private JPanel panelInfo;
 	private JLabel labelCurrentTurn;
+	private JLabel labelScore;
 	private PanelPacmanGame panelPacmanGame;
 	
 	public ViewGame(Game game, GameController gameController, Maze maze) {
@@ -44,8 +49,17 @@ public class ViewGame extends JFrame implements View, KeyListener {
         int dy = centerPoint.y - windowSize.height / 2 + 150;
         setLocation(dx, dy);   
         
-        labelCurrentTurn = new JLabel("current turn " + game.nbTurn(), SwingConstants.CENTER);
-		add(labelCurrentTurn, BorderLayout.NORTH);
+        panelInfo = new JPanel();
+        panelInfo.setLayout(new GridLayout(2,1));
+        
+        labelCurrentTurn = new JLabel("Current turn " + game.nbTurn(), SwingConstants.CENTER);
+        panelInfo.add(labelCurrentTurn);
+		if(game instanceof PacmanGame) {
+			labelScore = new JLabel("Score " + ((PacmanGame)game).score(), SwingConstants.CENTER);
+			panelInfo.add(labelScore);
+		}
+		add(panelInfo, BorderLayout.NORTH);
+
 		panelPacmanGame = new PanelPacmanGame(maze);
 		add(panelPacmanGame, BorderLayout.CENTER);
 			
@@ -55,6 +69,9 @@ public class ViewGame extends JFrame implements View, KeyListener {
 	@Override
 	public void update() {
         labelCurrentTurn.setText("current turn " + game.nbTurn());
+		if(game instanceof PacmanGame) {
+			labelScore.setText("Score " + ((PacmanGame)game).score());
+		}
         panelPacmanGame.setPacmans_pos(game.positionPacman());
         panelPacmanGame.setGhosts_pos(game.positionGhosts());
         panelPacmanGame.setGhostsScarred(game.ghostsScarred());
