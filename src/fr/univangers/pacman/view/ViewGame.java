@@ -38,7 +38,7 @@ public class ViewGame extends JFrame implements View, KeyListener {
 		addKeyListener(this);
 		
         setTitle("Game");
-        setSize(new Dimension(700, 700));
+        setSize(new Dimension(maze.getSizeX() * 25, maze.getSizeY() * 25 + 80));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
       
