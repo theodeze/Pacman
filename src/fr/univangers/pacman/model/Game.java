@@ -21,6 +21,10 @@ public abstract class Game implements Model, Runnable {
 	private List<PositionAgent> positionGhosts = new ArrayList<>();
 	private boolean ghostsScarred;
 	
+	public void over() {
+		isOver=true;
+	}
+	
 	public int nbTurn() {
 		return nbTurn;
 	}

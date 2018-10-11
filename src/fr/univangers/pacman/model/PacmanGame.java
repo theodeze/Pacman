@@ -1,6 +1,7 @@
 package fr.univangers.pacman.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -167,6 +168,7 @@ public class PacmanGame extends Game {
 			moveAgent(ghost);
 		}
 		mortAgents();
+		isOver();
 
 		updatePosition();
 	}
@@ -183,14 +185,21 @@ public class PacmanGame extends Game {
 	
 	public void vieAgents() {
 		int count=0;
-		for (Agent pacman : pacmans) {
-			if((getNbViePacman(count)>0)&&(pacman.getEtatActuel().getEtat()==MORT)) {
-				pacman.vivant();
-				setNbViePacman(count,getNbViePacman(count)-1);
-				reinitPosition();
+		Iterator<Agent> Iter = pacmans.iterator();
+		while (Iter.hasNext()) {
+			Agent pacman = Iter.next();
+			if(pacman.getEtatActuel().getEtat()==MORT) {
+				if (getNbViePacman(count)>0) {
+					pacman.vivant();
+					setNbViePacman(count,getNbViePacman(count)-1);
+					reinitPosition();
+				}
+				else {
+					pacmans.remove(pacman);
+				}
 			}
 			count++;
-		}		
+		}
 	}
 	
 	public void mortAgents() {	
@@ -212,4 +221,13 @@ public class PacmanGame extends Game {
 			}
 		}
 	}
+	
+	public void isOver() {
+		if(pacmans.isEmpty()) {
+			over();
+		}
+		
+	}
+	
+	
 }
