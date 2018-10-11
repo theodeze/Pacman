@@ -20,6 +20,7 @@ public class TestPacmanGame {
 	public static void main(String[] args) {
 		File directory = new File("res/layouts");
 	    JComboBox<File> layouts = new JComboBox<>(directory.listFiles());
+	    layouts.setSelectedIndex(6);
 	    JPanel panelLayouts = new JPanel(new BorderLayout());
 	    panelLayouts.add(new JLabel("Choix map :"), BorderLayout.NORTH);
 	    panelLayouts.add(layouts);
