@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import fr.univangers.pacman.model.state.State;
 import fr.univangers.pacman.model.state.Vulnerable;
+import fr.univangers.pacman.model.strategy.Strategy;
 import fr.univangers.pacman.model.state.Death;
 import fr.univangers.pacman.model.state.Life;
 
@@ -18,6 +19,8 @@ public class Agent implements AgentAction, Serializable {
 	private State death;
 	
 	private State currentState;
+	
+	private Strategy strategy;
 	
 	private Type type;
 	private PositionAgent position;
@@ -39,33 +42,16 @@ public class Agent implements AgentAction, Serializable {
 		vivant();	
 		}
 	
+	public void setStrategy(Strategy strategy) {
+		this.strategy = strategy;
+	}
+	
 	public void setPosition(PositionAgent position) {
 		this.position=position;
 	}
 	
-	public PositionAgent newPosition() {
-		PositionAgent newPosition = new PositionAgent(position.getX(), position.getY(), position.getDir());
-		switch(newPosition.getDir()) {
-		case EAST:
-			newPosition.setX(newPosition.getX() + 1);
-			break;
-		case NORTH:
-			newPosition.setY(newPosition.getY() - 1);
-			break;
-		case SOUTH:
-			newPosition.setY(newPosition.getY() + 1);
-			break;
-		case WEST:
-			newPosition.setX(newPosition.getX() - 1);
-			break;
-		default:
-			break;
-		}
-		return newPosition;
-	}
-	
-	public void action() {
-		currentState.action();
+	public void action(boolean[][] walls) {
+		currentState.action(walls);
 	}
 	
 	public void vulnerability() {
@@ -89,8 +75,8 @@ public class Agent implements AgentAction, Serializable {
 	}
 	
 	@Override
-	public void move() {
-		position = newPosition();
+	public void move(boolean[][] walls) {
+		position = strategy.move(position, walls);
 	}
 	
 	@Override

@@ -7,14 +7,6 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
-import java.io.IOException;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -49,21 +41,6 @@ public class ViewGame extends JFrame implements View, KeyListener {
         setSize(new Dimension(maze.getSizeX() * 25, maze.getSizeY() * 25 + 80));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-      
-		try {
-	        AudioInputStream audioIn;
-			audioIn = AudioSystem.getAudioInputStream(new File("res/sounds/pacman_chomp.wav"));
-	        Clip clip = AudioSystem.getClip();
-	        clip.open(audioIn);
-	        clip.loop(Clip.LOOP_CONTINUOUSLY);
-	        clip.start();
-		} catch (UnsupportedAudioFileException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
         
         Dimension windowSize = getSize();
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();

@@ -1,13 +1,17 @@
 package fr.univangers.pacman.model;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import fr.univangers.pacman.model.PositionAgent.Dir;
-import fr.univangers.pacman.model.state.State.Status;
+import fr.univangers.pacman.model.strategy.PlayerStrategy;
+import fr.univangers.pacman.model.strategy.RandomStrategy;
 
 public class PacmanGame extends Game {
 
@@ -19,7 +23,6 @@ public class PacmanGame extends Game {
 	private List<Agent> pacmans = new ArrayList<>();
 	private List<Agent> ghosts = new ArrayList<>();
 	private List<Integer> nbViePacmans = new ArrayList<>();
-	private Random r = new Random();
 	private int nbTurnVulnerables;
 	private int nbFood = 0;
 	private int scorePerGhosts = 200;
@@ -54,11 +57,6 @@ public class PacmanGame extends Game {
 		}
 		notifyViews();
 	}
-
-	public boolean isLegalMove(Agent agent) {
-		PositionAgent newPosition = agent.newPosition();
-		return !maze.isWall(newPosition.getX(), newPosition.getY()) || agent.isDeath();
-	}
 	
 	public void movePacmanPlayer1(Dir dir) {
 		Agent p1 = pacmans.get(0);
@@ -81,27 +79,7 @@ public class PacmanGame extends Game {
 	}
 	
 	public void moveAgent(Agent agent) {
-		if(isLegalMove(agent)) {
-			agent.action();
-		} 
-		/* else {
-			switch(r.nextInt(4)) {
-			case 0:
-				agent.goUp();
-				break;
-			case 1:
-				agent.goDown();
-				break;
-			case 2:
-				agent.goLeft();
-				break;
-			case 3:
-				agent.goRight();
-				break;
-			default:
-				break;
-			}
-		}*/
+		agent.action(maze.getWalls());
 	}
 	
 	public void reinitPosition() {
@@ -119,19 +97,32 @@ public class PacmanGame extends Game {
 	public void initializeGame() {
 		pacmans.clear();
 		for(PositionAgent position : maze.getPacman_start()) {
-			pacmans.add(new Agent(Agent.Type.PACMAN, position));
+			Agent pacman = new Agent(Agent.Type.PACMAN, position);
+			pacman.setStrategy(new PlayerStrategy());
+			pacmans.add(pacman);
 			nbViePacmans.add(nbVieMax);
 			
 		}
 		ghosts.clear();
 		for(PositionAgent position : maze.getGhosts_start()) {
-			ghosts.add(new Agent(Agent.Type.GHOST, position));
+			Agent ghost = new Agent(Agent.Type.GHOST, position);
+			ghost.setStrategy(new RandomStrategy());
+			ghosts.add(ghost);
 		}
 		nbFood = 0;
 		for(int x = 0; x < maze.getSizeX(); x++) {
 			for(int y = 0; y < maze.getSizeY(); y++) {
 				nbFood += maze.isFood(x, y) ? 1 : 0;
 			}
+		}
+		try {
+	        AudioInputStream audioIn;
+			audioIn = AudioSystem.getAudioInputStream(new File("res/sounds/pacman_beginning.wav"));
+	        Clip clip = AudioSystem.getClip();
+	        clip.open(audioIn);
+	        clip.start();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -154,6 +145,15 @@ public class PacmanGame extends Game {
 				maze.setFood(pacman.position().getX(), pacman.position().getY(), false);
 				score += 10;
 				nbFood--;
+				try {
+			        AudioInputStream audioIn;
+					audioIn = AudioSystem.getAudioInputStream(new File("res/sounds/pacman_chomp.wav"));
+			        Clip clip = AudioSystem.getClip();
+			        clip.open(audioIn);
+			        clip.start();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			if(maze.isCapsule(pacman.position().getX(), pacman.position().getY())) {
 				maze.setCapsule(pacman.position().getX(), pacman.position().getY(), false);
@@ -161,9 +161,19 @@ public class PacmanGame extends Game {
 				pacman.inversion();
 				for (Agent ghost : ghosts) {
 					ghost.vulnerability();
+					
 				}
 				nbTurnVulnerables = 20;
 				score += 50;
+				try {
+			        AudioInputStream audioIn;
+					audioIn = AudioSystem.getAudioInputStream(new File("res/sounds/pacman_eatghost.wav"));
+			        Clip clip = AudioSystem.getClip();
+			        clip.open(audioIn);
+			        clip.start();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		for(Agent ghost : ghosts) {
@@ -215,6 +225,15 @@ public class PacmanGame extends Game {
 					} else if (ghost.isLife()) {
 						pacman.mort();
 						vieAgents();
+						try {
+					        AudioInputStream audioIn;
+							audioIn = AudioSystem.getAudioInputStream(new File("res/sounds/pacman_death.wav"));
+					        Clip clip = AudioSystem.getClip();
+					        clip.open(audioIn);
+					        clip.start();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}

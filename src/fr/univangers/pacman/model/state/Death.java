@@ -20,7 +20,7 @@ public class Death implements State {
 	}
 	
 	@Override
-	public void action() {
+	public void action(boolean[][] walls) {
 		if(nbTurnDeath >= 20) {
 			nbTurnDeath = 0;
 			agent.vivant();

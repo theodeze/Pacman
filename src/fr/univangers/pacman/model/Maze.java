@@ -172,6 +172,9 @@ public class Maze implements Serializable{
 		return(ghosts_start.size());
 	}
 	
+	public boolean[][] getWalls() {
+		return walls;
+	}
 	
 	public List<PositionAgent> getPacman_start() {
 		return pacman_start;

@@ -18,8 +18,8 @@ public class Vulnerable implements State {
 	}
 
 	@Override
-	public void action() {
-		agent.move();
+	public void action(boolean[][] walls) {
+		agent.move(walls);
 	}
 	
 	@Override

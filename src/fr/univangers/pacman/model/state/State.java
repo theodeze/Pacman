@@ -9,7 +9,7 @@ public interface State extends Serializable {
 	}
 
 	public Status status();
-	public void action();
+	public void action(boolean[][] walls);
 	public void vulnerability();
 	public void stopVulnerability();
 	public boolean isDeath();
