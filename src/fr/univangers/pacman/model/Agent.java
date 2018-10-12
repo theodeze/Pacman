@@ -12,29 +12,30 @@ public class Agent implements AgentAction, Serializable {
 	private static final long serialVersionUID = 1968499836498466437L;
 	
 	public enum Type { PACMAN, GHOST }
+
+	private State vunerable;
+	private State life;
+	private State death;
 	
-	private State etatVie;
-	private State etatMort;
-	private State etatInverse;
-	
-	private State etatActuel;
+	private State currentState;
 	
 	private Type type;
 	private PositionAgent position;
-	private int nbTurnDeath;
 	
 	public PositionAgent position() {
 		return position;
 	}
 
+	public Type type() {
+		return type;
+	}
+	
 	public Agent(Type type, PositionAgent position) {
 		this.type = type;
 		this.position = position;
-		this.nbTurnDeath = 0;
-		this.etatVie= new Life(this);
-		this.etatMort= new Death(this);
-		this.etatInverse= new Vulnerable(this);
-		
+		this.life = new Life(this);
+		this.death = new Death(this);
+		this.vunerable = new Vulnerable(this);
 		vivant();	
 		}
 	
@@ -61,6 +62,30 @@ public class Agent implements AgentAction, Serializable {
 			break;
 		}
 		return newPosition;
+	}
+	
+	public void action() {
+		currentState.action();
+	}
+	
+	public void vulnerability() {
+		currentState.vulnerability();
+	}
+	
+	public void stopVulnerability() {
+		currentState.stopVulnerability();
+	}
+
+	public boolean isDeath() {
+		return currentState.isDeath();
+	}
+
+	public boolean isLife() {
+		return currentState.isLife();
+	}
+
+	public boolean isVulnerable() {
+		return currentState.isVulnerable();
 	}
 	
 	@Override
@@ -90,30 +115,19 @@ public class Agent implements AgentAction, Serializable {
 	
 	
 	public void vivant() {
-		etatActuel = etatVie;
+		currentState = life;
 	}
 
 	public void mort() {
-		etatActuel = etatMort;
+		currentState = death;
 	}
 	
 	public void inversion() {
-		etatActuel = etatInverse;
+		currentState = vunerable;
 	}
 	
 	public State getEtatActuel() {
-		return etatActuel;
-	}
-
-	public void deathTurn() {
-		if(etatActuel == etatMort) {
-			if(nbTurnDeath >= 20) {
-				vivant();
-				nbTurnDeath = 0;
-			} else { 
-				nbTurnDeath++;
-			}
-		}
+		return currentState;
 	}
 
 }

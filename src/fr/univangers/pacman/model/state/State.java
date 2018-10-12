@@ -4,10 +4,16 @@ import java.io.Serializable;
 
 public interface State extends Serializable {
 
-	public static final int VIVANT=0;
-	public static final int MORT=1;
-	public static final int INVERSE=2;
+	public enum Status  {
+		DEATH, LIFE, VULNERABLE
+	}
 
-	public int getEtat();
+	public Status status();
+	public void action();
+	public void vulnerability();
+	public void stopVulnerability();
+	public boolean isDeath();
+	public boolean isLife();
+	public boolean isVulnerable();
 	
 }

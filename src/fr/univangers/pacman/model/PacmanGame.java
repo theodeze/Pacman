@@ -7,13 +7,11 @@ import java.util.Random;
 
 
 import fr.univangers.pacman.model.PositionAgent.Dir;
+import fr.univangers.pacman.model.state.State.Status;
 
 public class PacmanGame extends Game {
 
 	private static final long serialVersionUID = 998416452804755455L;
-	public static final int VIVANT=0;
-	public static final int MORT=1;
-	public static final int INVERSE=2;	
 	public static final int nbVieMax=3;
 	
 	private Maze maze;
@@ -51,7 +49,7 @@ public class PacmanGame extends Game {
 		}
 		clearPositionGhosts();
 		for(Agent ghost : ghosts) {
-			if(ghost.getEtatActuel().getEtat()!=MORT)
+			if(!ghost.isDeath())
 				addPositionGhosts(ghost.position());
 		}
 		notifyViews();
@@ -59,7 +57,7 @@ public class PacmanGame extends Game {
 
 	public boolean isLegalMove(Agent agent) {
 		PositionAgent newPosition = agent.newPosition();
-		return !maze.isWall(newPosition.getX(), newPosition.getY());
+		return !maze.isWall(newPosition.getX(), newPosition.getY()) || agent.isDeath();
 	}
 	
 	public void movePacmanPlayer1(Dir dir) {
@@ -83,10 +81,10 @@ public class PacmanGame extends Game {
 	}
 	
 	public void moveAgent(Agent agent) {
-		agent.deathTurn();
 		if(isLegalMove(agent)) {
-			agent.move();
-		} /*else {
+			agent.action();
+		} 
+		/* else {
 			switch(r.nextInt(4)) {
 			case 0:
 				agent.goUp();
@@ -141,13 +139,8 @@ public class PacmanGame extends Game {
 	public void takeTurn() {
 		if(nbTurnVulnerables == 0) {
 			setGhostsScarred(false);
-			for(Agent pacman : pacmans) {
-				if (pacman.getEtatActuel().getEtat()!=VIVANT)
-					pacman.vivant();
-			}
 			for (Agent ghost : ghosts) {
-				if(ghost.getEtatActuel().getEtat()==INVERSE)
-					ghost.vivant();
+				ghost.stopVulnerability();
 			}
 			nbTurnVulnerables--;
 			scorePerGhosts = 200;
@@ -167,8 +160,7 @@ public class PacmanGame extends Game {
 				setGhostsScarred(true);
 				pacman.inversion();
 				for (Agent ghost : ghosts) {
-					if(ghost.getEtatActuel().getEtat()!=MORT)
-						ghost.inversion();
+					ghost.vulnerability();
 				}
 				nbTurnVulnerables = 20;
 				score += 50;
@@ -195,10 +187,10 @@ public class PacmanGame extends Game {
 	
 	public void vieAgents() {
 		int count=0;
-		Iterator<Agent> Iter = pacmans.iterator();
-		while (Iter.hasNext()) {
-			Agent pacman = Iter.next();
-			if(pacman.getEtatActuel().getEtat()==MORT) {
+		Iterator<Agent> iter = pacmans.iterator();
+		while (iter.hasNext()) {
+			Agent pacman = iter.next();
+			if(pacman.isDeath()) {
 				if (getNbViePacman(count)>0) {
 					pacman.vivant();
 					setNbViePacman(count,getNbViePacman(count)-1);
@@ -213,21 +205,16 @@ public class PacmanGame extends Game {
 	}
 	
 	public void mortAgents() {	
-		for (Agent ghost: ghosts) {
-			for (Agent pacman: pacmans) {
-
-				if ((ghost.position().getX()==pacman.position().getX())&&(ghost.position().getY()==pacman.position().getY())) {
-					if (pacman.getEtatActuel().getEtat()==INVERSE) {
+		for(Agent ghost: ghosts) {
+			for(Agent pacman: pacmans) {
+				if((ghost.position().getX()==pacman.position().getX())&&(ghost.position().getY()==pacman.position().getY())) {
+					if (ghost.isVulnerable()) {
 						ghost.mort();
 						score += scorePerGhosts;
 						scorePerGhosts *= 2;
-					}
-					
-					else {
-						if (ghost.getEtatActuel().getEtat()==VIVANT) {
-							pacman.mort();
-							vieAgents();
-						}
+					} else if (ghost.isLife()) {
+						pacman.mort();
+						vieAgents();
 					}
 				}
 			}
