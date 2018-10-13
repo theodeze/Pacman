@@ -17,7 +17,7 @@ public abstract class Game implements Model, Runnable {
 	private int maxTurn;
 	
 	/* PACMAN */
-	private List<PositionAgent> positionPacman = new ArrayList<>();
+	private List<PositionAgent> positionPacmans = new ArrayList<>();
 	private List<PositionAgent> positionGhosts = new ArrayList<>();
 	private boolean ghostsScarred;
 	
@@ -44,15 +44,15 @@ public abstract class Game implements Model, Runnable {
 	}
 	
 	public void clearPositionPacman() {
-		positionPacman.clear();
+		positionPacmans.clear();
 	}
 	
 	public void addPositionPacman(PositionAgent position) {
-		positionPacman.add(position);
+		positionPacmans.add(position);
 	}
 	
-	public List<PositionAgent> positionPacman() {
-		return positionPacman;
+	public List<PositionAgent> positionPacmans() {
+		return positionPacmans;
 	}
 	
 	public void clearPositionGhosts() {

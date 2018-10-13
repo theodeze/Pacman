@@ -1,6 +1,7 @@
 package fr.univangers.pacman.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import fr.univangers.pacman.model.state.State;
 import fr.univangers.pacman.model.state.Vulnerable;
@@ -19,8 +20,10 @@ public class Agent implements AgentAction, Serializable {
 	private State death;
 	
 	private State currentState;
-	
-	private Strategy strategy;
+
+	private Strategy currentStrategy;
+	private Strategy lifeStrategy;
+	private Strategy vunerableStrategy;
 	
 	private Type type;
 	private PositionAgent position;
@@ -42,16 +45,26 @@ public class Agent implements AgentAction, Serializable {
 		vivant();	
 		}
 	
-	public void setStrategy(Strategy strategy) {
-		this.strategy = strategy;
+	public void setStrategy(Strategy lifeStrategy, Strategy vunerableStrategy) {
+		this.currentStrategy = lifeStrategy;
+		this.lifeStrategy = lifeStrategy;
+		this.vunerableStrategy = vunerableStrategy;
+	}
+	
+	public void switchLifeStrategy() {
+		currentStrategy = lifeStrategy;
+	}
+	
+	public void switchVunerableStrategy() {
+		currentStrategy = vunerableStrategy;
 	}
 	
 	public void setPosition(PositionAgent position) {
 		this.position=position;
 	}
 	
-	public void action(boolean[][] walls) {
-		currentState.action(walls);
+	public void action(List<PositionAgent> positionPacmans, boolean[][] walls) {
+		currentState.action(positionPacmans, walls);
 	}
 	
 	public void vulnerability() {
@@ -75,8 +88,8 @@ public class Agent implements AgentAction, Serializable {
 	}
 	
 	@Override
-	public void move(boolean[][] walls) {
-		position = strategy.move(position, walls);
+	public void move(List<PositionAgent> positionPacmans, boolean[][] walls) {
+		currentStrategy.move(this, positionPacmans, walls);
 	}
 	
 	@Override
@@ -101,6 +114,7 @@ public class Agent implements AgentAction, Serializable {
 	
 	
 	public void vivant() {
+		switchLifeStrategy();
 		currentState = life;
 	}
 
@@ -109,6 +123,7 @@ public class Agent implements AgentAction, Serializable {
 	}
 	
 	public void inversion() {
+		switchVunerableStrategy();
 		currentState = vunerable;
 	}
 	

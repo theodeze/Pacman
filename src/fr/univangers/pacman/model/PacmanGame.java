@@ -10,6 +10,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 import fr.univangers.pacman.model.PositionAgent.Dir;
+import fr.univangers.pacman.model.strategy.EscapeStrategy;
 import fr.univangers.pacman.model.strategy.PlayerStrategy;
 import fr.univangers.pacman.model.strategy.RandomStrategy;
 
@@ -79,7 +80,7 @@ public class PacmanGame extends Game {
 	}
 	
 	public void moveAgent(Agent agent) {
-		agent.action(maze.getWalls());
+		agent.action(positionPacmans(), maze.getWalls());
 	}
 	
 	public void reinitPosition() {
@@ -98,7 +99,7 @@ public class PacmanGame extends Game {
 		pacmans.clear();
 		for(PositionAgent position : maze.getPacman_start()) {
 			Agent pacman = new Agent(Agent.Type.PACMAN, position);
-			pacman.setStrategy(new PlayerStrategy());
+			pacman.setStrategy(new PlayerStrategy(), new PlayerStrategy());
 			pacmans.add(pacman);
 			nbViePacmans.add(nbVieMax);
 			
@@ -106,7 +107,7 @@ public class PacmanGame extends Game {
 		ghosts.clear();
 		for(PositionAgent position : maze.getGhosts_start()) {
 			Agent ghost = new Agent(Agent.Type.GHOST, position);
-			ghost.setStrategy(new RandomStrategy());
+			ghost.setStrategy(new RandomStrategy(), new EscapeStrategy());
 			ghosts.add(ghost);
 		}
 		nbFood = 0;
@@ -149,6 +150,7 @@ public class PacmanGame extends Game {
 			        AudioInputStream audioIn;
 					audioIn = AudioSystem.getAudioInputStream(new File("res/sounds/pacman_chomp.wav"));
 			        Clip clip = AudioSystem.getClip();
+			        clip.close();
 			        clip.open(audioIn);
 			        clip.start();
 				} catch (Exception e) {
@@ -169,6 +171,7 @@ public class PacmanGame extends Game {
 			        AudioInputStream audioIn;
 					audioIn = AudioSystem.getAudioInputStream(new File("res/sounds/pacman_eatghost.wav"));
 			        Clip clip = AudioSystem.getClip();
+			        clip.close();
 			        clip.open(audioIn);
 			        clip.start();
 				} catch (Exception e) {
@@ -229,6 +232,7 @@ public class PacmanGame extends Game {
 					        AudioInputStream audioIn;
 							audioIn = AudioSystem.getAudioInputStream(new File("res/sounds/pacman_death.wav"));
 					        Clip clip = AudioSystem.getClip();
+					        clip.close();
 					        clip.open(audioIn);
 					        clip.start();
 						} catch (Exception e) {

@@ -1,6 +1,9 @@
 package fr.univangers.pacman.model.state;
 
+import java.util.List;
+
 import fr.univangers.pacman.model.Agent;
+import fr.univangers.pacman.model.PositionAgent;
 import fr.univangers.pacman.model.Agent.Type;
 
 public class Life implements State {
@@ -20,8 +23,8 @@ public class Life implements State {
 	}
 
 	@Override
-	public void action(boolean[][] walls) {
-		agent.move(walls);
+	public void action(List<PositionAgent> positionPacmans, boolean[][] walls) {
+		agent.move(positionPacmans, walls);
 	}
 	
 	@Override

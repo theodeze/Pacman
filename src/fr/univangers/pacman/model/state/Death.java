@@ -1,6 +1,9 @@
 package fr.univangers.pacman.model.state;
 
+import java.util.List;
+
 import fr.univangers.pacman.model.Agent;
+import fr.univangers.pacman.model.PositionAgent;
 
 public class Death implements State {
 
@@ -20,7 +23,7 @@ public class Death implements State {
 	}
 	
 	@Override
-	public void action(boolean[][] walls) {
+	public void action(List<PositionAgent> positionPacmans, boolean[][] walls) {
 		if(nbTurnDeath >= 20) {
 			nbTurnDeath = 0;
 			agent.vivant();

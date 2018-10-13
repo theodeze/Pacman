@@ -1,7 +1,9 @@
 package fr.univangers.pacman.model.strategy;
 
+import java.util.List;
 import java.util.Random;
 
+import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
@@ -11,7 +13,8 @@ public class RandomStrategy implements Strategy {
 	private Random random = new Random();
 
 	@Override
-	public PositionAgent move(PositionAgent position, boolean[][] walls) {
+	public void move(Agent agent, List<PositionAgent> positionPacmans, boolean[][] walls) {
+		PositionAgent position = agent.position();
 		PositionAgent newPosition = new PositionAgent(position.getX(), position.getY(), position.getDir());
 		do {
 			switch(random.nextInt(4)) {
@@ -39,7 +42,7 @@ public class RandomStrategy implements Strategy {
 				break;
 			}
 		} while(walls[newPosition.getX()][newPosition.getY()]);
-		return newPosition;
+		agent.setPosition(newPosition);
 	}
 
 }

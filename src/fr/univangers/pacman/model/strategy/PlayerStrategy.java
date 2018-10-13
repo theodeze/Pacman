@@ -1,5 +1,8 @@
 package fr.univangers.pacman.model.strategy;
 
+import java.util.List;
+
+import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 
 public class PlayerStrategy implements Strategy {
@@ -7,7 +10,8 @@ public class PlayerStrategy implements Strategy {
 	private static final long serialVersionUID = -3421485434310896297L;
 
 	@Override
-	public PositionAgent move(PositionAgent position, boolean[][] walls) {
+	public void move(Agent agent, List<PositionAgent> positionPacmans, boolean[][] walls) {
+		PositionAgent position = agent.position();
 		PositionAgent newPosition = new PositionAgent(position.getX(), position.getY(), position.getDir());
 		switch(position.getDir()) {
 		case EAST:
@@ -25,7 +29,7 @@ public class PlayerStrategy implements Strategy {
 		default:
 			break;	
 		}
-		return walls[newPosition.getX()][newPosition.getY()] ? position : newPosition;
+		agent.setPosition(walls[newPosition.getX()][newPosition.getY()] ? position : newPosition);
 	}
 
 }
