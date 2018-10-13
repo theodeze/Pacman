@@ -11,6 +11,7 @@ import javax.sound.sampled.Clip;
 
 import fr.univangers.pacman.model.PositionAgent.Dir;
 import fr.univangers.pacman.model.strategy.EscapeStrategy;
+import fr.univangers.pacman.model.strategy.NearestAttackStrategy;
 import fr.univangers.pacman.model.strategy.PlayerStrategy;
 import fr.univangers.pacman.model.strategy.RandomStrategy;
 
@@ -107,7 +108,7 @@ public class PacmanGame extends Game {
 		ghosts.clear();
 		for(PositionAgent position : maze.getGhosts_start()) {
 			Agent ghost = new Agent(Agent.Type.GHOST, position);
-			ghost.setStrategy(new RandomStrategy(), new EscapeStrategy());
+			ghost.setStrategy(new NearestAttackStrategy(), new EscapeStrategy());
 			ghosts.add(ghost);
 		}
 		nbFood = 0;

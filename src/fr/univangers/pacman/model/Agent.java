@@ -5,6 +5,7 @@ import java.util.List;
 
 import fr.univangers.pacman.model.state.State;
 import fr.univangers.pacman.model.state.Vulnerable;
+import fr.univangers.pacman.model.strategy.NoneStrategy;
 import fr.univangers.pacman.model.strategy.Strategy;
 import fr.univangers.pacman.model.state.Death;
 import fr.univangers.pacman.model.state.Life;
@@ -21,9 +22,11 @@ public class Agent implements AgentAction, Serializable {
 	
 	private State currentState;
 
-	private Strategy currentStrategy;
 	private Strategy lifeStrategy;
 	private Strategy vunerableStrategy;
+	private Strategy deathStrategy;
+	
+	private Strategy currentStrategy;
 	
 	private Type type;
 	private PositionAgent position;
@@ -49,6 +52,7 @@ public class Agent implements AgentAction, Serializable {
 		this.currentStrategy = lifeStrategy;
 		this.lifeStrategy = lifeStrategy;
 		this.vunerableStrategy = vunerableStrategy;
+		this.deathStrategy = new NoneStrategy();
 	}
 	
 	public void switchLifeStrategy() {
@@ -57,6 +61,10 @@ public class Agent implements AgentAction, Serializable {
 	
 	public void switchVunerableStrategy() {
 		currentStrategy = vunerableStrategy;
+	}
+	
+	public void switchDeathStrategy() {
+		currentStrategy = deathStrategy;
 	}
 	
 	public void setPosition(PositionAgent position) {
@@ -119,6 +127,7 @@ public class Agent implements AgentAction, Serializable {
 	}
 
 	public void mort() {
+		switchDeathStrategy();
 		currentState = death;
 	}
 	
