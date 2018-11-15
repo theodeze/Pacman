@@ -128,7 +128,6 @@ public class PacmanGame extends Game {
 	}
 	
 	public void resetPosition() {
-		int index = 0;
 		for(Agent pacman : pacmans)
 			pacman.resetPosition();
 		for(Agent ghost : ghosts)
@@ -201,7 +200,7 @@ public class PacmanGame extends Game {
 				}
 				nbTurnVulnerables = 20;
 				score += 50;
-				playSound("res/sounds/pacman_eatghost.wav");
+				playSound("res/sounds/pacman_extrapac.wav");
 			}
 		}
 		for(Agent ghost : ghosts) {
@@ -223,18 +222,14 @@ public class PacmanGame extends Game {
 	}
 	
 	public void lifeAgents() {
-		int count=0;
 		Iterator<Agent> iter = pacmans.iterator();
 		while(iter.hasNext()) {
 			Agent pacman = iter.next();
-			if(pacman.isDeath()) {
-				if(nbLifePacmans>0) {
-					pacman.vivant();
-					nbLifePacmans--;
-					resetPosition();
-				}
+			if(pacman.isDeath() && nbLifePacmans > 0) {
+				pacman.vivant();
+				nbLifePacmans--;
+				resetPosition();
 			}
-			count++;
 		}
 	}
 	
