@@ -19,7 +19,6 @@ public abstract class Game implements Model, Runnable {
 	/* PACMAN */
 	private List<PositionAgent> positionPacmans = new ArrayList<>();
 	private List<PositionAgent> positionGhosts = new ArrayList<>();
-	private boolean ghostsScarred;
 	
 	public void over() {
 		isOver=true;
@@ -65,14 +64,6 @@ public abstract class Game implements Model, Runnable {
 	
 	public List<PositionAgent> positionGhosts() {
 		return positionGhosts;
-	}
-	
-	public boolean ghostsScarred() {
-		return ghostsScarred;
-	}
-	
-	public void setGhostsScarred(boolean ghostsScarred) {
-		this.ghostsScarred = ghostsScarred;
 	}
 	
 	public Game(int maxTurn) {

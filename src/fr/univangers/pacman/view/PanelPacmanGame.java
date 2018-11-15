@@ -3,6 +3,7 @@ package fr.univangers.pacman.view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -35,14 +36,14 @@ public class PanelPacmanGame extends JPanel{
 	private List<PositionAgent> ghosts_pos;
 	
 	
-	private boolean ghostsScarred;
+	private List<Boolean> ghostsScarred;
 	
 
 	public PanelPacmanGame(Maze maze) {
 		this.m = maze;
 		pacmans_pos = this.m.getPacman_start();
 		ghosts_pos = this.m.getGhosts_start();
-		ghostsScarred = false;		
+		ghostsScarred = new ArrayList<>(Collections.nCopies(ghosts_pos.size(), false));		
 	}
 
 	public void paint(Graphics g){
@@ -104,7 +105,7 @@ public class PanelPacmanGame extends JPanel{
 
 		for(int i = 0; i < ghosts_pos.size(); i++){
 			PositionAgent pos = ghosts_pos.get(i);
-			if(ghostsScarred) {
+			if(ghostsScarred.get(i)) {
 				drawGhosts(g, pos.getX(), pos.getY(), ghostScarredColor);	
 			} else {
 				drawGhosts(g, pos.getX(), pos.getY(), ghostsColor);	
@@ -190,7 +191,7 @@ public class PanelPacmanGame extends JPanel{
 
 
 
-	public void setGhostsScarred(boolean ghostsScarred) {
+	public void setGhostsScarred(List<Boolean> ghostsScarred) {
 		this.ghostsScarred = ghostsScarred;
 	}
 	

@@ -1,6 +1,7 @@
 package fr.univangers.pacman.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class PositionAgent implements Serializable {
 
@@ -16,6 +17,20 @@ public class PositionAgent implements Serializable {
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(x,y,dir);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof PositionAgent) {
+			PositionAgent p = (PositionAgent) obj;
+			return (p.x == x) && (p.y == y);
+		}
+		return false;
 	}
 	
 	public int getX() {

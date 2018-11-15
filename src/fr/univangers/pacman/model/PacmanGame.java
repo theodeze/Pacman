@@ -12,6 +12,7 @@ import javax.sound.sampled.Clip;
 import fr.univangers.pacman.model.PositionAgent.Dir;
 import fr.univangers.pacman.model.strategy.EscapeStrategy;
 import fr.univangers.pacman.model.strategy.NearestAttackStrategy;
+import fr.univangers.pacman.model.strategy.NoneStrategy;
 import fr.univangers.pacman.model.strategy.PlayerStrategy;
 import fr.univangers.pacman.model.strategy.RandomStrategy;
 
@@ -54,6 +55,15 @@ public class PacmanGame extends Game {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public List<Boolean> ghostsScarred() {
+		List<Boolean> ghostsScarred = new ArrayList<>();
+		for(Agent ghost : ghosts) {
+			if(!ghost.isDeath())
+				ghostsScarred.add(ghost.isVulnerable());
+		}
+		return ghostsScarred;
 	}
 	
 	public PacmanGame(int maxTurn, Maze maze, Mode mode) {
@@ -156,7 +166,7 @@ public class PacmanGame extends Game {
 				p++;
 			}
 			else
-				ghost.setStrategy(new NearestAttackStrategy(), new EscapeStrategy());
+				ghost.setStrategy(new NoneStrategy(), new NoneStrategy());
 			ghosts.add(ghost);
 		}
 		nbFood = 0;
@@ -171,7 +181,6 @@ public class PacmanGame extends Game {
 	@Override
 	public void takeTurn() {
 		if(nbTurnVulnerables == 0) {
-			setGhostsScarred(false);
 			for (Agent ghost : ghosts) {
 				ghost.stopVulnerability();
 			}
@@ -192,7 +201,6 @@ public class PacmanGame extends Game {
 			}
 			if(maze.isCapsule(pacman.position().getX(), pacman.position().getY())) {
 				maze.setCapsule(pacman.position().getX(), pacman.position().getY(), false);
-				setGhostsScarred(true);
 				pacman.inversion();
 				for (Agent ghost : ghosts) {
 					ghost.vulnerability();
@@ -237,7 +245,7 @@ public class PacmanGame extends Game {
 		if(pacmans.contains(agt)) {		
 			Agent pacman = agt;
 			for(Agent ghost: ghosts) {
-				if(ghost.position()==pacman.position()) {
+				if(ghost.position().equals(pacman.position())) {
 					if (ghost.isVulnerable()) {
 						ghost.mort();
 						score += scorePerGhosts;
@@ -254,7 +262,7 @@ public class PacmanGame extends Game {
 		else {		
 			Agent ghost = agt;
 			for(Agent pacman: pacmans) {
-				if(ghost.position()==pacman.position()) {
+				if(ghost.position().equals(pacman.position())) {
 					if (ghost.isVulnerable()) {
 						ghost.mort();
 						score += scorePerGhosts;

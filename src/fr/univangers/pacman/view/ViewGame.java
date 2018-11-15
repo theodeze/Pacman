@@ -74,10 +74,10 @@ public class ViewGame extends JFrame implements View, KeyListener {
 		if(game instanceof PacmanGame) {
 			labelLife.setText("Vie " + ((PacmanGame)game).getNbLifePacmans());
 			labelScore.setText("Score " + ((PacmanGame)game).score());
+	        panelPacmanGame.setGhostsScarred(((PacmanGame)game).ghostsScarred());
 		}
         panelPacmanGame.setPacmans_pos(game.positionPacmans());
         panelPacmanGame.setGhosts_pos(game.positionGhosts());
-        panelPacmanGame.setGhostsScarred(game.ghostsScarred());
         panelPacmanGame.repaint();
 	}
 
