@@ -192,7 +192,7 @@ public class PacmanGame extends Game {
 		}
 		for(Agent pacman : pacmans) {
 			moveAgent(pacman);
-			mortAgents(pacman);
+			deadAgents(pacman);
 			if(maze.isFood(pacman.position().getX(), pacman.position().getY())) {
 				maze.setFood(pacman.position().getX(), pacman.position().getY(), false);
 				score += 10;
@@ -214,7 +214,7 @@ public class PacmanGame extends Game {
 		}
 		for(Agent ghost : ghosts) {
 			moveAgent(ghost);
-			mortAgents(ghost);
+			deadAgents(ghost);
 		}
 		isOver();
 
@@ -231,7 +231,7 @@ public class PacmanGame extends Game {
 		}
 	}
 	
-	public void vieAgents() {
+	public void lifeAgents() {
 		int count=0;
 		Iterator<Agent> iter = pacmans.iterator();
 		while(iter.hasNext()) {
@@ -250,24 +250,8 @@ public class PacmanGame extends Game {
 		}
 	}
 	
-	public void mortAgents(Agent agt) {	
-		if(ghosts.contains(agt)) {
-			Agent ghost = agt;
-			for(Agent pacman: pacmans) {
-				if((ghost.position().getX()==pacman.position().getX())&&(ghost.position().getY()==pacman.position().getY())) {
-					if (ghost.isVulnerable()) {
-						ghost.mort();
-						score += scorePerGhosts;
-						scorePerGhosts *= 2;
-					} else if (ghost.isLife()) {
-						pacman.mort();
-						vieAgents();
-						playSound("res/sounds/pacman_death.wav");
-					}
-				}
-			}
-		}
-		else {
+	public void deadAgents(Agent agt) {	
+		if(pacmans.contains(agt)) {		
 			Agent pacman = agt;
 			for(Agent ghost: ghosts) {
 				if((ghost.position().getX()==pacman.position().getX())&&(ghost.position().getY()==pacman.position().getY())) {
@@ -277,7 +261,23 @@ public class PacmanGame extends Game {
 						scorePerGhosts *= 2;
 					} else if (ghost.isLife()) {
 						pacman.mort();
-						vieAgents();
+						lifeAgents();
+						playSound("res/sounds/pacman_death.wav");
+					}
+				}
+			}		
+		}
+		else {		
+			Agent ghost = agt;
+			for(Agent pacman: pacmans) {
+				if((ghost.position().getX()==pacman.position().getX())&&(ghost.position().getY()==pacman.position().getY())) {
+					if (ghost.isVulnerable()) {
+						ghost.mort();
+						score += scorePerGhosts;
+						scorePerGhosts *= 2;
+					} else if (ghost.isLife()) {
+						pacman.mort();
+						lifeAgents();
 						playSound("res/sounds/pacman_death.wav");
 					}
 				}
