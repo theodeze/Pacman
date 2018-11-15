@@ -29,14 +29,14 @@ public class PacmanGame extends Game {
 	private int score = 0;
 	private List<Agent> pacmans = new ArrayList<>();
 	private List<Agent> ghosts = new ArrayList<>();
-	private int nbViePacmans;
+	private int nbLifePacmans;
 	private int nbTurnVulnerables;
 	private int nbFood = 0;
 	private int scorePerGhosts = 200;
 	private Mode mode;
 	
-	public int getNbViePacmans() {
-		return nbViePacmans;
+	public int getNbLifePacmans() {
+		return nbLifePacmans;
 	}
 	
 	public int score() {
@@ -60,7 +60,7 @@ public class PacmanGame extends Game {
 		super(maxTurn);
 		this.maze = maze;
 		this.mode = mode;
-		this.nbViePacmans = nbVieMax;
+		this.nbLifePacmans = nbVieMax;
 		init();
 	}
 	
@@ -127,7 +127,7 @@ public class PacmanGame extends Game {
 		agent.action(positionPacmans(), maze.getWalls());
 	}
 	
-	public void reinitPosition() {
+	public void resetPosition() {
 		int index = 0;
 		for(Agent pacman : pacmans)
 			pacman.resetPosition();
@@ -228,10 +228,10 @@ public class PacmanGame extends Game {
 		while(iter.hasNext()) {
 			Agent pacman = iter.next();
 			if(pacman.isDeath()) {
-				if(nbViePacmans>0) {
+				if(nbLifePacmans>0) {
 					pacman.vivant();
-					nbViePacmans--;
-					reinitPosition();
+					nbLifePacmans--;
+					resetPosition();
 				}
 			}
 			count++;
@@ -276,7 +276,7 @@ public class PacmanGame extends Game {
 	}
 	
 	public void isOver() {
-		if(nbViePacmans == 0) {
+		if(nbLifePacmans == 0) {
 			over();
 		}
 		if(nbFood == 0) {

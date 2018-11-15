@@ -55,7 +55,7 @@ public class ViewGame extends JFrame implements View, KeyListener {
         labelCurrentTurn = new JLabel("Current turn " + game.nbTurn(), SwingConstants.CENTER);
         panelInfo.add(labelCurrentTurn);
 		if(game instanceof PacmanGame) {
-			labelLife = new JLabel("Vie " + ((PacmanGame)game).getNbViePacmans(), SwingConstants.CENTER);
+			labelLife = new JLabel("Vie " + ((PacmanGame)game).getNbLifePacmans(), SwingConstants.CENTER);
 			panelInfo.add(labelLife);
 			labelScore = new JLabel("Score " + ((PacmanGame)game).score(), SwingConstants.CENTER);
 			panelInfo.add(labelScore);
@@ -72,7 +72,7 @@ public class ViewGame extends JFrame implements View, KeyListener {
 	public void update() {
         labelCurrentTurn.setText("current turn " + game.nbTurn());
 		if(game instanceof PacmanGame) {
-			labelLife.setText("Vie " + ((PacmanGame)game).getNbViePacmans());
+			labelLife.setText("Vie " + ((PacmanGame)game).getNbLifePacmans());
 			labelScore.setText("Score " + ((PacmanGame)game).score());
 		}
         panelPacmanGame.setPacmans_pos(game.positionPacmans());
