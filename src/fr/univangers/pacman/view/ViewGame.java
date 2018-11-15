@@ -107,7 +107,7 @@ public class ViewGame extends JFrame implements View, KeyListener {
             gameController.movePlayer2(Dir.SOUTH);
         	break;
         case KeyEvent.VK_D:
-            gameController.movePlayer2(Dir.WEST);
+            gameController.movePlayer2(Dir.EAST);
         	break;
         case KeyEvent.VK_P:
         	gameController.pause();

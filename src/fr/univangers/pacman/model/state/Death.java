@@ -26,6 +26,7 @@ public class Death implements State {
 	public void action(List<PositionAgent> positionPacmans, boolean[][] walls) {
 		if(nbTurnDeath >= 20) {
 			nbTurnDeath = 0;
+			agent.resetPosition();
 			agent.vivant();
 		} else { 
 			nbTurnDeath++;

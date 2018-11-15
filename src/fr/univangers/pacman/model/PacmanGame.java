@@ -13,9 +13,15 @@ import fr.univangers.pacman.model.PositionAgent.Dir;
 import fr.univangers.pacman.model.strategy.EscapeStrategy;
 import fr.univangers.pacman.model.strategy.NearestAttackStrategy;
 import fr.univangers.pacman.model.strategy.PlayerStrategy;
+import fr.univangers.pacman.model.strategy.RandomStrategy;
 
 public class PacmanGame extends Game {
-
+	public enum Mode {
+		oneplayer,
+		twoplayerC,
+		twoplayerO
+	}
+	
 	private static final long serialVersionUID = 998416452804755455L;
 	public static final int nbVieMax=3;
 	
@@ -27,6 +33,7 @@ public class PacmanGame extends Game {
 	private int nbTurnVulnerables;
 	private int nbFood = 0;
 	private int scorePerGhosts = 200;
+	private Mode mode;
 	
 	public int score() {
 		return score;
@@ -53,9 +60,10 @@ public class PacmanGame extends Game {
 		}
 	}
 	
-	public PacmanGame(int maxTurn, Maze maze) {
+	public PacmanGame(int maxTurn, Maze maze, Mode mode) {
 		super(maxTurn);
 		this.maze = maze;
+		this.mode = mode;
 		init();
 	}
 	
@@ -92,6 +100,32 @@ public class PacmanGame extends Game {
 		}
 	}
 	
+	public void movePacmanPlayer2(Dir dir) {
+		Agent p2 = null;
+		if(mode == Mode.twoplayerC)
+			p2 = pacmans.get(1);
+		else if(mode == Mode.twoplayerO)
+			p2 = ghosts.get(0);
+		if(p2 == null)
+			return;
+		switch(dir) {
+		case EAST:
+			p2.goRight();
+			break;
+		case NORTH:
+			p2.goUp();
+			break;
+		case SOUTH:
+			p2.goDown();
+			break;
+		case WEST:
+			p2.goLeft();
+			break;
+		default:
+			break;
+		}	
+	}
+	
 	public void moveAgent(Agent agent) {
 		agent.action(positionPacmans(), maze.getWalls());
 	}
@@ -110,9 +144,15 @@ public class PacmanGame extends Game {
 	@Override
 	public void initializeGame() {
 		pacmans.clear();
+		int p = 0;
 		for(PositionAgent position : maze.getPacman_start()) {
 			Agent pacman = new Agent(Agent.Type.PACMAN, position);
-			pacman.setStrategy(new PlayerStrategy(), new PlayerStrategy());
+			if((p < 1) || (p < 2 && mode == Mode.twoplayerC)) {
+				pacman.setStrategy(new PlayerStrategy(), new PlayerStrategy());
+				p++;
+			}
+			else
+				pacman.setStrategy(new RandomStrategy(), new RandomStrategy());
 			pacmans.add(pacman);
 			nbViePacmans.add(nbVieMax);
 			
@@ -120,7 +160,12 @@ public class PacmanGame extends Game {
 		ghosts.clear();
 		for(PositionAgent position : maze.getGhosts_start()) {
 			Agent ghost = new Agent(Agent.Type.GHOST, position);
-			ghost.setStrategy(new NearestAttackStrategy(), new EscapeStrategy());
+			if(p < 2 && mode == Mode.twoplayerO) {
+				ghost.setStrategy(new PlayerStrategy(), new PlayerStrategy());
+				p++;
+			}
+			else
+				ghost.setStrategy(new NearestAttackStrategy(), new EscapeStrategy());
 			ghosts.add(ghost);
 		}
 		nbFood = 0;
@@ -147,6 +192,7 @@ public class PacmanGame extends Game {
 		}
 		for(Agent pacman : pacmans) {
 			moveAgent(pacman);
+			mortAgents(pacman);
 			if(maze.isFood(pacman.position().getX(), pacman.position().getY())) {
 				maze.setFood(pacman.position().getX(), pacman.position().getY(), false);
 				score += 10;
@@ -168,8 +214,8 @@ public class PacmanGame extends Game {
 		}
 		for(Agent ghost : ghosts) {
 			moveAgent(ghost);
+			mortAgents(ghost);
 		}
-		mortAgents();
 		isOver();
 
 		updatePosition();
@@ -188,7 +234,7 @@ public class PacmanGame extends Game {
 	public void vieAgents() {
 		int count=0;
 		Iterator<Agent> iter = pacmans.iterator();
-		while (iter.hasNext()) {
+		while(iter.hasNext()) {
 			Agent pacman = iter.next();
 			if(pacman.isDeath()) {
 				if (getNbViePacman(count)>0) {
@@ -204,9 +250,26 @@ public class PacmanGame extends Game {
 		}
 	}
 	
-	public void mortAgents() {	
-		for(Agent ghost: ghosts) {
+	public void mortAgents(Agent agt) {	
+		if(ghosts.contains(agt)) {
+			Agent ghost = agt;
 			for(Agent pacman: pacmans) {
+				if((ghost.position().getX()==pacman.position().getX())&&(ghost.position().getY()==pacman.position().getY())) {
+					if (ghost.isVulnerable()) {
+						ghost.mort();
+						score += scorePerGhosts;
+						scorePerGhosts *= 2;
+					} else if (ghost.isLife()) {
+						pacman.mort();
+						vieAgents();
+						playSound("res/sounds/pacman_death.wav");
+					}
+				}
+			}
+		}
+		else {
+			Agent pacman = agt;
+			for(Agent ghost: ghosts) {
 				if((ghost.position().getX()==pacman.position().getX())&&(ghost.position().getY()==pacman.position().getY())) {
 					if (ghost.isVulnerable()) {
 						ghost.mort();

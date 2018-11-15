@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import fr.univangers.pacman.controller.PacmanGameController;
 import fr.univangers.pacman.model.Maze;
 import fr.univangers.pacman.model.PacmanGame;
+import fr.univangers.pacman.model.PacmanGame.Mode;
 import fr.univangers.pacman.view.ViewCommande;
 import fr.univangers.pacman.view.ViewGame;
 
@@ -33,7 +34,7 @@ public class TestPacmanGame {
 		} catch (Exception e) {
 			return;
 		} 
-		
+	
 	    Vector<String> listModes = new Vector<>();
 	    if(!maze.getPacman_start().isEmpty()) {
 	    	listModes.add("Un joueur");
@@ -50,8 +51,15 @@ public class TestPacmanGame {
 	    panelMode.add(new JLabel("Choix mode :"), BorderLayout.NORTH);
 	    panelMode.add(modes);
         JOptionPane.showMessageDialog(null, panelMode, "Choix mode", JOptionPane.QUESTION_MESSAGE);
-        
-		PacmanGame pacmanGame = new PacmanGame(250,maze);
+
+
+	    PacmanGame.Mode mode = Mode.oneplayer;
+	    if(modes.getSelectedItem() == "Deux joueurs (Comperatif)")
+	    	mode = Mode.twoplayerC;
+		else if(modes.getSelectedItem() == "Deux joueurs (Opposition)")
+			mode = Mode.twoplayerO;
+	    
+		PacmanGame pacmanGame = new PacmanGame(250,maze,mode);
 		PacmanGameController pacmanGameController = new PacmanGameController(pacmanGame);
 		ViewCommande viewCommande = new ViewCommande(pacmanGame); 
 		viewCommande.setGameController(pacmanGameController);

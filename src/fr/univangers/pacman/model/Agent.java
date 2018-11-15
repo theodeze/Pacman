@@ -29,7 +29,12 @@ public class Agent implements AgentAction, Serializable {
 	private Strategy currentStrategy;
 	
 	private Type type;
+	private PositionAgent positionInit;
 	private PositionAgent position;
+	
+	public void resetPosition() {
+		position = positionInit;
+	}
 	
 	public PositionAgent position() {
 		return position;
@@ -41,6 +46,7 @@ public class Agent implements AgentAction, Serializable {
 	
 	public Agent(Type type, PositionAgent position) {
 		this.type = type;
+		this.positionInit = position;
 		this.position = position;
 		this.life = new Life(this);
 		this.death = new Death(this);
