@@ -92,7 +92,6 @@ public abstract class Game implements Model, Runnable {
 			takeTurn();
 		} else {
 			isOver = true;
-			gameOver();
 		}
 	}
 	
@@ -116,6 +115,9 @@ public abstract class Game implements Model, Runnable {
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
+		}
+		if(isOver) {
+			gameOver();
 		}
 		isRunning = false;
 	}

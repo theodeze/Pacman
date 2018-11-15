@@ -23,28 +23,24 @@ public class PacmanGame extends Game {
 	}
 	
 	private static final long serialVersionUID = 998416452804755455L;
-	public static final int nbVieMax=3;
+	private static final int nbVieMax=3;
 	
 	private Maze maze;
 	private int score = 0;
 	private List<Agent> pacmans = new ArrayList<>();
 	private List<Agent> ghosts = new ArrayList<>();
-	private List<Integer> nbViePacmans = new ArrayList<>();
+	private int nbViePacmans;
 	private int nbTurnVulnerables;
 	private int nbFood = 0;
 	private int scorePerGhosts = 200;
 	private Mode mode;
 	
+	public int getNbViePacmans() {
+		return nbViePacmans;
+	}
+	
 	public int score() {
 		return score;
-	}
-	
-	public int getNbViePacman(int vieDuPacman) {
-		return nbViePacmans.get(vieDuPacman);
-	}
-	
-	public void setNbViePacman(int vieDuPacman, int newValeur) {	
-		nbViePacmans.set(vieDuPacman,newValeur);
 	}
 	
 	private void playSound(String filename) {
@@ -64,6 +60,7 @@ public class PacmanGame extends Game {
 		super(maxTurn);
 		this.maze = maze;
 		this.mode = mode;
+		this.nbViePacmans = nbVieMax;
 		init();
 	}
 	
@@ -132,13 +129,10 @@ public class PacmanGame extends Game {
 	
 	public void reinitPosition() {
 		int index = 0;
-		for(PositionAgent position : maze.getPacman_start()) {
-			pacmans.get(index++).setPosition(position);
-		}
-		index = 0;
-		for(PositionAgent position : maze.getGhosts_start()) {
-			ghosts.get(index++).setPosition(position);
-		}
+		for(Agent pacman : pacmans)
+			pacman.resetPosition();
+		for(Agent ghost : ghosts)
+			ghost.resetPosition();
 	}
 	
 	@Override
@@ -154,8 +148,6 @@ public class PacmanGame extends Game {
 			else
 				pacman.setStrategy(new RandomStrategy(), new RandomStrategy());
 			pacmans.add(pacman);
-			nbViePacmans.add(nbVieMax);
-			
 		}
 		ghosts.clear();
 		for(PositionAgent position : maze.getGhosts_start()) {
@@ -223,11 +215,10 @@ public class PacmanGame extends Game {
 
 	@Override
 	public void gameOver() {
-		if(pacmans.isEmpty()) {
-			System.out.println("Les fantomes ont gagnée");
-		}
 		if(nbFood == 0) {
 			System.out.println("Les pacmans ont gagnée");
+		} else {
+			System.out.println("Les fantomes ont gagnée");
 		}
 	}
 	
@@ -237,13 +228,10 @@ public class PacmanGame extends Game {
 		while(iter.hasNext()) {
 			Agent pacman = iter.next();
 			if(pacman.isDeath()) {
-				if (getNbViePacman(count)>0) {
+				if(nbViePacmans>0) {
 					pacman.vivant();
-					setNbViePacman(count,getNbViePacman(count)-1);
+					nbViePacmans--;
 					reinitPosition();
-				}
-				else {
-					pacmans.remove(pacman);
 				}
 			}
 			count++;
@@ -254,12 +242,11 @@ public class PacmanGame extends Game {
 		if(pacmans.contains(agt)) {		
 			Agent pacman = agt;
 			for(Agent ghost: ghosts) {
-				if(ghost.position()==pacman.position()) {
+				if((ghost.position().getX()==pacman.position().getX())&&(ghost.position().getY()==pacman.position().getY())) {
 					if (ghost.isVulnerable()) {
 						ghost.mort();
 						score += scorePerGhosts;
 						scorePerGhosts *= 2;
-						playSound("res/sounds/pacman_eatghost.wav");
 					} else if (ghost.isLife()) {
 						pacman.mort();
 						lifeAgents();
@@ -271,12 +258,11 @@ public class PacmanGame extends Game {
 		else {		
 			Agent ghost = agt;
 			for(Agent pacman: pacmans) {
-				if(ghost.position()==pacman.position()) {
+				if((ghost.position().getX()==pacman.position().getX())&&(ghost.position().getY()==pacman.position().getY())) {
 					if (ghost.isVulnerable()) {
 						ghost.mort();
 						score += scorePerGhosts;
 						scorePerGhosts *= 2;
-						playSound("res/sounds/pacman_eatghost.wav");
 					} else if (ghost.isLife()) {
 						pacman.mort();
 						lifeAgents();
@@ -288,7 +274,7 @@ public class PacmanGame extends Game {
 	}
 	
 	public void isOver() {
-		if(pacmans.isEmpty()) {
+		if(nbViePacmans == 0) {
 			over();
 		}
 		if(nbFood == 0) {
