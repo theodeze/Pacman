@@ -254,11 +254,12 @@ public class PacmanGame extends Game {
 		if(pacmans.contains(agt)) {		
 			Agent pacman = agt;
 			for(Agent ghost: ghosts) {
-				if((ghost.position().getX()==pacman.position().getX())&&(ghost.position().getY()==pacman.position().getY())) {
+				if(ghost.position()==pacman.position()) {
 					if (ghost.isVulnerable()) {
 						ghost.mort();
 						score += scorePerGhosts;
 						scorePerGhosts *= 2;
+						playSound("res/sounds/pacman_eatghost.wav");
 					} else if (ghost.isLife()) {
 						pacman.mort();
 						lifeAgents();
@@ -270,11 +271,12 @@ public class PacmanGame extends Game {
 		else {		
 			Agent ghost = agt;
 			for(Agent pacman: pacmans) {
-				if((ghost.position().getX()==pacman.position().getX())&&(ghost.position().getY()==pacman.position().getY())) {
+				if(ghost.position()==pacman.position()) {
 					if (ghost.isVulnerable()) {
 						ghost.mort();
 						score += scorePerGhosts;
 						scorePerGhosts *= 2;
+						playSound("res/sounds/pacman_eatghost.wav");
 					} else if (ghost.isLife()) {
 						pacman.mort();
 						lifeAgents();
