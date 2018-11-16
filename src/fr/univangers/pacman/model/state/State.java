@@ -12,7 +12,7 @@ public interface State extends Serializable {
 	}
 
 	public Status status();
-	public void action(List<PositionAgent> positionPacmans, boolean[][] walls);
+	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls);
 	public void vulnerability();
 	public void stopVulnerability();
 	public boolean isDeath();
