@@ -77,8 +77,8 @@ public class Agent implements AgentAction, Serializable {
 		this.position=position;
 	}
 	
-	public void action(List<PositionAgent> positionPacmans, boolean[][] walls) {
-		currentState.action(positionPacmans, walls);
+	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
+		currentState.action(positionPacmans, positionGhosts, walls);
 	}
 	
 	public void vulnerability() {
@@ -102,8 +102,8 @@ public class Agent implements AgentAction, Serializable {
 	}
 	
 	@Override
-	public void move(List<PositionAgent> positionPacmans, boolean[][] walls) {
-		currentStrategy.move(this, positionPacmans, walls);
+	public void move(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
+		currentStrategy.move(this, positionPacmans, positionGhosts, walls);
 	}
 	
 	@Override

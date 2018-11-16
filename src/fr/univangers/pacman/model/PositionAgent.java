@@ -19,9 +19,15 @@ public class PositionAgent implements Serializable {
 		this.dir = dir;
 	}
 
+	public PositionAgent(int x, int y) {
+		this.x = x;
+		this.y = y;
+		this.dir = Dir.NORTH;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(x,y,dir);
+		return Objects.hash(x,y);
 	}
 	
 	@Override

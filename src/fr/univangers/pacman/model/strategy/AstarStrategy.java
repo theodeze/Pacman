@@ -47,7 +47,7 @@ public class AstarStrategy implements Strategy {
     
     public boolean isNotOccupiedByGhost(List<PositionAgent> positionGhosts, PositionAgent p) {
     	for(PositionAgent positionGhost : positionGhosts)
-    		if(PositionAgent.equal(positionGhost, p))
+    		if(positionGhost.equals(p))
     			return false;
     	return true;
     }
@@ -114,7 +114,7 @@ public class AstarStrategy implements Strategy {
         	PositionAgent current = minFScore(openList);
 
             // arrivé
-            if(PositionAgent.equal(current, goal))
+            if(current.equals(goal))
                 return nextPosition(cameFrom, current);
 
             closedList.add(current);
@@ -149,18 +149,23 @@ public class AstarStrategy implements Strategy {
     	int nearestDistance = heuristic(me, currentTarget);
     	for(PositionAgent target : targets) {
     		int currentDistance = heuristic(me, target);
-    		if(nearestDistance > currentDistance)
-    			
+    		if(nearestDistance > currentDistance) {
+    			currentTarget = target;
+    			nearestDistance = currentDistance;
+    		}			
     	}
-    	
+    	return currentTarget;
     }	
 
 	@Override
 	public void move(Agent agent, List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
-		if(positionPacmans.isEmpty())
+		if(positionPacmans.isEmpty()) {
 			return;
-			System.out.println("Pas besoin");
 		}
-        agent.setPosition(findPath(agent.position(), positionPacmans.get(0), positionGhosts, walls));
+		PositionAgent newPosition = findPath(agent.position(), positionPacmans.get(0), positionGhosts, walls);
+		if(newPosition.equals(agent.position())) {
+			newPosition  = findPath(agent.position(), positionPacmans.get(0), Collections.emptyList(), walls);
+		}
+        agent.setPosition(newPosition);
 	}
 }

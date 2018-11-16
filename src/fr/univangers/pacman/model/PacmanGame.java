@@ -134,7 +134,7 @@ public class PacmanGame extends Game {
 	}
 	
 	public void moveAgent(Agent agent) {
-		agent.action(positionPacmans(), maze.getWalls());
+		agent.action(positionPacmans(), positionGhosts(), maze.getWalls());
 	}
 	
 	public void resetPosition() {

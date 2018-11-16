@@ -23,7 +23,7 @@ public class Death implements State {
 	}
 	
 	@Override
-	public void action(List<PositionAgent> positionPacmans, boolean[][] walls) {
+	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
 		if(nbTurnDeath >= 20) {
 			nbTurnDeath = 0;
 			agent.resetPosition();
