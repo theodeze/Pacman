@@ -124,7 +124,7 @@ public class AstarStrategy implements Strategy {
 
                 double newGScore = getGScore(current) + 1;
                 
-                // voisin a déja été évalué ou ce n'est pas le mellieur chemin
+                // voisin a déja été évalué ou ce n'est pas le meilleur chemin
                 if((closedList.contains(neighbor)) || (getGScore(neighbor) <= newGScore))
                     continue;
 
