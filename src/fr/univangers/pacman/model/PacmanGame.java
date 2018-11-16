@@ -258,7 +258,6 @@ public class PacmanGame extends Game {
 	public void changesForDeathState(Agent pacman, Agent ghost) {
 		if(ghost.position().equals(pacman.position())) {
 			if (ghost.isVulnerable()) {
-				System.out.println("Test");
 				ghost.mort();
 				score += scorePerGhosts;
 				scorePerGhosts *= 2;
