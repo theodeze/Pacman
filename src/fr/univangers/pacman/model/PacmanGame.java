@@ -244,39 +244,32 @@ public class PacmanGame extends Game {
 	public void deadAgents(Agent agt) {	
 		if(pacmans.contains(agt)) {		
 			Agent pacman = agt;
-			for(Agent ghost: ghosts) {
-				if(ghost.position().equals(pacman.position())) {
-					if (ghost.isVulnerable()) {
-						ghost.mort();
-						score += scorePerGhosts;
-						scorePerGhosts *= 2;
-						playSound("res/sounds/pacman_eatghost.wav");
-					} else if (ghost.isLife()) {
-						pacman.mort();
-						lifeAgents();
-						playSound("res/sounds/pacman_death.wav");
-					}
-				}
-			}		
+			for(Agent ghost: ghosts) 
+				changesForDeathState(ghost, pacman);				
 		}
+		
 		else {		
 			Agent ghost = agt;
-			for(Agent pacman: pacmans) {
-				if(ghost.position().equals(pacman.position())) {
-					if (ghost.isVulnerable()) {
-						ghost.mort();
-						score += scorePerGhosts;
-						scorePerGhosts *= 2;
-						playSound("res/sounds/pacman_eatghost.wav");
-					} else if (ghost.isLife()) {
-						pacman.mort();
-						lifeAgents();
-						playSound("res/sounds/pacman_death.wav");
-					}
-				}
+			for(Agent pacman: pacmans)
+				changesForDeathState(ghost, pacman);
+		}
+	}
+	
+	public void changesForDeathState(Agent pacman, Agent ghost) {
+		if(ghost.position().equals(pacman.position())) {
+			if (ghost.isVulnerable()) {
+				ghost.mort();
+				score += scorePerGhosts;
+				scorePerGhosts *= 2;
+				playSound("res/sounds/pacman_eatghost.wav");
+			} else if (ghost.isLife()) {
+				pacman.mort();
+				lifeAgents();
+				playSound("res/sounds/pacman_death.wav");
 			}
 		}
 	}
+	
 	
 	public void isOver() {
 		if(nbLifePacmans == 0) {
