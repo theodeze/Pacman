@@ -16,9 +16,9 @@ public class Agent implements AgentAction, Serializable {
 	
 	public enum Type { PACMAN, GHOST }
 
-	private State vunerable;
-	private State life;
-	private State death;
+	private Vulnerable vunerable;
+	private Life life;
+	private Death death;
 	
 	private State currentState;
 
@@ -84,10 +84,6 @@ public class Agent implements AgentAction, Serializable {
 	public void vulnerability() {
 		currentState.vulnerability();
 	}
-	
-	public void stopVulnerability() {
-		currentState.stopVulnerability();
-	}
 
 	public boolean isDeath() {
 		return currentState.isDeath();
@@ -133,6 +129,7 @@ public class Agent implements AgentAction, Serializable {
 
 	public void mort() {
 		switchDeathStrategy();
+		vunerable.resetTurnVulnerable();
 		currentState = death;
 	}
 	

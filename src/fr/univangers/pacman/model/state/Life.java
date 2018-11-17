@@ -6,49 +6,58 @@ import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 import fr.univangers.pacman.model.Agent.Type;
 
+/**
+ * Vivant représente l'état par default d'un agent
+ */
 public class Life implements State {
 
 	private static final long serialVersionUID = 4688284123963873980L;
-	private static final Status status = Status.LIFE;
 	Agent agent;
-	
 	
 	public Life(Agent agent) {
 		this.agent = agent;
 	}
 
-	@Override
-	public Status status() {
-		return status;
-	}
-
+	/**
+	 * Déplace l'agent
+	 */
 	@Override
 	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
 		agent.move(positionPacmans, positionGhosts, walls);
 	}
 	
+	/**
+	 * Si l'agent est un fantome il dévient vunérable
+	 */
 	@Override
 	public void vulnerability() {
 		if(agent.type() == Type.GHOST) {
 			agent.inversion();
 		}
 	}
-
-	@Override
-	public void stopVulnerability() {
-		//
-	}
-
+	
+	/**
+	 * Renvoie si l'état est mort
+	 * @return vrai si mort faux sinon
+	 */
 	@Override
 	public boolean isDeath() {
 		return false;
 	}
-
+	
+	/**
+	 * Renvoie si l'état est vivant
+	 * @return vrai si vivant faux sinon
+	 */
 	@Override
 	public boolean isLife() {
 		return true;
 	}
 
+	/**
+	 * Renvoie si l'état est vulnerable
+	 * @return vrai si vulnerable faux sinon
+	 */
 	@Override
 	public boolean isVulnerable() {
 		return false;

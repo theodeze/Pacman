@@ -34,7 +34,6 @@ public class PacmanGame extends Game {
 	private List<Agent> ghosts = new ArrayList<>();
 	private List<PositionAgent> positionGhosts = new ArrayList<>();
 	private int nbLifePacmans;
-	private int nbTurnVulnerables;
 	private int nbFood = 0;
 	private int scorePerGhosts = 200;
 	private Mode mode;
@@ -200,16 +199,6 @@ public class PacmanGame extends Game {
 
 	@Override
 	public void takeTurn() {
-		if(nbTurnVulnerables == 0) {
-			for (Agent ghost : ghosts) {
-				ghost.stopVulnerability();
-			}
-			nbTurnVulnerables--;
-			scorePerGhosts = 200;
-		} 
-		if(nbTurnVulnerables > 0) {
-			nbTurnVulnerables--;
-		}
 		for(Agent pacman : pacmans) {
 			moveAgent(pacman);
 			deadAgents(pacman);
@@ -221,12 +210,9 @@ public class PacmanGame extends Game {
 			}
 			if(maze.isCapsule(pacman.position().getX(), pacman.position().getY())) {
 				maze.setCapsule(pacman.position().getX(), pacman.position().getY(), false);
-				pacman.inversion();
 				for (Agent ghost : ghosts) {
 					ghost.vulnerability();
-					
 				}
-				nbTurnVulnerables = 20;
 				score += 50;
 				playSound("res/sounds/pacman_extrapac.wav");
 			}
