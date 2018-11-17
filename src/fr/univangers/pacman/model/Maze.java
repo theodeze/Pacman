@@ -27,7 +27,9 @@ public class Maze implements Serializable{
 	 * Les elements du labyrinthe
 	 */
 	private boolean walls[][];
-	private boolean food[][];
+	private boolean foods_start[][];
+	private boolean foods[][];
+	private boolean capsules_start[][];
 	private boolean capsules[][];
 
 	/** 
@@ -62,17 +64,17 @@ public class Maze implements Serializable{
 			size_x=nbX;
 			size_y=nbY;
 			walls=new boolean[size_x][size_y];
-			food=new boolean[size_x][size_y];
-			capsules=new boolean[size_x][size_y];
+			foods_start=new boolean[size_x][size_y];
+			capsules_start=new boolean[size_x][size_y];
 			
 			pacman_start =new ArrayList<>();
 			ghosts_start =new ArrayList<>();
 			
 			//Lecture du fichier pour mettre a jour le labyrinthe
-			 ips=new FileInputStream(filename); 
-			 ipsr=new InputStreamReader(ips);
-			 br=new BufferedReader(ipsr);
-			 int y=0;
+			ips=new FileInputStream(filename); 
+			ipsr=new InputStreamReader(ips);
+			br=new BufferedReader(ipsr);
+			int y=0;
 			while ((ligne=br.readLine())!=null)
 			{
 				ligne=ligne.trim();
@@ -80,14 +82,17 @@ public class Maze implements Serializable{
 				for(int x=0;x<ligne.length();x++)
 				{
 					if (ligne.charAt(x)=='%') walls[x][y]=true; else walls[x][y]=false;
-					if (ligne.charAt(x)=='.') food[x][y]=true; else food[x][y]=false;
-					if (ligne.charAt(x)=='o') capsules[x][y]=true; else capsules[x][y]=false;
+					if (ligne.charAt(x)=='.') foods_start[x][y]=true; else foods_start[x][y]=false;
+					if (ligne.charAt(x)=='o') capsules_start[x][y]=true; else capsules_start[x][y]=false;
 					if (ligne.charAt(x)=='P') {pacman_start.add(new PositionAgent(x,y,PositionAgent.Dir.NORTH));}
 					if (ligne.charAt(x)=='G') {ghosts_start.add(new PositionAgent(x,y,PositionAgent.Dir.NORTH));}
 				}
 				y++;
 			}			
 			br.close(); 
+			
+			resetFoods();
+			resetCapsules();
 			
 			if (pacman_start.size()==0)throw new Exception("Wrong input format: must specify a Pacman start");
 			
@@ -128,23 +133,27 @@ public class Maze implements Serializable{
 	/**
 	 * Permet de savoir si il y a de la nourriture
 	 */
-	public boolean isFood(int x,int y) 
+	public boolean isFoods(int x,int y) 
 	{
 		assert((x>=0) && (x<size_x));
 		assert((y>=0) && (y<size_y));
-		return(food[x][y]);
+		return(foods[x][y]);
 	}
 
-	public void setFood(int x,int y,boolean b) {
-		food[x][y]=b;
+	public void setFoods(int x,int y,boolean b) {
+		foods[x][y]=b;
 	}
 	
+	public void resetFoods() {
+		foods = new boolean[foods_start.length][]; 
+		for(int i = 0; i < foods_start.length; i++)
+			foods[i] = foods_start[i].clone();
+	}
 	
 	/**
 	 * Permet de savoir si il y a une capsule
 	 */
-	public boolean isCapsule(int x,int y) 
-	{
+	public boolean isCapsule(int x,int y) {
 		assert((x>=0) && (x<size_x));
 		assert((y>=0) && (y<size_y));
 		return(capsules[x][y]);
@@ -154,12 +163,17 @@ public class Maze implements Serializable{
 		capsules[x][y]=b;
 	}
 	
+	public void resetCapsules() {
+		capsules = new boolean[capsules_start.length][]; 
+		for(int i = 0; i < capsules_start.length; i++)
+			capsules[i] = capsules_start[i].clone();
+	}
+	
 	/**
 	 * Renvoie le nombre de pacmans
 	 * @return
 	 */
-	public int getInitNumberOfPacmans() 
-	{
+	public int getInitNumberOfPacmans() {
 		return(pacman_start.size());	
 	}
 	

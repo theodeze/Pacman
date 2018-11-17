@@ -75,7 +75,7 @@ public class PanelPacmanGame extends JPanel{
 					double npy=(stepy-nsy)/2.0;
 					g.fillRect((int)(npx+posx),(int)(npy+posy),(int)(nsx),(int)nsy);						
 				}
-				if (m.isFood(x, y))
+				if (m.isFoods(x, y))
 				{
 					g.setColor(colorFood);
 					double nsx=stepx*sizeFood;

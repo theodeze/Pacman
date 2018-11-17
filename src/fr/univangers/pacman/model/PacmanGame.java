@@ -58,7 +58,7 @@ public class PacmanGame extends Game {
 	        clip.open(audioIn);
 	        clip.start();
 		} catch (Exception e) {
-			e.printStackTrace();
+			//
 		}
 	}
 	
@@ -172,11 +172,14 @@ public class PacmanGame extends Game {
 				ghosts.add(FactoryAgent.createGhostAstar(position));
 		}
 		nbFood = 0;
+		maze.resetFoods();
 		for(int x = 0; x < maze.getSizeX(); x++) {
 			for(int y = 0; y < maze.getSizeY(); y++) {
-				nbFood += maze.isFood(x, y) ? 1 : 0;
+				nbFood += maze.isFoods(x, y) ? 1 : 0;
 			}
 		}
+		maze.resetCapsules();
+		updatePosition();
 		playSound("res/sounds/pacman_beginning.wav");
 	}
 
@@ -195,8 +198,8 @@ public class PacmanGame extends Game {
 		for(Agent pacman : pacmans) {
 			moveAgent(pacman);
 			deadAgents(pacman);
-			if(maze.isFood(pacman.position().getX(), pacman.position().getY())) {
-				maze.setFood(pacman.position().getX(), pacman.position().getY(), false);
+			if(maze.isFoods(pacman.position().getX(), pacman.position().getY())) {
+				maze.setFoods(pacman.position().getX(), pacman.position().getY(), false);
 				score += 10;
 				nbFood--;
 				playSound("res/sounds/pacman_chomp.wav");
