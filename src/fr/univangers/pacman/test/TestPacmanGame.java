@@ -14,6 +14,7 @@ import fr.univangers.pacman.model.Maze;
 import fr.univangers.pacman.model.PacmanGame;
 import fr.univangers.pacman.model.PacmanGame.Mode;
 import fr.univangers.pacman.view.ViewCommande;
+import fr.univangers.pacman.view.ViewEndGame;
 import fr.univangers.pacman.view.ViewGame;
 
 public class TestPacmanGame {
@@ -63,7 +64,12 @@ public class TestPacmanGame {
 		PacmanGameController pacmanGameController = new PacmanGameController(pacmanGame);
 		ViewCommande viewCommande = new ViewCommande(pacmanGame); 
 		viewCommande.setGameController(pacmanGameController);
+		//new ViewGame(pacmanGame, pacmanGameController, maze);
+		
+		ViewEndGame viewEndGame = new ViewEndGame(pacmanGame, "Game over"); 
+		viewEndGame.setGameController(pacmanGameController);
 		new ViewGame(pacmanGame, pacmanGameController, maze);
+		
 	}
 
 }
