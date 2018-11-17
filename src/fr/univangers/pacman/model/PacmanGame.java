@@ -19,7 +19,7 @@ public class PacmanGame extends Game {
 	}
 	
 	private static final long serialVersionUID = 998416452804755455L;
-	private static final int nbVieMax=3;
+	private static final int nbVieMax = 3;
 	
 	private Maze maze;
 	private int score = 0;
@@ -179,6 +179,8 @@ public class PacmanGame extends Game {
 			}
 		}
 		maze.resetCapsules();
+		score = 0;
+		nbLifePacmans = nbVieMax;
 		updatePosition();
 		playSound("res/sounds/pacman_beginning.wav");
 	}
