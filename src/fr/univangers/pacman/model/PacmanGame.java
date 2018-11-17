@@ -10,11 +10,6 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 import fr.univangers.pacman.model.PositionAgent.Dir;
-import fr.univangers.pacman.model.strategy.EscapeStrategy;
-import fr.univangers.pacman.model.strategy.NearestAttackStrategy;
-import fr.univangers.pacman.model.strategy.NoneStrategy;
-import fr.univangers.pacman.model.strategy.PlayerStrategy;
-import fr.univangers.pacman.model.strategy.RandomStrategy;
 
 public class PacmanGame extends Game {
 	public enum Mode {
@@ -29,7 +24,9 @@ public class PacmanGame extends Game {
 	private Maze maze;
 	private int score = 0;
 	private List<Agent> pacmans = new ArrayList<>();
+	private List<PositionAgent> positionPacmans = new ArrayList<>();
 	private List<Agent> ghosts = new ArrayList<>();
+	private List<PositionAgent> positionGhosts = new ArrayList<>();
 	private int nbLifePacmans;
 	private int nbTurnVulnerables;
 	private int nbFood = 0;
@@ -42,6 +39,14 @@ public class PacmanGame extends Game {
 	
 	public int score() {
 		return score;
+	}
+	
+	public List<PositionAgent> positionPacmans() {
+		return positionPacmans;
+	}
+	
+	public List<PositionAgent> positionGhosts() {
+		return positionGhosts;
 	}
 	
 	private void playSound(String filename) {
@@ -75,14 +80,15 @@ public class PacmanGame extends Game {
 	}
 	
 	private void updatePosition() {
-		clearPositionPacman();
+		positionPacmans.clear();
 		for(Agent pacman : pacmans) {
-			addPositionPacman(pacman.position());
+			if(!pacman.isDeath())
+				positionPacmans.add(pacman.position());
 		}
-		clearPositionGhosts();
+		positionGhosts.clear();
 		for(Agent ghost : ghosts) {
 			if(!ghost.isDeath())
-				addPositionGhosts(ghost.position());
+				positionGhosts.add(ghost.position());
 		}
 		notifyViews();
 	}
@@ -149,25 +155,21 @@ public class PacmanGame extends Game {
 		pacmans.clear();
 		int p = 0;
 		for(PositionAgent position : maze.getPacman_start()) {
-			Agent pacman = new Agent(Agent.Type.PACMAN, position);
 			if((p < 1) || (p < 2 && mode == Mode.twoplayerC)) {
-				pacman.setStrategy(new PlayerStrategy(), new PlayerStrategy());
+				pacmans.add(FactoryAgent.createPacmanPlayer(position));
 				p++;
 			}
 			else
-				pacman.setStrategy(new RandomStrategy(), new RandomStrategy());
-			pacmans.add(pacman);
+				pacmans.add(FactoryAgent.createPacmanRandom(position));
 		}
 		ghosts.clear();
 		for(PositionAgent position : maze.getGhosts_start()) {
-			Agent ghost = new Agent(Agent.Type.GHOST, position);
 			if(p < 2 && mode == Mode.twoplayerO) {
-				ghost.setStrategy(new PlayerStrategy(), new PlayerStrategy());
+				ghosts.add(FactoryAgent.createGhostPlayer(position));
 				p++;
 			}
 			else
-				ghost.setStrategy(new NoneStrategy(), new NoneStrategy());
-			ghosts.add(ghost);
+				ghosts.add(FactoryAgent.createGhostAstar(position));
 		}
 		nbFood = 0;
 		for(int x = 0; x < maze.getSizeX(); x++) {

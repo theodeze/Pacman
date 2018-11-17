@@ -126,7 +126,6 @@ public class Agent implements AgentAction, Serializable {
 		position.setDir(PositionAgent.Dir.EAST);
 	}
 	
-	
 	public void vivant() {
 		switchLifeStrategy();
 		currentState = life;

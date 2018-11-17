@@ -3,6 +3,7 @@ package fr.univangers.pacman.model.state;
 import java.util.List;
 
 import fr.univangers.pacman.model.Agent;
+import fr.univangers.pacman.model.Agent.Type;
 import fr.univangers.pacman.model.PositionAgent;
 
 public class Death implements State {
@@ -24,12 +25,14 @@ public class Death implements State {
 	
 	@Override
 	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
-		if(nbTurnDeath >= 20) {
-			nbTurnDeath = 0;
-			agent.resetPosition();
-			agent.vivant();
-		} else { 
-			nbTurnDeath++;
+		if(agent.type() == Type.GHOST) {
+			if(nbTurnDeath >= 20) {
+				nbTurnDeath = 0;
+				agent.resetPosition();
+				agent.vivant();
+			} else { 
+				nbTurnDeath++;
+			}
 		}
 	}
 	

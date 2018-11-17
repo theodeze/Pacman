@@ -16,10 +16,6 @@ public abstract class Game implements Model, Runnable {
 	private int nbTurn = 0;
 	private int maxTurn;
 	
-	/* PACMAN */
-	private List<PositionAgent> positionPacmans = new ArrayList<>();
-	private List<PositionAgent> positionGhosts = new ArrayList<>();
-	
 	public void over() {
 		isOver=true;
 	}
@@ -40,30 +36,6 @@ public abstract class Game implements Model, Runnable {
 	
 	public void setTime(int time) {
 		this.time = time;
-	}
-	
-	public void clearPositionPacman() {
-		positionPacmans.clear();
-	}
-	
-	public void addPositionPacman(PositionAgent position) {
-		positionPacmans.add(position);
-	}
-	
-	public List<PositionAgent> positionPacmans() {
-		return positionPacmans;
-	}
-	
-	public void clearPositionGhosts() {
-		positionGhosts.clear();
-	}
-	
-	public void addPositionGhosts(PositionAgent position) {
-		positionGhosts.add(position);
-	}
-	
-	public List<PositionAgent> positionGhosts() {
-		return positionGhosts;
 	}
 	
 	public Game(int maxTurn) {

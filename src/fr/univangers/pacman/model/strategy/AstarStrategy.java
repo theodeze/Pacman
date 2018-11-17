@@ -145,26 +145,27 @@ public class AstarStrategy implements Strategy {
     public PositionAgent nearestTarget(PositionAgent me, List<PositionAgent> targets) {
     	if(targets.isEmpty())
     		return null;
-    	PositionAgent currentTarget = targets.get(0);
-    	int nearestDistance = heuristic(me, currentTarget);
-    	for(PositionAgent target : targets) {
-    		int currentDistance = heuristic(me, target);
+    	PositionAgent nearestTarget = targets.get(0);
+    	int nearestDistance = heuristic(me, nearestTarget);
+    	for(PositionAgent currentTarget : targets) {
+    		int currentDistance = heuristic(me, currentTarget);
     		if(nearestDistance > currentDistance) {
-    			currentTarget = target;
+    			nearestTarget = currentTarget;
     			nearestDistance = currentDistance;
     		}			
     	}
-    	return currentTarget;
+    	return nearestTarget;
     }	
 
 	@Override
 	public void move(Agent agent, List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
-		if(positionPacmans.isEmpty()) {
+		PositionAgent target = nearestTarget(agent.position(), positionPacmans);
+		if(target == null) {
 			return;
 		}
-		PositionAgent newPosition = findPath(agent.position(), positionPacmans.get(0), positionGhosts, walls);
+		PositionAgent newPosition = findPath(agent.position(), target, positionGhosts, walls);
 		if(newPosition.equals(agent.position())) {
-			newPosition  = findPath(agent.position(), positionPacmans.get(0), Collections.emptyList(), walls);
+			newPosition  = findPath(agent.position(), target, Collections.emptyList(), walls);
 		}
         agent.setPosition(newPosition);
 	}
