@@ -28,17 +28,20 @@ public class ViewEndGame extends JFrame implements View{
 	private JButton btnStop;
 	
 	private JPanel panelInfo;
+	private boolean end;
+	private String StateOfEnd;
 	
 
 	public void setGameController(GameController gameController) {
 		this.gameController = gameController;
 	}
 	
-	public ViewEndGame(Game game, String StateOfEnd) {
+	public ViewEndGame(Game game, boolean end) {
 		super();
 		this.game = game;
 		this.game.addView(this);
-		
+		this.end = end;
+		if (this.end) {
         setTitle("Fin de la partie");
         setSize(new Dimension(700, 300));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,7 +66,7 @@ public class ViewEndGame extends JFrame implements View{
         
         btnStop = new JButton(new ImageIcon("res/icons/icon_stop.png"));
         btnStop.addActionListener(evenement -> { 
-        	gameController.restart();
+        	gameController.end();
         	btnStop.setEnabled(true);
         });
         btnStop.setEnabled(true);
@@ -80,17 +83,22 @@ public class ViewEndGame extends JFrame implements View{
         
         panelInfo = new JPanel();
         panelInfo.setLayout(new GridLayout(1,1));
+        StateOfEnd=game.gameOver();
         JLabel labelTime = new JLabel(StateOfEnd, SwingConstants.CENTER);
         panelInfo.add(labelTime);
        
         add(panelInfo);
         
-		setVisible(true);
+		setVisible(this.end);
+		}
 	}
 	
 	
 	@Override
-	public void update() { //Ne sert à rien
-
+	public void update() { 
+		if(game.EndOfGame()) {
+			end=true;	
+			StateOfEnd=game.gameOver();
+		}
 	}
 }

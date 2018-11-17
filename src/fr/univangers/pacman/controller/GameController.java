@@ -11,6 +11,7 @@ public interface GameController extends Serializable {
 	public void restart();
 	public void run();
 	public void step();
+	public void end();
 	
 	public void movePlayer1(Dir dir);
 	public void movePlayer2(Dir dir);

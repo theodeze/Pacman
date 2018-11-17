@@ -221,11 +221,11 @@ public class PacmanGame extends Game {
 	}
 
 	@Override
-	public void gameOver() {
+	public String gameOver() {
 		if(nbFood == 0) {
-			System.out.println("Les pacmans ont gagnée");
+			return "Les pacmans ont gagnée";
 		} else {
-			System.out.println("Les fantomes ont gagnée");
+			return "Les fantômes ont gagnée";
 		}
 	}
 	
@@ -278,7 +278,23 @@ public class PacmanGame extends Game {
 		if(nbFood == 0) {
 			over();
 		}
+		EndOfGame();
 	}
 	
+	@Override
+	public boolean EndOfGame() {
+		if(nbLifePacmans == 0) {
+			return true;
+		}
+		else if (nbFood == 0) {
+
+			return true;
+		}
+		else if (getMaxTurn()==nbTurn()) {
+			return true;
+		}
+		else return false;
+	}
+
 	
 }

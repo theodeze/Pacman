@@ -19,8 +19,15 @@ public class SimpleGame extends Game {
 	}
 
 	@Override
-	public void gameOver() {
-		System.out.println("Game Over");
+	public String gameOver() {
+		return "Game Over";
 	}
 
+	@Override
+	public boolean EndOfGame() {
+		return false;
+	}
+
+
+	
 }

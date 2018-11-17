@@ -47,4 +47,9 @@ public class SimpleGameController implements GameController {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public void end() {
+		simpleGame.end();
+	}
+
 }

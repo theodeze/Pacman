@@ -47,5 +47,10 @@ public class PacmanGameController implements GameController {
 		pacmanGame.movePacmanPlayer2(dir);
 	}
 
+	@Override
+	public void end() {
+		pacmanGame.end();
+	}
+
 
 }

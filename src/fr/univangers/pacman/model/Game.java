@@ -109,6 +109,7 @@ public abstract class Game implements Model, Runnable {
 		}
 		if(isOver) {
 			gameOver();
+			notifyViews();
 		}
 		isRunning = false;
 	}
@@ -126,14 +127,24 @@ public abstract class Game implements Model, Runnable {
 	@Override
 	public void notifyViews() {
 		for(View view : views) {
-			view.update();
+			view.update();		
 		}
+	}
+	
+	public int getMaxTurn() {
+		return maxTurn;
+	}
+	
+	public void end() {
+		System.exit(1);
 	}
 	
 	// Méthodes abstraites
 	
 	public abstract void initializeGame();
 	public abstract void takeTurn();
-	public abstract void gameOver();
+	public abstract String gameOver();
+	public abstract boolean EndOfGame();
+
 
 }
