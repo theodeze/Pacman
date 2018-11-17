@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
 
 import fr.univangers.pacman.controller.GameController;
 import fr.univangers.pacman.model.Game;
+import fr.univangers.pacman.model.PacmanGame;
 
 public class ViewCommande extends JFrame implements View {
 
@@ -116,6 +117,12 @@ public class ViewCommande extends JFrame implements View {
 	@Override
 	public void update() {
 		labelNbTurn.setText("Turn : " + game.nbTurn());
+		if(game instanceof PacmanGame && ((PacmanGame)game).winner() != PacmanGame.Winner.noWinner) {
+        	btnRun.setEnabled(true);
+        	btnPause.setEnabled(false);
+            btnStep.setEnabled(false);
+        	btnRestart.setEnabled(false);
+		}
 	}
 
 }

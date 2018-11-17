@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -28,12 +29,14 @@ public class ViewGame extends JFrame implements View, KeyListener {
 	private JLabel labelScore;
 	private JLabel labelLife;
 	private PanelPacmanGame panelPacmanGame;
+	private boolean reset;
 	
 	public ViewGame(Game game, GameController gameController, Maze maze) {
 		super();
 		this.game = game;
 		this.game.addView(this);
 		this.gameController = gameController;
+		this.reset = false;
 		
 		addKeyListener(this);
 		
@@ -77,6 +80,27 @@ public class ViewGame extends JFrame implements View, KeyListener {
 	        panelPacmanGame.setGhostsScarred(((PacmanGame)game).ghostsScarred());
 	        panelPacmanGame.setPacmans_pos(((PacmanGame)game).positionPacmans());
 	        panelPacmanGame.setGhosts_pos(((PacmanGame)game).positionGhosts());
+	        
+	        PacmanGame.Winner winner = ((PacmanGame)game).winner();
+	        if(!reset && winner != PacmanGame.Winner.noWinner) {
+	        	String print = "";
+		        if(winner == PacmanGame.Winner.pacmanWinner) {
+		        	print = "Les pacmans ont gagné";
+		        }
+		        else if(winner == PacmanGame.Winner.ghostWinner) {
+		        	print = "Les fantomes ont gagné";
+		        }	  
+	        	int answer = JOptionPane.showConfirmDialog(this,
+	        			print + "\nRelancer?", "Game Over", JOptionPane.YES_NO_OPTION); 
+	        	if(answer == JOptionPane.YES_OPTION) {
+	        		reset = true;
+	        		gameController.restart();
+	        	} else {
+	        		System.exit(NORMAL);
+	        	}	
+	        }
+	        else 
+	        	reset = false;
 		}
         panelPacmanGame.repaint();
 	}

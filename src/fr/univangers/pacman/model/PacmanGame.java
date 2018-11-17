@@ -18,6 +18,12 @@ public class PacmanGame extends Game {
 		twoplayerO
 	}
 	
+	public enum Winner {
+		noWinner,
+		ghostWinner,
+		pacmanWinner
+	}
+	
 	private static final long serialVersionUID = 998416452804755455L;
 	private static final int nbVieMax = 3;
 	
@@ -32,6 +38,7 @@ public class PacmanGame extends Game {
 	private int nbFood = 0;
 	private int scorePerGhosts = 200;
 	private Mode mode;
+	private Winner winner;
 	
 	public int getNbLifePacmans() {
 		return nbLifePacmans;
@@ -39,6 +46,10 @@ public class PacmanGame extends Game {
 	
 	public int score() {
 		return score;
+	}
+	
+	public Winner winner() {
+		return winner;
 	}
 	
 	public List<PositionAgent> positionPacmans() {
@@ -75,6 +86,7 @@ public class PacmanGame extends Game {
 		super(maxTurn);
 		this.maze = maze;
 		this.mode = mode;
+		this.winner = Winner.noWinner;
 		this.nbLifePacmans = nbVieMax;
 		init();
 	}
@@ -181,6 +193,7 @@ public class PacmanGame extends Game {
 		maze.resetCapsules();
 		score = 0;
 		nbLifePacmans = nbVieMax;
+		winner = Winner.noWinner;
 		updatePosition();
 		playSound("res/sounds/pacman_beginning.wav");
 	}
@@ -230,9 +243,11 @@ public class PacmanGame extends Game {
 	@Override
 	public void gameOver() {
 		if(nbFood == 0) {
-			System.out.println("Les pacmans ont gagnée");
+			winner = Winner.pacmanWinner;
+			notifyViews();
 		} else {
-			System.out.println("Les fantomes ont gagnée");
+			winner = Winner.ghostWinner;
+			notifyViews();
 		}
 	}
 	
