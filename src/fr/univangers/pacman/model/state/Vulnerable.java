@@ -5,6 +5,10 @@ import java.util.List;
 import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 
+/**
+ *  Classe qui sert à définir l'état Death
+ */
+
 public class Vulnerable implements State {
 
 	private static final long serialVersionUID = -8735708242622564562L;

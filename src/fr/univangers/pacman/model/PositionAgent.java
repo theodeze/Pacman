@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * 
- * @author etudiant
- *
  * La classe PositionAgent permet d'afficher et localiser dans
  * le jeu chaque agent à la case qui correspond, en fonction d'un
  * moment donné

@@ -19,6 +19,10 @@ import fr.univangers.pacman.model.Maze;
 import fr.univangers.pacman.model.PacmanGame;
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
+/**
+ *	Classe ViewGame permet d'afficher le jeu dans une interface graphique
+ */
+
 public class ViewGame extends JFrame implements View, KeyListener {
 
 	private static final long serialVersionUID = -2187636929128362263L;

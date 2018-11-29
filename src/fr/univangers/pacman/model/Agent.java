@@ -11,9 +11,6 @@ import fr.univangers.pacman.model.state.Death;
 import fr.univangers.pacman.model.state.Life;
 
 /**
- * 
- * @author etudiant
- *
  * La classe Agent permet de créer le type Agent qui peut être un Pacman ou un Fantôme
  * L'agent peut avoir un état, une stratégie (selon son état courant) 
  * Dans cette classe, on crée également des fonctions permettant 

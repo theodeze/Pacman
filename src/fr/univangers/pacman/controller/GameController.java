@@ -5,11 +5,7 @@ import java.io.Serializable;
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
 /**
- * 
- * @author etudiant
- *
  * Interface de PacmanGameController
- *
  */
 
 public interface GameController extends Serializable {

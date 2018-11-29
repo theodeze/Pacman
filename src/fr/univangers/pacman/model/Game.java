@@ -6,9 +6,6 @@ import java.util.List;
 import fr.univangers.pacman.view.View;
 
 /**
- * 
- * @author etudiant
- *
  * Cette classe abstraite est utilisée dans PacmanGame
  * Elle sert à :
  * 		- Dire quand la partie est terminée ;

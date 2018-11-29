@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 
- * @author etudiant
- *
  * Interface de la classe Agent
  *
  */

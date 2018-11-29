@@ -4,9 +4,6 @@ import fr.univangers.pacman.model.PacmanGame;
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
 /**
- * 
- * @author etudiant
- * 
  * Classe qui permet de lier l'interface graphique du Pacman et le jeu Pacman
  * On a des fonctions qui permettent de mettre à jour le temps, et en fonction du bouton l'utilisant,
  * mettre en pause, relancer le jeu à l'état courant, relancer la partie depuis le début ou avancer

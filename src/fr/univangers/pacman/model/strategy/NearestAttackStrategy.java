@@ -6,6 +6,12 @@ import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
+/**
+ * Première stratégie implémentée ("peut encore être utile" - Théo)
+ * Plus utile... :
+ * 			- Attaque l'ennemi le plus proche
+ */
+
 public class NearestAttackStrategy implements Strategy {
 
 	private static final long serialVersionUID = 1704735151191179215L;

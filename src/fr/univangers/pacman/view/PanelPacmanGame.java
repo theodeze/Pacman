@@ -11,6 +11,11 @@ import javax.swing.JPanel;
 import fr.univangers.pacman.model.Maze;
 import fr.univangers.pacman.model.PositionAgent;
 
+/**
+ * Classe PanelPacmanGame, utilisé dans ViewGame, permet de colorier
+ * la carte ainsi que les éléments du jeu
+ */
+
 public class PanelPacmanGame extends JPanel{
 	
 	private static final long serialVersionUID = 6308859631855223659L;

@@ -5,6 +5,10 @@ import java.util.List;
 import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 
+/**
+ * Stratégie correspondant au contrôle par un utilisateur 
+ */
+
 public class PlayerStrategy implements Strategy {
 
 	private static final long serialVersionUID = -3421485434310896297L;

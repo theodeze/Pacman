@@ -6,6 +6,10 @@ import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.Agent.Type;
 import fr.univangers.pacman.model.PositionAgent;
 
+/**
+ * Classe qui sert à définir l'état Death
+ */
+
 public class Death implements State {
 
 	private static final long serialVersionUID = 3749566683811598L;

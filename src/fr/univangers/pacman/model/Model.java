@@ -5,9 +5,6 @@ import java.io.Serializable;
 import fr.univangers.pacman.view.View;
 
 /**
- * 
- * @author etudiant
- *
  * Interface implémentée dans la classe Abstraite Game
  */
 
