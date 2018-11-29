@@ -39,6 +39,11 @@ public class PositionAgent implements Serializable {
 		return false;
 	}
 	
+	public boolean near(PositionAgent p) {
+		return ((p.x == x) || (p.x - 1 == x) || (p.x + 1 == x)) 
+				&& ((p.y == y) || (p.y - 1 == y) || (p.y + 1 == y));
+	}
+	
 	public int getX() {
 		return x;
 	}
@@ -53,6 +58,17 @@ public class PositionAgent implements Serializable {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+	
+	public void updateDir(PositionAgent p) {
+		if(p.x - 1 == x)
+			dir = Dir.WEST;
+		else if(p.x + 1 == x)
+			dir = Dir.EAST;
+		else if(p.y - 1 == y)
+			dir = Dir.NORTH;
+		else if(p.y + 1 == y)
+			dir = Dir.SOUTH;
 	}
 
 	public Dir getDir() {

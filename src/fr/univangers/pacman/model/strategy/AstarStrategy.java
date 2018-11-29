@@ -47,9 +47,24 @@ public class AstarStrategy implements Strategy {
         }
     }
     
-    public boolean isNotOccupiedByEnemies(List<PositionAgent> enemies, PositionAgent p) {
+    /**
+     * Vérifie que la case n'est pas occupé par un ennemie 
+     */
+	public boolean isNotOccupiedByEnemies(PositionAgent me, List<PositionAgent> enemies, PositionAgent p) {
     	for(PositionAgent enemie : enemies)
-    		if(enemie.equals(p))
+    		// Verifie que l'agent n'est pas l'enemie ou si un enemie est proche
+    		if(!enemie.equals(me) && enemie.near(p))
+    			return false;
+    	return true;
+    }
+    
+    /**
+     * Vérifie que la case n'est pas occupé par un amie
+     */
+	public boolean isNotOccupiedByFriends(PositionAgent me, List<PositionAgent> enemies, PositionAgent p) {
+    	for(PositionAgent enemie : enemies)
+    		// Verifie que l'agent n'est pas l'amie ou si un amie est proche
+    		if(!enemie.equals(me) && enemie.equals(p))
     			return false;
     	return true;
     }
@@ -69,17 +84,25 @@ public class AstarStrategy implements Strategy {
         return minPoint;
     }
 
-    public List<PositionAgent> neighbors(PositionAgent p, List<PositionAgent> enemies, boolean[][] walls) {
+    public List<PositionAgent> neighbors(PositionAgent me, PositionAgent p, List<PositionAgent> enemies, List<PositionAgent> friends, boolean[][] walls) {
         List<PositionAgent> neighbors = new ArrayList<>();
         int xSize = walls.length;
         int ySize = walls[0].length;
-        if(p.getX() > 0 && !walls[p.getX() - 1][p.getY()] && isNotOccupiedByEnemies(enemies, new PositionAgent(p.getX() - 1, p.getY())))
+        if(p.getX() > 0 && !walls[p.getX() - 1][p.getY()] 
+        		&& isNotOccupiedByEnemies(me, enemies, new PositionAgent(p.getX() - 1, p.getY()))
+        		&& isNotOccupiedByFriends(me, friends, new PositionAgent(p.getX() - 1, p.getY())))
             neighbors.add(new PositionAgent(p.getX() - 1, p.getY()));
-        if(p.getY() > 0 && !walls[p.getX()][p.getY() - 1] && isNotOccupiedByEnemies(enemies, new PositionAgent(p.getX(), p.getY() - 1)))
+        if(p.getY() > 0 && !walls[p.getX()][p.getY() - 1] 
+        		&& isNotOccupiedByEnemies(me, enemies, new PositionAgent(p.getX(), p.getY() - 1))
+    			&& isNotOccupiedByFriends(me, friends, new PositionAgent(p.getX(), p.getY() - 1)))
             neighbors.add(new PositionAgent(p.getX(), p.getY() - 1));
-        if(p.getX() < xSize  && !walls[p.getX() + 1][p.getY()] && isNotOccupiedByEnemies(enemies, new PositionAgent(p.getX() + 1, p.getY())))
+        if(p.getX() < xSize  && !walls[p.getX() + 1][p.getY()] 
+        		&& isNotOccupiedByEnemies(me, enemies, new PositionAgent(p.getX() + 1, p.getY()))
+    			&& isNotOccupiedByFriends(me, friends, new PositionAgent(p.getX() + 1, p.getY())))
             neighbors.add(new PositionAgent(p.getX() + 1, p.getY()));
-        if(p.getY() < ySize  && !walls[p.getX()][p.getY() + 1] && isNotOccupiedByEnemies(enemies, new PositionAgent(p.getX(), p.getY() + 1)))
+        if(p.getY() < ySize  && !walls[p.getX()][p.getY() + 1] 
+        		&& isNotOccupiedByEnemies(me, enemies, new PositionAgent(p.getX(), p.getY() + 1))
+    			&& isNotOccupiedByFriends(me, friends, new PositionAgent(p.getX(), p.getY() + 1)))
             neighbors.add(new PositionAgent(p.getX(), p.getY() + 1));
         return neighbors;
     }
@@ -100,7 +123,7 @@ public class AstarStrategy implements Strategy {
         return nextPosition;
     }
 
-    public PositionAgent findPath(PositionAgent start, PositionAgent goal, List<PositionAgent> enemies, boolean[][] walls) {
+    public PositionAgent findPath(PositionAgent start, PositionAgent goal, List<PositionAgent> enemies, List<PositionAgent> friends, boolean[][] walls) {
         List<PositionAgent> closedList = new ArrayList<>();
         List<PositionAgent> openList = new ArrayList<>();
         Map<PositionAgent, PositionAgent> cameFrom = new HashMap<>();
@@ -122,7 +145,7 @@ public class AstarStrategy implements Strategy {
             closedList.add(current);
             openList.remove(current);
 
-            for(PositionAgent neighbor : neighbors(current, enemies, walls)) {
+            for(PositionAgent neighbor : neighbors(start, current, enemies, friends, walls)) {
 
                 double newGScore = getGScore(current) + 1;
                 
@@ -165,10 +188,9 @@ public class AstarStrategy implements Strategy {
 		if(target == null) {
 			return;
 		}
-		PositionAgent newPosition = findPath(agent.position(), target, Stream.concat(enemies.stream(), friends.stream())
-                .collect(Collectors.toList()), walls);
+		PositionAgent newPosition = findPath(agent.position(), target, enemies, friends, walls);
 		if(newPosition.equals(agent.position())) {
-			newPosition  = findPath(agent.position(), target, enemies, walls);
+			newPosition  = findPath(agent.position(), target, enemies, Collections.emptyList(), walls);
 		}
         agent.setPosition(newPosition);
 	}

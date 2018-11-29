@@ -75,6 +75,7 @@ public class Agent implements AgentAction, Serializable {
 	}
 	
 	public void setPosition(PositionAgent position) {
+		position.updateDir(this.position);
 		this.position=position;
 	}
 	

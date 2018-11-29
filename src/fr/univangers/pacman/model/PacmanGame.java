@@ -192,13 +192,14 @@ public class PacmanGame extends Game {
 				p++;
 			}
 			else
-				ghosts.add(FactoryAgent.createGhostRandom(position));
+				ghosts.add(FactoryAgent.createGhostAstar(position));
 		}
 		nbFood = 0;
 		maze.resetFoods();
 		for(int x = 0; x < maze.getSizeX(); x++) {
 			for(int y = 0; y < maze.getSizeY(); y++) {
 				nbFood += maze.isFoods(x, y) ? 1 : 0;
+				nbFood += maze.isCapsule(x, y) ? 1 : 0;
 			}
 		}
 		maze.resetCapsules();
@@ -226,6 +227,7 @@ public class PacmanGame extends Game {
 					ghost.vulnerability();
 				}
 				score += 50;
+				nbFood--;
 				playSound("res/sounds/pacman_extrapac.wav");
 			}
 		}
