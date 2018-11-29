@@ -5,6 +5,10 @@ import java.util.List;
 import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 
+/**
+ *  Classe qui sert à définir l'état Death
+ */
+
 public class Vulnerable implements State {
 
 	private static final long serialVersionUID = -8735708242622564562L;
@@ -31,7 +35,7 @@ public class Vulnerable implements State {
 			List<PositionAgent> positionFoods, boolean[][] walls) {
 		if(nbTurnVulnerable >=  endTurnVulnerable) {
 			resetTurnVulnerable();
-			agent.vivant();
+			agent.alive();
 		} else {
 			nbTurnVulnerable++;
 		}
@@ -47,8 +51,8 @@ public class Vulnerable implements State {
 	}
 	
 	/**
-	 * Renvoie si l'état est mort
-	 * @return vrai si mort faux sinon
+	 * Renvoie si l'état est dead
+	 * @return vrai si dead faux sinon
 	 */
 	@Override
 	public boolean isDeath() {
@@ -56,8 +60,8 @@ public class Vulnerable implements State {
 	}
 	
 	/**
-	 * Renvoie si l'état est vivant
-	 * @return vrai si vivant faux sinon
+	 * Renvoie si l'état est alive
+	 * @return vrai si alive faux sinon
 	 */
 	@Override
 	public boolean isLife() {

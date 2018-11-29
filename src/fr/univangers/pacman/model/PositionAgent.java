@@ -3,6 +3,12 @@ package fr.univangers.pacman.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * La classe PositionAgent permet d'afficher et localiser dans
+ * le jeu chaque agent à la case qui correspond, en fonction d'un
+ * moment donné
+ */
+
 public class PositionAgent implements Serializable {
 
 	private static final long serialVersionUID = -2240234555555290641L;

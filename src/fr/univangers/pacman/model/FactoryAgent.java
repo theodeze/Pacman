@@ -5,6 +5,15 @@ import fr.univangers.pacman.model.strategy.EscapeStrategy;
 import fr.univangers.pacman.model.strategy.PlayerStrategy;
 import fr.univangers.pacman.model.strategy.RandomStrategy;
 
+
+/**
+ * La classe FactoryAgent permet de créer un Agent de chaque type et
+ * d'implémenter une stratégie à chaque agent correspondant (elles
+ * peuvent dépendre du hasard, de l'algorithme A*, ou permettre la
+ * fuite)
+ *
+ */
+
 public class FactoryAgent {
 
 	private FactoryAgent() {

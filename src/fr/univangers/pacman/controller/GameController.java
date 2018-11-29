@@ -4,8 +4,12 @@ import java.io.Serializable;
 
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
-public interface GameController extends Serializable {
+/**
+ * Interface de PacmanGameController
+ */
 
+public interface GameController extends Serializable {
+	
 	public void setTime(int time);
 	public void pause();
 	public void restart();

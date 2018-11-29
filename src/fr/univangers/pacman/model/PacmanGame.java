@@ -11,6 +11,13 @@ import javax.sound.sampled.Clip;
 
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
+/**
+ * PacmanGame est la classe principale du jeu 
+ * Elle permet de créer la carte, de compter le score,
+ * compter le  nombre de vie des pacmans de nourritures, 
+ * les différents scores et agents ainsi que leur position
+ */
+
 public class PacmanGame extends Game {
 	public enum Mode {
 		oneplayer,
@@ -59,6 +66,10 @@ public class PacmanGame extends Game {
 	public List<PositionAgent> positionGhosts() {
 		return positionGhosts;
 	}
+
+	/**
+	 * Fonction qui permet de jouer le son du Pacman
+	 */
 	
 	public List<PositionAgent> positionFoods() {
 		return positionFoods;
@@ -73,9 +84,13 @@ public class PacmanGame extends Game {
 	        clip.open(audioIn);
 	        clip.start();
 		} catch (Exception e) {
-			//
+			// Cas où il n'y a pas de sons
 		}
 	}
+	
+	/**
+	 *  Fonction prenant le cas où les fantômes sont effrayés s'ils sont vulnérables
+	 */
 	
 	public List<Boolean> ghostsScarred() {
 		List<Boolean> ghostsScarred = new ArrayList<>();
@@ -174,6 +189,7 @@ public class PacmanGame extends Game {
 	}
 	
 	@Override
+	
 	public void initializeGame() {
 		pacmans.clear();
 		int p = 0;
@@ -211,6 +227,10 @@ public class PacmanGame extends Game {
 	}
 
 	@Override
+	/**
+	 *  Fonction qui modifie le jeu à chaque tour
+	 */
+	
 	public void takeTurn() {
 		for(Agent pacman : pacmans) {
 			moveAgent(pacman);
@@ -251,17 +271,27 @@ public class PacmanGame extends Game {
 		}
 	}
 	
+	/**
+	 *  Fonction lifeAgents permet de réduire le nombre de 
+	 *  vie des Agents Pacmans, jusqu'à la fin de la partie
+	 */
+	
 	public void lifeAgents() {
 		Iterator<Agent> iter = pacmans.iterator();
 		while(iter.hasNext()) {
 			Agent pacman = iter.next();
 			if(pacman.isDeath() && nbLifePacmans > 0) {
-				pacman.vivant();
+				pacman.alive();
 				nbLifePacmans--;
 				resetPosition();
 			}
 		}
 	}
+	
+	/**
+	 *  Fonction deadAgents teste pour chaque agent concerné s'il est mort
+	 *  et change son état en conséquence
+	 */
 	
 	public void deadAgents(Agent agt) {	
 		if(pacmans.contains(agt)) {		
@@ -277,15 +307,19 @@ public class PacmanGame extends Game {
 		}
 	}
 	
+	/**
+	 *  Fonction changesForDeathState appelée dans deadAgents
+	 */
+	
 	public void changesForDeathState(Agent pacman, Agent ghost) {
 		if(ghost.position().equals(pacman.position())) {
 			if (ghost.isVulnerable()) {
-				ghost.mort();
+				ghost.dead();
 				score += scorePerGhosts;
 				scorePerGhosts *= 2;
 				playSound("res/sounds/pacman_eatghost.wav");
 			} else if (ghost.isLife()) {
-				pacman.mort();
+				pacman.dead();
 				lifeAgents();
 				playSound("res/sounds/pacman_death.wav");
 			}

@@ -6,10 +6,18 @@ import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
+/**
+ * Stratégie de fuites des agents fantômes
+ */
+
 public class EscapeStrategy implements Strategy {
-
+	
 	private static final long serialVersionUID = 4316826769530063482L;
-
+	
+	/**
+	 * Calcul des distances vis-à-vis des Pacmans pour s'en éloigner le plus possible
+	 */
+	
 	private int averageDistancePacman(PositionAgent position, List<PositionAgent> positionPacmans) {
 		int averageDistance = 0;
 		for(PositionAgent positionPacman : positionPacmans) {

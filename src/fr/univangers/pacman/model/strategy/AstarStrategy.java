@@ -11,6 +11,11 @@ import java.util.stream.Stream;
 import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 
+/**
+ * Stratégie de l'aglgorithme A*
+ * La plus performante !
+ */
+
 public class AstarStrategy implements Strategy {
 
 	private static final long serialVersionUID = 6882118649697899327L;
