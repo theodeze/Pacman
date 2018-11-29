@@ -8,6 +8,6 @@ import fr.univangers.pacman.model.PositionAgent;
 
 public interface Strategy extends Serializable {
 
-	public void move(Agent agent, List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls);
+	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls);
 	
 }

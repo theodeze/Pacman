@@ -28,7 +28,8 @@ public class Death implements State {
 	 * Si l'agent est un fantome alors l'agent attend un nombre de tours avant de revivre 
 	 */
 	@Override
-	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
+	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, 
+			List<PositionAgent> positionFoods, boolean[][] walls) {
 		if(agent.type() == Type.GHOST) {
 			if(nbTurnDeath >= endTurnDeath) {
 				resetTurnDeath();

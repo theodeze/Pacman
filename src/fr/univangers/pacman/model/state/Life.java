@@ -22,8 +22,9 @@ public class Life implements State {
 	 * Déplace l'agent
 	 */
 	@Override
-	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
-		agent.move(positionPacmans, positionGhosts, walls);
+	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, 
+			List<PositionAgent> positionFoods, boolean[][] walls) {
+		agent.move(positionPacmans, positionGhosts, positionFoods, walls);
 	}
 	
 	/**

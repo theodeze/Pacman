@@ -10,8 +10,7 @@ public class PlayerStrategy implements Strategy {
 	private static final long serialVersionUID = -3421485434310896297L;
 
 	@Override
-	public void move(Agent agent, List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
-		PositionAgent position = agent.position();
+	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {		PositionAgent position = agent.position();
 		PositionAgent newPosition = new PositionAgent(position.getX(), position.getY(), position.getDir());
 		switch(position.getDir()) {
 		case EAST:

@@ -27,14 +27,15 @@ public class Vulnerable implements State {
 	 * L'agent ce déplace et quite l'état vulnerable au bout d'un certain nombre de tours
 	 */
 	@Override
-	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
+	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, 
+			List<PositionAgent> positionFoods, boolean[][] walls) {
 		if(nbTurnVulnerable >=  endTurnVulnerable) {
 			resetTurnVulnerable();
 			agent.vivant();
 		} else {
 			nbTurnVulnerable++;
 		}
-		agent.move(positionPacmans, positionGhosts, walls);
+		agent.move(positionPacmans, positionGhosts, positionFoods, walls);
 	}
 	
 	/**

@@ -1,6 +1,7 @@
 package fr.univangers.pacman.model;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 import fr.univangers.pacman.model.state.State;
@@ -77,8 +78,9 @@ public class Agent implements AgentAction, Serializable {
 		this.position=position;
 	}
 	
-	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
-		currentState.action(positionPacmans, positionGhosts, walls);
+	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, 
+			List<PositionAgent> positionFoods, boolean[][] walls) {
+		currentState.action(positionPacmans, positionGhosts, positionFoods, walls);
 	}
 	
 	public void vulnerability() {
@@ -98,8 +100,33 @@ public class Agent implements AgentAction, Serializable {
 	}
 	
 	@Override
-	public void move(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
-		currentStrategy.move(this, positionPacmans, positionGhosts, walls);
+	public void move(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, 
+			List<PositionAgent> positionFoods, boolean[][] walls) {
+		switch(type) {
+		case GHOST:
+			if(isDeath())
+				currentStrategy.move(this, Collections.emptyList(), Collections.emptyList(), 
+						Collections.emptyList(), walls);
+			else if(isLife())
+				currentStrategy.move(this, positionPacmans, positionGhosts, 
+						Collections.emptyList(), walls);
+			else if(isVulnerable())
+				currentStrategy.move(this, Collections.emptyList(), positionGhosts, 
+						positionPacmans, walls);
+			break;
+		case PACMAN:
+			if(isDeath())
+				currentStrategy.move(this, Collections.emptyList(), Collections.emptyList(), 
+						Collections.emptyList(), walls);
+			else if(isLife())
+				currentStrategy.move(this, positionFoods, positionGhosts, 
+						positionPacmans, walls);
+			break;
+		default:
+			currentStrategy.move(this, Collections.emptyList(), Collections.emptyList(), 
+					Collections.emptyList(), walls);
+			break;
+		}
 	}
 	
 	@Override

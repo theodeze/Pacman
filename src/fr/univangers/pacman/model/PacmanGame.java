@@ -33,6 +33,7 @@ public class PacmanGame extends Game {
 	private List<PositionAgent> positionPacmans = new ArrayList<>();
 	private List<Agent> ghosts = new ArrayList<>();
 	private List<PositionAgent> positionGhosts = new ArrayList<>();
+	private List<PositionAgent> positionFoods = new ArrayList<>();
 	private int nbLifePacmans;
 	private int nbFood = 0;
 	private int scorePerGhosts = 200;
@@ -57,6 +58,10 @@ public class PacmanGame extends Game {
 	
 	public List<PositionAgent> positionGhosts() {
 		return positionGhosts;
+	}
+	
+	public List<PositionAgent> positionFoods() {
+		return positionFoods;
 	}
 	
 	private void playSound(String filename) {
@@ -100,6 +105,13 @@ public class PacmanGame extends Game {
 		for(Agent ghost : ghosts) {
 			if(!ghost.isDeath())
 				positionGhosts.add(ghost.position());
+		}
+		positionFoods.clear();
+		for(int x = 0; x < maze.getSizeX(); x++) {
+			for(int y = 0; y < maze.getSizeY(); y++) {
+				if(maze.isFoods(x, y) || maze.isCapsule(x, y))
+					positionFoods.add(new PositionAgent(x, y));
+			}
 		}
 		notifyViews();
 	}
@@ -151,7 +163,7 @@ public class PacmanGame extends Game {
 	}
 	
 	public void moveAgent(Agent agent) {
-		agent.action(positionPacmans(), positionGhosts(), maze.getWalls());
+		agent.action(positionPacmans(), positionGhosts(), positionFoods(), maze.getWalls());
 	}
 	
 	public void resetPosition() {
@@ -167,11 +179,11 @@ public class PacmanGame extends Game {
 		int p = 0;
 		for(PositionAgent position : maze.getPacman_start()) {
 			if((p < 1) || (p < 2 && mode == Mode.twoplayerC)) {
-				pacmans.add(FactoryAgent.createPacmanPlayer(position));
+				pacmans.add(FactoryAgent.createPacmanAstar(position));
 				p++;
 			}
 			else
-				pacmans.add(FactoryAgent.createPacmanRandom(position));
+				pacmans.add(FactoryAgent.createPacmanAstar(position));
 		}
 		ghosts.clear();
 		for(PositionAgent position : maze.getGhosts_start()) {
@@ -180,7 +192,7 @@ public class PacmanGame extends Game {
 				p++;
 			}
 			else
-				ghosts.add(FactoryAgent.createGhostAstar(position));
+				ghosts.add(FactoryAgent.createGhostRandom(position));
 		}
 		nbFood = 0;
 		maze.resetFoods();

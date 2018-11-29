@@ -13,7 +13,7 @@ public class RandomStrategy implements Strategy {
 	private Random random = new Random();
 
 	@Override
-	public void move(Agent agent, List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
+	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {
 		PositionAgent position = agent.position();
 		PositionAgent newPosition = new PositionAgent(position.getX(), position.getY(), position.getDir());
 		do {

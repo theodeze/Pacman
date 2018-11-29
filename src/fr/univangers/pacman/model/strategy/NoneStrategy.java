@@ -10,8 +10,7 @@ public class NoneStrategy implements Strategy {
 	private static final long serialVersionUID = 973545336472026490L;
 
 	@Override
-	public void move(Agent agent, List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
-		//
+	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {		//
 	}
 
 }

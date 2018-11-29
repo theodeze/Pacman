@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
@@ -45,9 +47,9 @@ public class AstarStrategy implements Strategy {
         }
     }
     
-    public boolean isNotOccupiedByGhost(List<PositionAgent> positionGhosts, PositionAgent p) {
-    	for(PositionAgent positionGhost : positionGhosts)
-    		if(positionGhost.equals(p))
+    public boolean isNotOccupiedByEnemies(List<PositionAgent> enemies, PositionAgent p) {
+    	for(PositionAgent enemie : enemies)
+    		if(enemie.equals(p))
     			return false;
     	return true;
     }
@@ -67,17 +69,17 @@ public class AstarStrategy implements Strategy {
         return minPoint;
     }
 
-    public List<PositionAgent> neighbors(PositionAgent p, List<PositionAgent> positionGhosts, boolean[][] walls) {
+    public List<PositionAgent> neighbors(PositionAgent p, List<PositionAgent> enemies, boolean[][] walls) {
         List<PositionAgent> neighbors = new ArrayList<>();
         int xSize = walls.length;
         int ySize = walls[0].length;
-        if(p.getX() > 0 && !walls[p.getX() - 1][p.getY()] && isNotOccupiedByGhost(positionGhosts, new PositionAgent(p.getX() - 1, p.getY())))
+        if(p.getX() > 0 && !walls[p.getX() - 1][p.getY()] && isNotOccupiedByEnemies(enemies, new PositionAgent(p.getX() - 1, p.getY())))
             neighbors.add(new PositionAgent(p.getX() - 1, p.getY()));
-        if(p.getY() > 0 && !walls[p.getX()][p.getY() - 1] && isNotOccupiedByGhost(positionGhosts, new PositionAgent(p.getX(), p.getY() - 1)))
+        if(p.getY() > 0 && !walls[p.getX()][p.getY() - 1] && isNotOccupiedByEnemies(enemies, new PositionAgent(p.getX(), p.getY() - 1)))
             neighbors.add(new PositionAgent(p.getX(), p.getY() - 1));
-        if(p.getX() < xSize  && !walls[p.getX() + 1][p.getY()] && isNotOccupiedByGhost(positionGhosts, new PositionAgent(p.getX() + 1, p.getY())))
+        if(p.getX() < xSize  && !walls[p.getX() + 1][p.getY()] && isNotOccupiedByEnemies(enemies, new PositionAgent(p.getX() + 1, p.getY())))
             neighbors.add(new PositionAgent(p.getX() + 1, p.getY()));
-        if(p.getY() < ySize  && !walls[p.getX()][p.getY() + 1] && isNotOccupiedByGhost(positionGhosts, new PositionAgent(p.getX(), p.getY() + 1)))
+        if(p.getY() < ySize  && !walls[p.getX()][p.getY() + 1] && isNotOccupiedByEnemies(enemies, new PositionAgent(p.getX(), p.getY() + 1)))
             neighbors.add(new PositionAgent(p.getX(), p.getY() + 1));
         return neighbors;
     }
@@ -98,7 +100,7 @@ public class AstarStrategy implements Strategy {
         return nextPosition;
     }
 
-    public PositionAgent findPath(PositionAgent start, PositionAgent goal, List<PositionAgent> positionGhosts, boolean[][] walls) {
+    public PositionAgent findPath(PositionAgent start, PositionAgent goal, List<PositionAgent> enemies, boolean[][] walls) {
         List<PositionAgent> closedList = new ArrayList<>();
         List<PositionAgent> openList = new ArrayList<>();
         Map<PositionAgent, PositionAgent> cameFrom = new HashMap<>();
@@ -120,7 +122,7 @@ public class AstarStrategy implements Strategy {
             closedList.add(current);
             openList.remove(current);
 
-            for(PositionAgent neighbor : neighbors(current, positionGhosts, walls)) {
+            for(PositionAgent neighbor : neighbors(current, enemies, walls)) {
 
                 double newGScore = getGScore(current) + 1;
                 
@@ -158,14 +160,15 @@ public class AstarStrategy implements Strategy {
     }	
 
 	@Override
-	public void move(Agent agent, List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
-		PositionAgent target = nearestTarget(agent.position(), positionPacmans);
+	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {
+		PositionAgent target = nearestTarget(agent.position(), targets);
 		if(target == null) {
 			return;
 		}
-		PositionAgent newPosition = findPath(agent.position(), target, positionGhosts, walls);
+		PositionAgent newPosition = findPath(agent.position(), target, Stream.concat(enemies.stream(), friends.stream())
+                .collect(Collectors.toList()), walls);
 		if(newPosition.equals(agent.position())) {
-			newPosition  = findPath(agent.position(), target, Collections.emptyList(), walls);
+			newPosition  = findPath(agent.position(), target, enemies, walls);
 		}
         agent.setPosition(newPosition);
 	}

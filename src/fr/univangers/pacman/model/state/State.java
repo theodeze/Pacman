@@ -16,7 +16,7 @@ public interface State extends Serializable {
 	 * @param positionGhosts
 	 * @param walls
 	 */
-	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls);
+	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, List<PositionAgent> positionFoods, boolean[][] walls);
 	
 	/**
 	 * Passe le status de l'agent à vunerable

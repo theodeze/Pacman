@@ -20,17 +20,17 @@ public class EscapeStrategy implements Strategy {
 	}
 	
 	@Override
-	public void move(Agent agent, List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
+	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {
 		PositionAgent position = agent.position();
 		PositionAgent testPosition = new PositionAgent(position.getX(), position.getY(), position.getDir());
 		PositionAgent newPosition = new PositionAgent(position.getX(), position.getY(), position.getDir());
-		int currentAverageDistance = averageDistancePacman(position, positionPacmans);
+		int currentAverageDistance = averageDistancePacman(position, enemies);
 		int testAverageDistancePacman = 0;
 		
 		if(!walls[position.getX() + 1][position.getY()]) {
 			testPosition.setX(position.getX() + 1);
 			testPosition.setY(position.getY());
-			testAverageDistancePacman = averageDistancePacman(testPosition, positionPacmans);
+			testAverageDistancePacman = averageDistancePacman(testPosition, enemies);
 			if(currentAverageDistance < testAverageDistancePacman) {
 				currentAverageDistance = testAverageDistancePacman;
 				newPosition = testPosition;
@@ -41,7 +41,7 @@ public class EscapeStrategy implements Strategy {
 		if(!walls[position.getX()][position.getY() - 1]) {
 			testPosition.setX(position.getX());
 			testPosition.setY(position.getY() - 1);
-			testAverageDistancePacman = averageDistancePacman(testPosition, positionPacmans);
+			testAverageDistancePacman = averageDistancePacman(testPosition, enemies);
 			if(currentAverageDistance < testAverageDistancePacman) {
 				currentAverageDistance = testAverageDistancePacman;
 				newPosition = testPosition;
@@ -52,7 +52,7 @@ public class EscapeStrategy implements Strategy {
 		if(!walls[position.getX()][position.getY() + 1]) {
 			testPosition.setX(position.getX());
 			testPosition.setY(position.getY() + 1);
-			testAverageDistancePacman = averageDistancePacman(testPosition, positionPacmans);
+			testAverageDistancePacman = averageDistancePacman(testPosition, enemies);
 			if(currentAverageDistance < testAverageDistancePacman) {
 				currentAverageDistance = testAverageDistancePacman;
 				newPosition = testPosition;
@@ -63,7 +63,7 @@ public class EscapeStrategy implements Strategy {
 		if(!walls[position.getX() - 1][position.getY()]) {
 			testPosition.setX(position.getX() - 1);
 			testPosition.setY(position.getY());
-			testAverageDistancePacman = averageDistancePacman(testPosition, positionPacmans);
+			testAverageDistancePacman = averageDistancePacman(testPosition, enemies);
 			if(currentAverageDistance < testAverageDistancePacman) {
 				newPosition = testPosition;
 				newPosition.setDir(Dir.WEST);

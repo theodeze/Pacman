@@ -7,6 +7,10 @@ import fr.univangers.pacman.model.strategy.RandomStrategy;
 
 public class FactoryAgent {
 
+	private FactoryAgent() {
+	    throw new IllegalStateException("Factory class");
+	}	
+	
 	public static Agent createPacmanPlayer(PositionAgent position) {
 		Agent agt = new Agent(Agent.Type.PACMAN, position);
 		agt.setStrategy(new PlayerStrategy(), new PlayerStrategy());
@@ -28,6 +32,12 @@ public class FactoryAgent {
 	public static Agent createGhostRandom(PositionAgent position) {
 		Agent agt = new Agent(Agent.Type.GHOST, position);
 		agt.setStrategy(new RandomStrategy(), new RandomStrategy());
+		return agt;
+	}
+	
+	public static Agent createPacmanAstar(PositionAgent position) {
+		Agent agt = new Agent(Agent.Type.PACMAN, position);
+		agt.setStrategy(new AstarStrategy(), new EscapeStrategy());
 		return agt;
 	}
 	

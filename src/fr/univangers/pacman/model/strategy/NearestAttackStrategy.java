@@ -32,10 +32,10 @@ public class NearestAttackStrategy implements Strategy {
 	}
 	
 	@Override
-	public void move(Agent agent, List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
+	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {
 		PositionAgent position = agent.position();
 		PositionAgent newPosition = new PositionAgent(position.getX(), position.getY(), position.getDir());
-		PositionAgent positionPacman = nearest(position, positionPacmans);
+		PositionAgent positionPacman = nearest(position, targets);
 		
 		if((positionPacman.getX() > position.getX()) && (!walls[position.getX() + 1][position.getY()])) {
 			newPosition.setX(position.getX() + 1);
