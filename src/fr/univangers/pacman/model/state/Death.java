@@ -18,7 +18,7 @@ public class Death implements State {
 	}
 
 	/**
-	 * Rénitialise le compteur de tours de mort
+	 * Rénitialise le compteur de tours de dead
 	 */
 	public void resetTurnDeath() {
 		nbTurnDeath = 0;
@@ -33,7 +33,7 @@ public class Death implements State {
 			if(nbTurnDeath >= endTurnDeath) {
 				resetTurnDeath();
 				agent.resetPosition();
-				agent.vivant();
+				agent.dead();
 			} else { 
 				nbTurnDeath++;
 			}
@@ -41,7 +41,7 @@ public class Death implements State {
 	}
 	
 	/**
-	 * Ne fais rien car l'agent est mort
+	 * Ne fais rien car l'agent est dead
 	 */
 	@Override
 	public void vulnerability() {
@@ -49,8 +49,8 @@ public class Death implements State {
 	}
 	
 	/**
-	 * Renvoie si l'état est mort
-	 * @return vrai si mort faux sinon
+	 * Renvoie si l'état est dead
+	 * @return vrai si dead faux sinon
 	 */
 	@Override
 	public boolean isDeath() {
@@ -58,8 +58,8 @@ public class Death implements State {
 	}
 	
 	/**
-	 * Renvoie si l'état est vivant
-	 * @return vrai si vivant faux sinon
+	 * Renvoie si l'état est dead
+	 * @return vrai si dead faux sinon
 	 */
 	@Override
 	public boolean isLife() {

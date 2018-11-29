@@ -30,7 +30,7 @@ public class Vulnerable implements State {
 	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, boolean[][] walls) {
 		if(nbTurnVulnerable >=  endTurnVulnerable) {
 			resetTurnVulnerable();
-			agent.vivant();
+			agent.alive();
 		} else {
 			nbTurnVulnerable++;
 		}
@@ -46,8 +46,8 @@ public class Vulnerable implements State {
 	}
 	
 	/**
-	 * Renvoie si l'état est mort
-	 * @return vrai si mort faux sinon
+	 * Renvoie si l'état est dead
+	 * @return vrai si dead faux sinon
 	 */
 	@Override
 	public boolean isDeath() {
@@ -55,8 +55,8 @@ public class Vulnerable implements State {
 	}
 	
 	/**
-	 * Renvoie si l'état est vivant
-	 * @return vrai si vivant faux sinon
+	 * Renvoie si l'état est alive
+	 * @return vrai si alive faux sinon
 	 */
 	@Override
 	public boolean isLife() {

@@ -242,7 +242,7 @@ public class PacmanGame extends Game {
 		while(iter.hasNext()) {
 			Agent pacman = iter.next();
 			if(pacman.isDeath() && nbLifePacmans > 0) {
-				pacman.vivant();
+				pacman.alive();
 				nbLifePacmans--;
 				resetPosition();
 			}
@@ -266,12 +266,12 @@ public class PacmanGame extends Game {
 	public void changesForDeathState(Agent pacman, Agent ghost) {
 		if(ghost.position().equals(pacman.position())) {
 			if (ghost.isVulnerable()) {
-				ghost.mort();
+				ghost.dead();
 				score += scorePerGhosts;
 				scorePerGhosts *= 2;
 				playSound("res/sounds/pacman_eatghost.wav");
 			} else if (ghost.isLife()) {
-				pacman.mort();
+				pacman.dead();
 				lifeAgents();
 				playSound("res/sounds/pacman_death.wav");
 			}

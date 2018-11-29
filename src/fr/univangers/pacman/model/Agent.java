@@ -51,7 +51,7 @@ public class Agent implements AgentAction, Serializable {
 		this.life = new Life(this);
 		this.death = new Death(this);
 		this.vunerable = new Vulnerable(this);
-		vivant();	
+		alive();	
 		}
 	
 	public void setStrategy(Strategy lifeStrategy, Strategy vunerableStrategy) {
@@ -122,12 +122,12 @@ public class Agent implements AgentAction, Serializable {
 		position.setDir(PositionAgent.Dir.EAST);
 	}
 	
-	public void vivant() {
+	public void alive() {
 		switchLifeStrategy();
 		currentState = life;
 	}
 
-	public void mort() {
+	public void dead() {
 		switchDeathStrategy();
 		vunerable.resetTurnVulnerable();
 		currentState = death;
