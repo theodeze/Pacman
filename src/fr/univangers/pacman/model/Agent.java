@@ -10,6 +10,17 @@ import fr.univangers.pacman.model.strategy.Strategy;
 import fr.univangers.pacman.model.state.Death;
 import fr.univangers.pacman.model.state.Life;
 
+/**
+ * 
+ * @author etudiant
+ *
+ * La classe Agent permet de créer le type Agent qui peut être un Pacman ou un Fantôme
+ * L'agent peut avoir un état, une stratégie (selon son état courant) 
+ * Dans cette classe, on crée également des fonctions permettant 
+ * à l'agent de se déplacer dans chaque direction (gauche, droit, haut, bas)
+ *  
+ */
+
 public class Agent implements AgentAction, Serializable {
 	
 	private static final long serialVersionUID = 1968499836498466437L;

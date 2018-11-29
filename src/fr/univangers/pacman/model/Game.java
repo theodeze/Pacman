@@ -5,6 +5,20 @@ import java.util.List;
 
 import fr.univangers.pacman.view.View;
 
+/**
+ * 
+ * @author etudiant
+ *
+ * Cette classe abstraite est utilisée dans PacmanGame
+ * Elle sert à :
+ * 		- Dire quand la partie est terminée ;
+ * 		- Compter et augmenter le nombre de tours, le 
+ * 		réinitialiser ou le mettre à jour ;
+ * 		- Lancer le jeu, le mettre en pause, le relancer 
+ * 		ou le réinitialiser ;
+ * 		- Mettre à jour la vue du jeu pour les utilisateurs
+ */
+
 public abstract class Game implements Model, Runnable {
 
 	private static final long serialVersionUID = -5712731745471369390L;

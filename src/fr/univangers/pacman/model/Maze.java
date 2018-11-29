@@ -8,6 +8,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * @author etudiant
+ *
+ *	La classe Maze permet de créer la carte qui sera utilisée 
+ *	aussi bien pour la vue des utilisateurs que pour le contrôle du jeu
+ *	Sur la carte, on définit les murs, le placement des capsules et gommes, 
+ *	ainsi que les positions des différents agents du jeu au début
+ *
+ */
+
 public class Maze implements Serializable{
 	
 	private static final long serialVersionUID = 1076456911984437464L;
