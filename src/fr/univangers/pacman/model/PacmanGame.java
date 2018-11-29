@@ -258,7 +258,7 @@ public class PacmanGame extends Game {
 	}
 	
 	/**
-	 *  Fonction lifeAgents permet de réuire le nombre de 
+	 *  Fonction lifeAgents permet de réduire le nombre de 
 	 *  vie des Agents Pacmans, jusqu'à la fin de la partie
 	 */
 	
@@ -275,7 +275,7 @@ public class PacmanGame extends Game {
 	}
 	
 	/**
-	 *  Fonction deadAgents testent pour chaque agent concerné s'il est mort
+	 *  Fonction deadAgents teste pour chaque agent concerné s'il est mort
 	 *  et change son état en conséquence
 	 */
 	
@@ -294,7 +294,7 @@ public class PacmanGame extends Game {
 	}
 	
 	/**
-	 *  Fonction changesForDeathState appelé dans deadAgents
+	 *  Fonction changesForDeathState appelée dans deadAgents
 	 */
 	
 	public void changesForDeathState(Agent pacman, Agent ghost) {
