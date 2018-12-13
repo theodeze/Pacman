@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.29)  13 DEC 2018 11:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.29)  13 DEC 2018 11:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -634,12 +634,8 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 <img/Pacman.png, id=16, 1927.2pt x 1084.05pt>
 File: img/Pacman.png Graphic file (type png)
 <use img/Pacman.png>
-Package pdftex.def Info: img/Pacman.png  used on input line 21.
+Package pdftex.def Info: img/Pacman.png  used on input line 24.
 (pdftex.def)             Requested size: 351.19966pt x 306.71869pt.
-
-Overfull \hbox (8.19966pt too wide) in paragraph at lines 21--22
-[][] 
- []
 
 [1
 
@@ -649,61 +645,61 @@ Overfull \hbox (8.19966pt too wide) in paragraph at lines 21--22
 \openout4 = `rapport.toc'.
 
  [2]
-Underfull \hbox (badness 10000) in paragraph at lines 46--47
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 48--50
-
- []
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 51--52
 
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 53--55
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 56--57
+
+ []
+
 [3]
-Underfull \hbox (badness 10000) in paragraph at lines 67--68
+Underfull \hbox (badness 10000) in paragraph at lines 72--73
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 69--73
+Underfull \hbox (badness 10000) in paragraph at lines 74--78
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 74--75
+Underfull \hbox (badness 10000) in paragraph at lines 79--80
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 85--86
+Underfull \hbox (badness 10000) in paragraph at lines 90--91
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 87--90
+Underfull \hbox (badness 10000) in paragraph at lines 92--95
 
  []
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 91--92
+Underfull \hbox (badness 10000) in paragraph at lines 96--97
 
  []
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 93.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 112.
+(Font)              <10.95> on input line 98.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 117.
 [5]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 112.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 117.
  (./rapport.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 112.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 112.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 117.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 117.
 Package rerunfilecheck Info: File `rapport.out' has not changed.
 (rerunfilecheck)             Checksum: 4291C0AC19D429698065CBD896DB4A7B;202.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 112.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 117.
  ) 
 Here is how much of TeX's memory you used:
  6846 strings out of 494853
@@ -712,7 +708,7 @@ Here is how much of TeX's memory you used:
  10092 multiletter control sequences out of 15000+600000
  14901 words of font info for 36 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 28i,6n,30p,209b,467s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 28i,8n,30p,209b,467s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/etudiant/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm0800.
 600pk> </home/etudiant/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2
 074.600pk> </home/etudiant/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/e
