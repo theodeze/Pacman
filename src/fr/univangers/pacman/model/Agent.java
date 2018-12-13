@@ -128,8 +128,8 @@ public class Agent implements AgentAction, Serializable {
 				currentStrategy.move(this, Collections.emptyList(), Collections.emptyList(), 
 						Collections.emptyList(), walls);
 			else if(isLife())
-				currentStrategy.move(this, positionFoods, positionGhosts, 
-						positionPacmans, walls);
+				currentStrategy.move(this, positionFoods, positionPacmans, 
+						positionGhosts, walls);
 			break;
 		default:
 			currentStrategy.move(this, Collections.emptyList(), Collections.emptyList(), 

@@ -30,6 +30,12 @@ public class PositionAgent implements Serializable {
 		this.y = y;
 		this.dir = Dir.NORTH;
 	}
+	
+	public PositionAgent(PositionAgent p) {
+		this.x = p.x;
+		this.y = p.y;
+		this.dir = p.dir;
+	}
 
 	@Override
 	public int hashCode() {
@@ -46,8 +52,8 @@ public class PositionAgent implements Serializable {
 	}
 	
 	public boolean near(PositionAgent p) {
-		return ((p.x == x) || (p.x - 1 == x) || (p.x + 1 == x)) 
-				&& ((p.y == y) || (p.y - 1 == y) || (p.y + 1 == y));
+		return ((p.x == x) || ((p.y == y) && (p.x - 1 == x) || (p.x + 1 == x))) 
+				&& ((p.y == y) || ((p.x == x) && (p.y - 1 == y) || (p.y + 1 == y)));
 	}
 	
 	public int getX() {

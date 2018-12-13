@@ -20,9 +20,10 @@ import fr.univangers.pacman.model.PositionAgent.Dir;
 
 public class PacmanGame extends Game {
 	public enum Mode {
-		oneplayer,
-		twoplayerC,
-		twoplayerO
+		AUTO,
+		ONEPLAYER,
+		TWOPLAYERC,
+		TWOPLAYERO
 	}
 	
 	public enum Winner {
@@ -80,7 +81,8 @@ public class PacmanGame extends Game {
 	        AudioInputStream audioIn;
 			audioIn = AudioSystem.getAudioInputStream(new File(filename));
 	        Clip clip = AudioSystem.getClip();
-	        clip.close();
+	        clip.stop();
+	        clip.setFramePosition(0);
 	        clip.open(audioIn);
 	        clip.start();
 		} catch (Exception e) {
@@ -133,6 +135,8 @@ public class PacmanGame extends Game {
 	
 	public void movePacmanPlayer1(Dir dir) {
 		Agent p1 = pacmans.get(0);
+		if(mode != Mode.AUTO)
+			return;
 		switch(dir) {
 		case EAST:
 			p1.goRight();
@@ -153,9 +157,9 @@ public class PacmanGame extends Game {
 	
 	public void movePacmanPlayer2(Dir dir) {
 		Agent p2 = null;
-		if(mode == Mode.twoplayerC)
+		if(mode == Mode.TWOPLAYERC)
 			p2 = pacmans.get(1);
-		else if(mode == Mode.twoplayerO)
+		else if(mode == Mode.TWOPLAYERO)
 			p2 = ghosts.get(0);
 		if(p2 == null)
 			return;
@@ -189,13 +193,12 @@ public class PacmanGame extends Game {
 	}
 	
 	@Override
-	
 	public void initializeGame() {
 		pacmans.clear();
 		int p = 0;
 		for(PositionAgent position : maze.getPacman_start()) {
-			if((p < 1) || (p < 2 && mode == Mode.twoplayerC)) {
-				pacmans.add(FactoryAgent.createPacmanAstar(position));
+			if((p < 1 && mode != Mode.AUTO) || (p < 2 && mode == Mode.TWOPLAYERC)) {
+				pacmans.add(FactoryAgent.createPacmanPlayer(position));
 				p++;
 			}
 			else
@@ -203,7 +206,7 @@ public class PacmanGame extends Game {
 		}
 		ghosts.clear();
 		for(PositionAgent position : maze.getGhosts_start()) {
-			if(p < 2 && mode == Mode.twoplayerO) {
+			if(p < 2 && mode == Mode.TWOPLAYERO) {
 				ghosts.add(FactoryAgent.createGhostPlayer(position));
 				p++;
 			}
@@ -251,6 +254,9 @@ public class PacmanGame extends Game {
 				playSound("res/sounds/pacman_extrapac.wav");
 			}
 		}
+		
+		updatePosition();
+		
 		for(Agent ghost : ghosts) {
 			moveAgent(ghost);
 			deadAgents(ghost);
@@ -264,9 +270,11 @@ public class PacmanGame extends Game {
 	public void gameOver() {
 		if(nbFood == 0) {
 			winner = Winner.pacmanWinner;
+			playSound("res/sounds/pacman_intermission.wav");
 			notifyViews();
 		} else {
 			winner = Winner.ghostWinner;
+			playSound("res/sounds/pacman_death.wav");
 			notifyViews();
 		}
 	}
