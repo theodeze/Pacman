@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+
 import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 
@@ -108,10 +110,20 @@ public class AstarStrategy implements Strategy {
             neighbors.add(new PositionAgent(p.getX(), p.getY() + 1));
         return neighbors;
     }
-
-    public int heuristic(PositionAgent p1, PositionAgent p2) {
-        // distance de Manhattan
+    
+    public int manhattan(PositionAgent p1, PositionAgent p2) {
         return Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY());
+    }
+
+    public int heuristic(PositionAgent p1, List<PositionAgent> ps2) {
+    	int min = Integer.MAX_VALUE;
+    	for(PositionAgent p2 : ps2) {
+    		int dist = manhattan(p1, p2);
+    		if(dist < min) {
+    			dist = min;
+    		}
+    	}
+    	return min;
     }
 
     public PositionAgent nextPosition(Map<PositionAgent, PositionAgent> cameFrom, PositionAgent current) {
@@ -124,28 +136,58 @@ public class AstarStrategy implements Strategy {
         }
         return nextPosition;
     }
+    
+    public int compareGScore(PositionAgent p1, PositionAgent p2) {
+    	if(getGScore(p1) < getGScore(p2))
+    		return 1;
+    	else if(getGScore(p1) == getGScore(p2))
+    		return 0;
+    	else 
+    		return -1;
+    }
+    
+    public int compareFScore(PositionAgent p1, PositionAgent p2) {
+    	if(getFScore(p1) < getFScore(p2))
+    		return -1;
+    	else if(getFScore(p1) == getFScore(p2))
+    		return 0;
+    	else 
+    		return 1;
+    }
+    
+    public int compare(PositionAgent p1, PositionAgent p2) {
+    	int compare = compareFScore(p1, p2);
+    	if(compare == 0)
+    		compare = compareGScore(p1, p2);
+    	return compare;
+    }
 
-    public PositionAgent findPath(PositionAgent start, PositionAgent goal, List<PositionAgent> enemies, List<PositionAgent> friends, boolean[][] walls) {
+    public PositionAgent findPath(PositionAgent start, List<PositionAgent> goals, List<PositionAgent> enemies, List<PositionAgent> friends, boolean[][] walls) {
+        //List<PositionAgent> openList = new ArrayList<>();
+    	
+        PriorityQueue<PositionAgent> openList = new PriorityQueue<>((p1, p2) -> compare(p1, p2));
         List<PositionAgent> closedList = new ArrayList<>();
-        List<PositionAgent> openList = new ArrayList<>();
+        
         Map<PositionAgent, PositionAgent> cameFrom = new HashMap<>();
 
-        openList.add(start);
+        openList.offer(start);
 
         initGScore(walls.length, walls[0].length);
         initFScore(walls.length, walls[0].length);
         setGScore(start, 0);
-        setFScore(start, heuristic(start, goal));
+        setFScore(start, heuristic(start, goals));
 
         while(!openList.isEmpty()) {
-        	PositionAgent current = minFScore(openList);
+        	//PositionAgent current = minFScore(openList);
+        	PositionAgent current = openList.poll();
 
             // arrivé
-            if(current.equals(goal))
-                return nextPosition(cameFrom, current);
+        	for(PositionAgent goal : goals)
+	            if(current.equals(goal))
+	                return nextPosition(cameFrom, current);
 
             closedList.add(current);
-            openList.remove(current);
+            //openList.remove(current);
 
             for(PositionAgent neighbor : neighbors(start, current, enemies, friends, walls)) {
 
@@ -157,42 +199,26 @@ public class AstarStrategy implements Strategy {
 
                 // découverte d'un nouveau voisin
                 if(!openList.contains(neighbor))
-                    openList.add(neighbor);
+                    openList.offer(neighbor);
 
                 cameFrom.put(neighbor,current);
                 setGScore(neighbor, newGScore);
-                setFScore(neighbor, newGScore + heuristic(neighbor,goal));
+                setFScore(neighbor, newGScore + heuristic(neighbor, goals));
             }
         }
        
         // il n'existe pas de chemin
         return start;
     }
-    
-    public PositionAgent nearestTarget(PositionAgent me, List<PositionAgent> targets) {
-    	if(targets.isEmpty())
-    		return null;
-    	PositionAgent nearestTarget = targets.get(0);
-    	int nearestDistance = heuristic(me, nearestTarget);
-    	for(PositionAgent currentTarget : targets) {
-    		int currentDistance = heuristic(me, currentTarget);
-    		if(nearestDistance > currentDistance) {
-    			nearestTarget = currentTarget;
-    			nearestDistance = currentDistance;
-    		}			
-    	}
-    	return nearestTarget;
-    }	
 
 	@Override
 	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {
-		PositionAgent target = nearestTarget(agent.position(), targets);
-		if(target == null) {
+		if(targets.isEmpty()) {
 			return;
 		}
-		PositionAgent newPosition = findPath(agent.position(), target, enemies, friends, walls);
+		PositionAgent newPosition = findPath(agent.position(), targets, enemies, friends, walls);
 		if(newPosition.equals(agent.position())) {
-			newPosition  = findPath(agent.position(), target, enemies, Collections.emptyList(), walls);
+			newPosition  = findPath(agent.position(), targets, enemies, Collections.emptyList(), walls);
 		}
         agent.setPosition(newPosition);
 	}

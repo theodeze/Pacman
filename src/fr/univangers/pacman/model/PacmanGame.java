@@ -251,6 +251,7 @@ public class PacmanGame extends Game {
 				playSound("res/sounds/pacman_extrapac.wav");
 			}
 		}
+		
 		for(Agent ghost : ghosts) {
 			moveAgent(ghost);
 			deadAgents(ghost);
