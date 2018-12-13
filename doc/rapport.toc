@@ -1,6 +1,4 @@
 \babel@toc {french}{}
-\contentsline {part}{I\hspace {1em}Introduction}{2}{part.1}
-\contentsline {part}{II\hspace {1em}PacmanGame et Pattern MVC}{2}{part.2}
-\contentsline {part}{III\hspace {1em}Intelligence Artificielle et Pattern Strategy}{2}{part.3}
-\contentsline {part}{IV\hspace {1em}Autres Patterns utilis\IeC {\'e}s}{2}{part.4}
-\contentsline {part}{V\hspace {1em}Conclusion}{2}{part.5}
+\contentsline {part}{I\hspace {1em}PacmanGame et Pattern MVC}{3}{part.1}
+\contentsline {part}{II\hspace {1em}Intelligence Artificielle et Pattern Strategy}{4}{part.2}
+\contentsline {part}{III\hspace {1em}Autres Patterns utilis\IeC {\'e}s}{4}{part.3}
