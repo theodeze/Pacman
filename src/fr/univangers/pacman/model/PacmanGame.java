@@ -81,7 +81,8 @@ public class PacmanGame extends Game {
 	        AudioInputStream audioIn;
 			audioIn = AudioSystem.getAudioInputStream(new File(filename));
 	        Clip clip = AudioSystem.getClip();
-	        clip.close();
+	        clip.stop();
+	        clip.setFramePosition(0);
 	        clip.open(audioIn);
 	        clip.start();
 		} catch (Exception e) {
@@ -269,9 +270,11 @@ public class PacmanGame extends Game {
 	public void gameOver() {
 		if(nbFood == 0) {
 			winner = Winner.pacmanWinner;
+			playSound("res/sounds/pacman_intermission.wav");
 			notifyViews();
 		} else {
 			winner = Winner.ghostWinner;
+			playSound("res/sounds/pacman_death.wav");
 			notifyViews();
 		}
 	}

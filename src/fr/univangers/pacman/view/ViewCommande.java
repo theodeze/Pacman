@@ -48,7 +48,7 @@ public class ViewCommande extends JFrame implements View {
 		this.game = game;
 		this.game.addView(this);
 		
-        setTitle("Commande");
+        setTitle("Commandes");
         setSize(new Dimension(700, 300));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(2,1));
@@ -100,7 +100,7 @@ public class ViewCommande extends JFrame implements View {
         panelInfo = new JPanel();
         panelTime = new JPanel();
         panelTime.setLayout(new GridLayout(2,1));
-        JLabel labelTime = new JLabel("Numbers of turns per second", SwingConstants.CENTER);
+        JLabel labelTime = new JLabel("Nombre de tours par minute", SwingConstants.CENTER);
         panelTime.add(labelTime);
         sliderTime = new JSlider(1,10,1);
         sliderTime.setMajorTickSpacing(1);
@@ -121,7 +121,7 @@ public class ViewCommande extends JFrame implements View {
 	
 	@Override
 	public void update() {
-		labelNbTurn.setText("Turn : " + game.nbTurn());
+		labelNbTurn.setText("Tour : " + game.nbTurn());
 		if(game instanceof PacmanGame && ((PacmanGame)game).winner() != PacmanGame.Winner.noWinner) {
         	btnRun.setEnabled(true);
         	btnPause.setEnabled(false);

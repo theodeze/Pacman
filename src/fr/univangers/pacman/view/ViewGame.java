@@ -44,7 +44,7 @@ public class ViewGame extends JFrame implements View, KeyListener {
 		
 		addKeyListener(this);
 		
-        setTitle("Game");
+        setTitle("Pacman");
         setSize(new Dimension(maze.getSizeX() * 25, maze.getSizeY() * 25 + 80));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -59,7 +59,7 @@ public class ViewGame extends JFrame implements View, KeyListener {
         panelInfo = new JPanel();
         panelInfo.setLayout(new GridLayout(2,1));
         
-        labelCurrentTurn = new JLabel("Current turn " + game.nbTurn(), SwingConstants.CENTER);
+        labelCurrentTurn = new JLabel("Tour " + game.nbTurn(), SwingConstants.CENTER);
         panelInfo.add(labelCurrentTurn);
 		if(game instanceof PacmanGame) {
 			labelLife = new JLabel("Vie " + ((PacmanGame)game).getNbLifePacmans(), SwingConstants.CENTER);
@@ -77,7 +77,7 @@ public class ViewGame extends JFrame implements View, KeyListener {
 	
 	@Override
 	public void update() {
-        labelCurrentTurn.setText("current turn " + game.nbTurn());
+        labelCurrentTurn.setText("Tour " + game.nbTurn());
 		if(game instanceof PacmanGame) {
 			labelLife.setText("Vie " + ((PacmanGame)game).getNbLifePacmans());
 			labelScore.setText("Score " + ((PacmanGame)game).score());
