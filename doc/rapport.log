@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.29)  13 DEC 2018 11:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.29)  13 DEC 2018 11:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -722,7 +722,7 @@ pen/ec/ecrm1095.600pk> </home/etudiant/.texlive2017/texmf-var/fonts/pk/ljfour/j
 knappen/ec/eccc1200.600pk> </home/etudiant/.texlive2017/texmf-var/fonts/pk/ljfo
 ur/jknappen/ec/ecrm1200.600pk> </home/etudiant/.texlive2017/texmf-var/fonts/pk/
 ljfour/jknappen/ec/ecrm1728.600pk>
-Output written on rapport.pdf (5 pages, 407485 bytes).
+Output written on rapport.pdf (5 pages, 329503 bytes).
 PDF statistics:
  266 PDF objects out of 1000 (max. 8388607)
  76 compressed objects within 1 object stream
