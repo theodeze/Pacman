@@ -1,5 +1,6 @@
 package fr.univangers.pacman.model.strategy;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -120,7 +121,7 @@ public class AstarStrategy implements Strategy {
     	for(PositionAgent p2 : ps2) {
     		int dist = manhattan(p1, p2);
     		if(dist < min) {
-    			dist = min;
+    			min = dist;
     		}
     	}
     	return min;
@@ -162,9 +163,7 @@ public class AstarStrategy implements Strategy {
     	return compare;
     }
 
-    public PositionAgent findPath(PositionAgent start, List<PositionAgent> goals, List<PositionAgent> enemies, List<PositionAgent> friends, boolean[][] walls) {
-        //List<PositionAgent> openList = new ArrayList<>();
-    	
+    public Map.Entry<Double, PositionAgent> findPath(PositionAgent start, List<PositionAgent> goals, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {    	
         PriorityQueue<PositionAgent> openList = new PriorityQueue<>((p1, p2) -> compare(p1, p2));
         List<PositionAgent> closedList = new ArrayList<>();
         
@@ -178,16 +177,15 @@ public class AstarStrategy implements Strategy {
         setFScore(start, heuristic(start, goals));
 
         while(!openList.isEmpty()) {
-        	//PositionAgent current = minFScore(openList);
         	PositionAgent current = openList.poll();
 
             // arrivé
         	for(PositionAgent goal : goals)
 	            if(current.equals(goal))
-	                return nextPosition(cameFrom, current);
+	                return new AbstractMap.SimpleImmutableEntry<>(
+	                		getGScore(goal), nextPosition(cameFrom, current));
 
             closedList.add(current);
-            //openList.remove(current);
 
             for(PositionAgent neighbor : neighbors(start, current, enemies, friends, walls)) {
 
@@ -208,7 +206,7 @@ public class AstarStrategy implements Strategy {
         }
        
         // il n'existe pas de chemin
-        return start;
+        return new AbstractMap.SimpleImmutableEntry <>(0.0, start);
     }
 
 	@Override
@@ -216,9 +214,9 @@ public class AstarStrategy implements Strategy {
 		if(targets.isEmpty()) {
 			return;
 		}
-		PositionAgent newPosition = findPath(agent.position(), targets, enemies, friends, walls);
+		PositionAgent newPosition = findPath(agent.position(), targets, friends, enemies, walls).getValue();
 		if(newPosition.equals(agent.position())) {
-			newPosition  = findPath(agent.position(), targets, enemies, Collections.emptyList(), walls);
+			newPosition  = findPath(agent.position(), targets, Collections.emptyList(), enemies, walls).getValue();
 		}
         agent.setPosition(newPosition);
 	}

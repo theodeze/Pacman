@@ -1,7 +1,9 @@
 package fr.univangers.pacman.model;
 
+import fr.univangers.pacman.model.strategy.AstarEscapeStrategy;
 import fr.univangers.pacman.model.strategy.AstarStrategy;
 import fr.univangers.pacman.model.strategy.EscapeStrategy;
+import fr.univangers.pacman.model.strategy.NoneStrategy;
 import fr.univangers.pacman.model.strategy.PlayerStrategy;
 import fr.univangers.pacman.model.strategy.RandomStrategy;
 
@@ -46,13 +48,13 @@ public class FactoryAgent {
 	
 	public static Agent createPacmanAstar(PositionAgent position) {
 		Agent agt = new Agent(Agent.Type.PACMAN, position);
-		agt.setStrategy(new AstarStrategy(), new EscapeStrategy());
+		agt.setStrategy(new AstarStrategy(), new AstarEscapeStrategy());
 		return agt;
 	}
 	
 	public static Agent createGhostAstar(PositionAgent position) {
 		Agent agt = new Agent(Agent.Type.GHOST, position);
-		agt.setStrategy(new AstarStrategy(), new EscapeStrategy());
+		agt.setStrategy(new AstarStrategy(), new AstarEscapeStrategy());
 		return agt;
 	}
 	

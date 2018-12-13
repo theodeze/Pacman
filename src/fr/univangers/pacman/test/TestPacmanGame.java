@@ -37,6 +37,7 @@ public class TestPacmanGame {
 	
 	    Vector<String> listModes = new Vector<>();
 	    if(!maze.getPacman_start().isEmpty()) {
+	    	listModes.add("Auto");
 	    	listModes.add("Un joueur");
 	    }
 	    if(maze.getPacman_start().size() >= 2) {
@@ -53,11 +54,13 @@ public class TestPacmanGame {
         JOptionPane.showMessageDialog(null, panelMode, "Choix mode", JOptionPane.QUESTION_MESSAGE);
 
 
-	    PacmanGame.Mode mode = Mode.oneplayer;
+	    PacmanGame.Mode mode = Mode.ONEPLAYER;
+	    if(modes.getSelectedItem() == "Auto")
+	    	mode = Mode.AUTO;
 	    if(modes.getSelectedItem() == "Deux joueurs (Comperatif)")
-	    	mode = Mode.twoplayerC;
+	    	mode = Mode.TWOPLAYERC;
 		else if(modes.getSelectedItem() == "Deux joueurs (Opposition)")
-			mode = Mode.twoplayerO;
+			mode = Mode.TWOPLAYERO;
 	    
 		PacmanGame pacmanGame = new PacmanGame(250,maze,mode);
 		PacmanGameController pacmanGameController = new PacmanGameController(pacmanGame);
