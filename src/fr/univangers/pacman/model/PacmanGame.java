@@ -211,7 +211,7 @@ public class PacmanGame extends Game {
 				p++;
 			}
 			else
-				ghosts.add(FactoryAgent.createGhostAstar(position));
+				ghosts.add(FactoryAgent.createGhostExplorer(position));
 		}
 		nbFood = 0;
 		maze.resetFoods();
