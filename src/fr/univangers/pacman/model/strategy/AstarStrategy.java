@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 
 /**
@@ -16,36 +15,36 @@ import fr.univangers.pacman.model.PositionAgent;
  * La plus performante !
  */
 
-public class AstarStrategy implements Strategy {
+public abstract class AstarStrategy implements Strategy {
 
 	private static final long serialVersionUID = 6882118649697899327L;
 	private List<List<Double>> gScore = new ArrayList<>();
     private List<List<Double>> fScore = new ArrayList<>();
 
-    public double getGScore(PositionAgent p) {
+    private double getGScore(PositionAgent p) {
         return gScore.get(p.getX()).get(p.getY());
     }
 
-    public void setGScore(PositionAgent p, double score) {
+    private void setGScore(PositionAgent p, double score) {
         gScore.get(p.getX()).set(p.getY(), score);
     }
 
-    public double getFScore(PositionAgent p) {
+    private double getFScore(PositionAgent p) {
         return fScore.get(p.getX()).get(p.getY());
     }
 
-    public void setFScore(PositionAgent p, double score) {
+    private void setFScore(PositionAgent p, double score) {
         fScore.get(p.getX()).set(p.getY(), score);
     }
 
-    public void initGScore(int xSize, int ySize) {
+    private void initGScore(int xSize, int ySize) {
         gScore.clear();
         for(int x = 0; x < xSize; x++) {
             gScore.add(new ArrayList<>(Collections.nCopies(ySize, Double.POSITIVE_INFINITY)));
         }
     }
 
-    public void initFScore(int xSize, int ySize) {
+    private void initFScore(int xSize, int ySize) {
         fScore.clear();
         for(int x = 0; x < xSize; x++) {
             fScore.add(new ArrayList<>(Collections.nCopies(ySize, Double.POSITIVE_INFINITY)));
@@ -55,7 +54,7 @@ public class AstarStrategy implements Strategy {
     /**
      * Vérifie que la case n'est pas occupé par un ennemie 
      */
-	public boolean isNotOccupiedByEnemies(PositionAgent me, List<PositionAgent> enemies, PositionAgent p) {
+    private boolean isNotOccupiedByEnemies(PositionAgent me, List<PositionAgent> enemies, PositionAgent p) {
     	for(PositionAgent enemie : enemies)
     		// Verifie que l'agent n'est pas l'enemie ou si un enemie est proche
     		if(!enemie.equals(me) && enemie.near(p))
@@ -66,7 +65,7 @@ public class AstarStrategy implements Strategy {
     /**
      * Vérifie que la case n'est pas occupé par un amie
      */
-	public boolean isNotOccupiedByFriends(PositionAgent me, List<PositionAgent> enemies, PositionAgent p) {
+    private boolean isNotOccupiedByFriends(PositionAgent me, List<PositionAgent> enemies, PositionAgent p) {
     	for(PositionAgent enemie : enemies)
     		// Verifie que l'agent n'est pas l'amie ou si un amie est proche
     		if(!enemie.equals(me) && enemie.equals(p))
@@ -74,22 +73,7 @@ public class AstarStrategy implements Strategy {
     	return true;
     }
 
-    public PositionAgent minFScore(List<PositionAgent> list) {
-        if(list.isEmpty())
-            return null;
-        PositionAgent minPoint = list.get(0);
-        Double minValue = getFScore(list.get(0));
-        for(PositionAgent currentPoint : list) {
-            Double currentValue = getFScore(currentPoint);
-            if(currentValue < minValue) {
-                minPoint = currentPoint;
-                minValue = currentValue;
-            }
-        }
-        return minPoint;
-    }
-
-    public List<PositionAgent> neighbors(PositionAgent me, PositionAgent p, List<PositionAgent> enemies, List<PositionAgent> friends, boolean[][] walls) {
+    private List<PositionAgent> neighbors(PositionAgent me, PositionAgent p, List<PositionAgent> enemies, List<PositionAgent> friends, boolean[][] walls) {
         List<PositionAgent> neighbors = new ArrayList<>();
         int xSize = walls.length;
         int ySize = walls[0].length;
@@ -112,11 +96,11 @@ public class AstarStrategy implements Strategy {
         return neighbors;
     }
     
-    public int manhattan(PositionAgent p1, PositionAgent p2) {
+    private int manhattan(PositionAgent p1, PositionAgent p2) {
         return Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY());
     }
 
-    public int heuristic(PositionAgent p1, List<PositionAgent> ps2) {
+    private int heuristic(PositionAgent p1, List<PositionAgent> ps2) {
     	int min = Integer.MAX_VALUE;
     	for(PositionAgent p2 : ps2) {
     		int dist = manhattan(p1, p2);
@@ -127,7 +111,7 @@ public class AstarStrategy implements Strategy {
     	return min;
     }
 
-    public PositionAgent nextPosition(Map<PositionAgent, PositionAgent> cameFrom, PositionAgent current) {
+    private PositionAgent nextPosition(Map<PositionAgent, PositionAgent> cameFrom, PositionAgent current) {
         PositionAgent nextPosition = current;
         PositionAgent currentPosition = current;
         while(cameFrom.get(current) != null) {
@@ -138,7 +122,7 @@ public class AstarStrategy implements Strategy {
         return nextPosition;
     }
     
-    public int compareGScore(PositionAgent p1, PositionAgent p2) {
+    private int compareGScore(PositionAgent p1, PositionAgent p2) {
     	if(getGScore(p1) < getGScore(p2))
     		return 1;
     	else if(getGScore(p1) == getGScore(p2))
@@ -147,7 +131,7 @@ public class AstarStrategy implements Strategy {
     		return -1;
     }
     
-    public int compareFScore(PositionAgent p1, PositionAgent p2) {
+    private int compareFScore(PositionAgent p1, PositionAgent p2) {
     	if(getFScore(p1) < getFScore(p2))
     		return -1;
     	else if(getFScore(p1) == getFScore(p2))
@@ -156,14 +140,14 @@ public class AstarStrategy implements Strategy {
     		return 1;
     }
     
-    public int compare(PositionAgent p1, PositionAgent p2) {
+    private int compare(PositionAgent p1, PositionAgent p2) {
     	int compare = compareFScore(p1, p2);
     	if(compare == 0)
     		compare = compareGScore(p1, p2);
     	return compare;
     }
 
-    public Map.Entry<Double, PositionAgent> findPath(PositionAgent start, List<PositionAgent> goals, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {    	
+    protected Map.Entry<Double, PositionAgent> findPath(PositionAgent start, List<PositionAgent> goals, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {    	
         PriorityQueue<PositionAgent> openList = new PriorityQueue<>((p1, p2) -> compare(p1, p2));
         List<PositionAgent> closedList = new ArrayList<>();
         
@@ -208,16 +192,4 @@ public class AstarStrategy implements Strategy {
         // il n'existe pas de chemin
         return new AbstractMap.SimpleImmutableEntry <>(0.0, start);
     }
-
-	@Override
-	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {
-		if(targets.isEmpty()) {
-			return;
-		}
-		PositionAgent newPosition = findPath(agent.position(), targets, friends, enemies, walls).getValue();
-		if(newPosition.equals(agent.position())) {
-			newPosition  = findPath(agent.position(), targets, Collections.emptyList(), enemies, walls).getValue();
-		}
-        agent.setPosition(newPosition);
-	}
 }

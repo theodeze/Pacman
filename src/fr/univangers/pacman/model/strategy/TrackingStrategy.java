@@ -8,15 +8,15 @@ import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 
 /**
- * Stratégie pour Exploration pour les fantomes
+ * Stratégie pister pour les fantomes
  * Elle utilise un tableau qui représente le labyrinthe et 
  * la valeur d'une case représente une "trace de la cible" 
  * (0 si récente et infinie si un mur) et à chaque exécution 
  * la "trace" ce dissipe et si un fantôme passe dessus la 
- * "trace" ce dissipe plus vite. Le fantôme se dirige suit 
+ * "trace" ce dissipe plus vite. Le fantôme suit 
  * la "trace".
  */
-public class ExplorerStrategy implements Strategy {
+public class TrackingStrategy implements Strategy {
 
 	private static final long serialVersionUID = -3703352132989593376L;
 	private static List<List<Double>> maze = new ArrayList<>();

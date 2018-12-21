@@ -1,7 +1,6 @@
 package fr.univangers.pacman.view;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -18,6 +17,8 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 import fr.univangers.pacman.controller.PacmanGameController;
 import fr.univangers.pacman.model.Maze;
@@ -36,6 +37,7 @@ public class ViewSettings extends JFrame {
 	private JPanel panel;
 	private JComboBox<File> listMaze;
 	private JComboBox<String> listMode;
+	private JSpinner nbTurn;
 	private JComboBox<String> listStrategyPacman;
 	private JComboBox<String> listStrategyGhost;
 	
@@ -47,7 +49,7 @@ public class ViewSettings extends JFrame {
         setLayout(new BorderLayout());
       
         panel = new JPanel();
-        panel.setLayout(new GridLayout(5, 2, 10, 10));
+        panel.setLayout(new GridLayout(6, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         // Liste Maze
@@ -76,6 +78,11 @@ public class ViewSettings extends JFrame {
 		panel.add(new JLabel("Mode de jeu :"));
 		panel.add(listMode);
 		
+		// Liste Nombre de tours
+		nbTurn = new JSpinner(new SpinnerNumberModel(250, 1, 999, 1));
+		panel.add(new JLabel("Nombre de tour :"));
+		panel.add(nbTurn);
+		
 		// Liste Stratégie pacman
 		listStrategyPacman = new JComboBox<>();
 		updateStrategyPacman();
@@ -90,7 +97,7 @@ public class ViewSettings extends JFrame {
         
 		JButton buttonLaunch = new JButton("Lancer");
 		buttonLaunch.addActionListener((arg0) -> {
-			PacmanGame pacmanGame = new PacmanGame(250, getMaze(), getStrategyPacman(), getStrategyGhost(), getMode());
+			PacmanGame pacmanGame = new PacmanGame(getNbTurn(), getMaze(), getStrategyPacman(), getStrategyGhost(), getMode());
 			PacmanGameController pacmanGameController = new PacmanGameController(pacmanGame);
 			ViewCommande viewCommande = new ViewCommande(pacmanGame); 
 			viewCommande.setGameController(pacmanGameController);
@@ -103,7 +110,7 @@ public class ViewSettings extends JFrame {
 		buttonClose.addActionListener((arg0) -> System.exit(0));
 		panel.add(buttonClose);
 		
-		JLabel labelPreview = new JLabel("Jeux Pacman");
+		JLabel labelPreview = new JLabel("Menu");
 		labelPreview.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 25));
 		labelPreview.setHorizontalAlignment((int)JLabel.CENTER_ALIGNMENT);;
 		add(labelPreview, BorderLayout.PAGE_START);
@@ -119,6 +126,10 @@ public class ViewSettings extends JFrame {
 		return maze;
 	}
 	
+	public int getNbTurn() {
+		return (int)nbTurn.getValue();
+	}
+	
 	private void updateMaze(File file) {
 		System.out.println(file.toString());
 		try {
@@ -126,7 +137,7 @@ public class ViewSettings extends JFrame {
         	remove(panelPreview);
         	
 			panelPreview = new PanelPacmanGame(maze);
-			setSize(new Dimension(20*maze.getSizeX(), 20*maze.getSizeY() + 270));
+			setSize(new Dimension(20*maze.getSizeX(), 20*maze.getSizeY() + 280));
 			centerView();
 			add(panelPreview, BorderLayout.CENTER);
         	revalidate();
@@ -179,7 +190,7 @@ public class ViewSettings extends JFrame {
 	private void updateStrategyGhost() {
 	    Vector<String> difficulties = new Vector<>();
 	    difficulties.add("A* (Difficile)");
-	    difficulties.add("Exploreur (Normale)");
+	    difficulties.add("Pister (Normale)");
 	    difficulties.add("Basique (Facile)");
 	    difficulties.add("Aléatoire (Facile)");
 	    difficulties.add("Rien (Paisible)");
@@ -201,8 +212,8 @@ public class ViewSettings extends JFrame {
 	
 	public StrategyGhost getStrategyGhost() {
 		StrategyGhost difficulty = StrategyGhost.ASTAR;
-	    if(listStrategyGhost.getSelectedItem().equals("Exploreur (Normale)"))
-	    	difficulty = StrategyGhost.EXPLORER;
+	    if(listStrategyGhost.getSelectedItem().equals("Pister (Normale)"))
+	    	difficulty = StrategyGhost.TRACKING;
 	    else if(listStrategyGhost.getSelectedItem().equals("Basique (Facile)"))
 	    	difficulty = StrategyGhost.BASIC;
 		else if(listStrategyGhost.getSelectedItem().equals("Aléatoire (Facile)"))

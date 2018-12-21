@@ -174,7 +174,7 @@ public class Agent implements AgentAction, Serializable {
 		currentState = vunerable;
 	}
 	
-	public State getEtatActuel() {
+	public State getCurrentState() {
 		return currentState;
 	}
 

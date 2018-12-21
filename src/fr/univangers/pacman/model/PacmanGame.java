@@ -35,7 +35,7 @@ public class PacmanGame extends Game {
 	
 	public enum StrategyGhost {
 		ASTAR,
-		EXPLORER,
+		TRACKING,
 		RANDOM,
 		BASIC,
 		NONE
@@ -255,8 +255,8 @@ public class PacmanGame extends Game {
 				case BASIC:
 					ghosts.add(FactoryAgent.createGhostBasic(position));
 					break;
-				case EXPLORER:
-					ghosts.add(FactoryAgent.createGhostExplorer(position));
+				case TRACKING:
+					ghosts.add(FactoryAgent.createGhostTracking(position));
 					break;
 				case NONE:
 					ghosts.add(FactoryAgent.createGhostNone(position));

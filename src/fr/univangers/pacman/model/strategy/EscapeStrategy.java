@@ -1,10 +1,10 @@
 package fr.univangers.pacman.model.strategy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
-import fr.univangers.pacman.model.PositionAgent.Dir;
 
 /**
  * Stratégie de fuites des agents fantômes
@@ -15,14 +15,13 @@ public class EscapeStrategy implements Strategy {
 	private static final long serialVersionUID = 4316826769530063482L;
 	
 	/**
-	 * Calcul des distances vis-à-vis des Pacmans pour s'en éloigner le plus possible
+	 * Calcul des distances vis-à-vis des enemies pour s'en éloigner le plus possible
 	 */
-	
-	private int averageDistancePacman(PositionAgent position, List<PositionAgent> positionPacmans) {
+	private int averageDistanceEnemies(PositionAgent position, List<PositionAgent> enemies) {
 		int averageDistance = 0;
-		for(PositionAgent positionPacman : positionPacmans) {
-			averageDistance += Math.abs(position.getX() - positionPacman.getX()) 
-					+ Math.abs(position.getY() - positionPacman.getY());
+		for(PositionAgent enemie : enemies) {
+			averageDistance += Math.abs(position.getX() - enemie.getX()) 
+					+ Math.abs(position.getY() - enemie.getY());
 		}
 		return averageDistance;
 	}
@@ -30,53 +29,33 @@ public class EscapeStrategy implements Strategy {
 	@Override
 	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {
 		PositionAgent position = agent.position();
-		PositionAgent testPosition = new PositionAgent(position.getX(), position.getY(), position.getDir());
-		PositionAgent newPosition = new PositionAgent(position.getX(), position.getY(), position.getDir());
-		int currentAverageDistance = averageDistancePacman(position, enemies);
+		int currentAverageDistance = averageDistanceEnemies(position, enemies);
 		int testAverageDistancePacman = 0;
 		
-		if(!walls[position.getX() + 1][position.getY()]) {
-			testPosition.setX(position.getX() + 1);
-			testPosition.setY(position.getY());
-			testAverageDistancePacman = averageDistancePacman(testPosition, enemies);
-			if(currentAverageDistance < testAverageDistancePacman) {
-				currentAverageDistance = testAverageDistancePacman;
-				newPosition = testPosition;
-				newPosition.setDir(Dir.EAST);
-			}
-		}
+		PositionAgent newPosition = agent.position();
 		
-		if(!walls[position.getX()][position.getY() - 1]) {
-			testPosition.setX(position.getX());
-			testPosition.setY(position.getY() - 1);
-			testAverageDistancePacman = averageDistancePacman(testPosition, enemies);
-			if(currentAverageDistance < testAverageDistancePacman) {
-				currentAverageDistance = testAverageDistancePacman;
-				newPosition = testPosition;
-				newPosition.setDir(Dir.NORTH);
+		List<PositionAgent> positions = new ArrayList<>();
+		PositionAgent cp1 = new PositionAgent(newPosition);
+		cp1.setX(cp1.getX() + 1);
+		positions.add(cp1);
+		PositionAgent cp2 = new PositionAgent(newPosition);
+		cp2.setX(cp2.getX() - 1);
+		positions.add(cp2);
+		PositionAgent cp3 = new PositionAgent(newPosition);
+		cp3.setY(cp3.getY() + 1);
+		positions.add(cp3);
+		PositionAgent cp4 = new PositionAgent(newPosition);
+		cp4.setY(cp4.getY() - 1);
+		positions.add(cp4);
+		for(PositionAgent currentPosition : positions)	
+			if(!walls[position.getX()][position.getY()]) {
+				testAverageDistancePacman = averageDistanceEnemies(currentPosition, enemies);
+				if(currentAverageDistance < testAverageDistancePacman) {
+					currentAverageDistance = testAverageDistancePacman;
+					newPosition = currentPosition;
+				}
 			}
-		}
-		
-		if(!walls[position.getX()][position.getY() + 1]) {
-			testPosition.setX(position.getX());
-			testPosition.setY(position.getY() + 1);
-			testAverageDistancePacman = averageDistancePacman(testPosition, enemies);
-			if(currentAverageDistance < testAverageDistancePacman) {
-				currentAverageDistance = testAverageDistancePacman;
-				newPosition = testPosition;
-				newPosition.setDir(Dir.SOUTH);
-			}
-		}
-		
-		if(!walls[position.getX() - 1][position.getY()]) {
-			testPosition.setX(position.getX() - 1);
-			testPosition.setY(position.getY());
-			testAverageDistancePacman = averageDistancePacman(testPosition, enemies);
-			if(currentAverageDistance < testAverageDistancePacman) {
-				newPosition = testPosition;
-				newPosition.setDir(Dir.WEST);
-			}	
-		}
+	
 		
 		agent.setPosition(newPosition);
 	}
