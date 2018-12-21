@@ -13,7 +13,7 @@
 
 \title{Design Pattern : Pacman}
 \author{Théo \textsc{DÉZÉ}  \& Charles \textsc {MALLET}}
-\date{20 Décembre 2018} 
+\date{21 Décembre 2018} 
 
 
 \maketitle
@@ -47,13 +47,20 @@ Pacman fonctionne. Enfin, nous concluerons par vous présenter l'état final de 
 
 
 \part{PacmanGame et Pattern MVC}
-\begin{itemize}
-  \item PacmanGame :  \\ 
+
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[height=7.8cm]{img/png/mvc}
+  \end{center}
+  \caption[schema]{UML MVC}
+\end{figure}
+
+\section{PacmanGame}
   
 Comme dit précédemment dans l'Introduction, nous avons implémenté les comportements de base du Jeu Pacman. Au sein de la classe PacmanGame, nous avons appelé
 les fonctions essentielles à son bon déroulement et créer les différents items utiles au jeu. \\
  
-  \item Pattern MVC : \\
+\section{Pattern MVC}
   
 Le Design Pattern Pattern MVC signifie Modèle-Vue-Controller. Dans le cadre de notre projet, nous avons donc exploité ce concept afin d'améliorer
 notre architecture. Dans la Vue, nous avons défini les différentes interfaces grahiques de notre application : la vue du jeu, la vue des commande,
@@ -64,43 +71,57 @@ graphique permettant, par exemple, de mettre en pause le jeu ou d'augmenter et r
 défini tout ce qui correspondait au fonctionnement même de l'application tels que les classes Agents, FactoryAgent, Game ainsi que les États et Stratégies 
 dont nous parlerons plus en détail par la suite. 
 
-\end{itemize}
-
 \part{Intelligence Artificielle et Pattern Strategy}
 
-\begin{itemize}
-  \item Algorithme A* : \\
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[height=10cm]{img/png/strategy}
+  \end{center}
+  \caption[schema]{UML Stratégies}
+\end{figure}
+
+\section{Algorithme A*}
   
 L'Algorithme A* est un algorithme de recherche très puissant. Il permet de calculer efficacement le chemin le plus court pour se rendre d'un point I à un Objectif F.
 À l'aide d'heuristique, il parcourt un graphe en cherchant le coup de déplacement le plus minimal. Dans le cadre de notre Pacman, il est utilisé
 pour les fantômes lorsqu'ils partent à la poursuite du Pacman ainsi que pour échapper à ce dernier lorsqu'il devient invulnérable. Par ailleurs,
 Pacman utilise aussi cet algorithme lorsque l'utilisateur demande à ce que l'agent joue automatiquement, au lancement de la partie. \\
 
-  \item Pattern Strategy : \\
+\section{Pattern Strategy}
   
 Le Pattern Strategy nous a été très utile. En effet, il nous a permis de définir les différentes intelligences artificielles des agents fantômes 
 du jeu. Ces derniers se servent d'une stratégie d'attaque AstarStrategy lorsqu'ils repèrent le Pacman ainsi qu'une stratégie défini dans la classe 
 AstarEscapeStrategy lorsque leur vie est mise en danger par l'absorption d'une capsule.
 
-\end{itemize}
-
 \part{Autres Patterns utilisés}
 
-\begin{itemize}
-  \item Pattern Factory : \\
+\section{Pattern Fabrique}
   
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[height=7cm]{img/png/factory}
+  \end{center}
+  \caption[schema]{UML Fabrique}
+\end{figure}
+
 Ce Design Pattern nous a été utile dans le cadre de la création des Agents. Grâce à celui-ci nous avons pu facilement créer différent agents avec des
 méthodes similaires permettant toutes de créer des fantômes ou des pacmans aux caractéristiques souhaitées. Il a été implémenté grâce à la classe 
 FactoryAgent où nous avons défini ces méthodes et appelés lors du lancement du jeu par la classe PacmanGame. \\
 
-  \item Pattern État : \\
-  
+\section{Pattern État}
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[height=7cm]{img/png/state}
+  \end{center}
+  \caption[schema]{UML État}
+\end{figure}
+
 Ce dernier Pattern a permis de définir des États pour les agents car d'un moment t\textsubscript{0} à un moment t\textsubscript{n}, les agents ne restent pas 
 toujours dans le même état. Un agent peut être dans un état vivant ou mort voire vulnérable (uniquement) pour les fantômes. Avec ces états, 
 il est aisé de savoir à quel moment on peut retirer de la vie au pacman lorsqu'il se fait attraper par un fantôme
 ou faire disparaître un fantôme lorsqu'il est mangé par un pacman. Il suffisait simplement de changer ces états dès lors qu'un événement se 
 produisait (Capsule absorbé ; Pacman tué ; Fantôme tué \ldots). 
-\end{itemize}
 
 \part*{Conclusion}
 
