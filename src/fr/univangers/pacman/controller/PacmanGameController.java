@@ -7,12 +7,8 @@ import fr.univangers.pacman.model.PositionAgent.Dir;
  * Classe qui permet de lier l'interface graphique du Pacman et le jeu Pacman
  * On a des fonctions qui permettent de mettre à jour le temps, et en fonction du bouton l'utilisant,
  * mettre en pause, relancer le jeu à l'état courant, relancer la partie depuis le début ou avancer
- * d'un temps en plus
- * On a également deux fonctions qui permettent de permettre à un joueur 1 et un joueur 2 de jouer au clavier
- *
+ * d'un tour et de contrôler le joueur
  */
-
-
 public class PacmanGameController implements GameController {
 	
 	private static final long serialVersionUID = 7744355889303690019L;

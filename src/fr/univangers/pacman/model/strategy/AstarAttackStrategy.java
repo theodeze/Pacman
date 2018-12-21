@@ -6,6 +6,9 @@ import java.util.List;
 import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 
+/**
+ * Stratégie de l'aglgorithme A* attaque
+ */
 public class AstarAttackStrategy extends AstarStrategy {
 
 	private static final long serialVersionUID = -4845423502376948832L;

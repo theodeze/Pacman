@@ -7,9 +7,7 @@ import fr.univangers.pacman.model.PositionAgent;
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
 /**
- * Première stratégie implémentée ("peut encore être utile" - Théo)
- * Plus utile... :
- * 			- Attaque l'ennemi le plus proche
+ * Première stratégie implémentée
  */
 
 public class NearestAttackStrategy implements Strategy {

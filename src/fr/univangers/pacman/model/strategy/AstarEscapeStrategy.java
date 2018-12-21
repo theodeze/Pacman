@@ -8,6 +8,9 @@ import java.util.Map.Entry;
 import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 
+/**
+ * Stratégie de l'aglgorithme A* fuite
+ */
 public class AstarEscapeStrategy extends AstarStrategy {
 
 	private static final long serialVersionUID = -8042348962940629614L;

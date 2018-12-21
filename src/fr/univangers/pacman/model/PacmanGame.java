@@ -84,10 +84,6 @@ public class PacmanGame extends Game {
 	public List<PositionAgent> positionGhosts() {
 		return positionGhosts;
 	}
-
-	/**
-	 * Fonction qui permet de jouer le son du Pacman
-	 */
 	
 	public List<PositionAgent> positionFoods() {
 		return positionFoods;
@@ -384,7 +380,6 @@ public class PacmanGame extends Game {
 	/**
 	 *  Fonction changesForDeathState appelée dans deadAgents
 	 */
-	
 	public void changesForDeathState(Agent pacman, Agent ghost) {
 		if(ghost.position().equals(pacman.position())) {
 			if (ghost.isVulnerable()) {
