@@ -26,10 +26,25 @@ public class PacmanGame extends Game {
 		TWOPLAYERO
 	}
 	
+	public enum StrategyPacman {
+		ASTAR,
+		RANDOM,
+		BASIC,
+		NONE
+	}
+	
+	public enum StrategyGhost {
+		ASTAR,
+		EXPLORER,
+		RANDOM,
+		BASIC,
+		NONE
+	}
+	
 	public enum Winner {
-		noWinner,
-		ghostWinner,
-		pacmanWinner
+		NOWINNER,
+		GHOSTWINNER,
+		PACMANWINNER
 	}
 	
 	private static final long serialVersionUID = 998416452804755455L;
@@ -46,6 +61,8 @@ public class PacmanGame extends Game {
 	private int nbFood = 0;
 	private int scorePerGhosts = 200;
 	private Mode mode;
+	private StrategyPacman strategyPacman;
+	private StrategyGhost strategyGhost;
 	private Winner winner;
 	
 	public int getNbLifePacmans() {
@@ -103,11 +120,13 @@ public class PacmanGame extends Game {
 		return ghostsScarred;
 	}
 	
-	public PacmanGame(int maxTurn, Maze maze, Mode mode) {
+	public PacmanGame(int maxTurn, Maze maze, StrategyPacman strategyPacman, StrategyGhost strategyGhost, Mode mode) {
 		super(maxTurn);
 		this.maze = maze;
+		this.strategyPacman = strategyPacman;
+		this.strategyGhost = strategyGhost;
 		this.mode = mode;
-		this.winner = Winner.noWinner;
+		this.winner = Winner.NOWINNER;
 		this.nbLifePacmans = nbVieMax;
 		init();
 	}
@@ -135,7 +154,7 @@ public class PacmanGame extends Game {
 	
 	public void movePacmanPlayer1(Dir dir) {
 		Agent p1 = pacmans.get(0);
-		if(mode != Mode.AUTO)
+		if(mode == Mode.AUTO)
 			return;
 		switch(dir) {
 		case EAST:
@@ -192,27 +211,67 @@ public class PacmanGame extends Game {
 			ghost.resetPosition();
 	}
 	
-	@Override
-	public void initializeGame() {
+	private void initializePacman() {
 		pacmans.clear();
-		int p = 0;
+		int nbPacmanAdd = 0;
 		for(PositionAgent position : maze.getPacman_start()) {
-			if((p < 1 && mode != Mode.AUTO) || (p < 2 && mode == Mode.TWOPLAYERC)) {
+			if((nbPacmanAdd < 1 && mode != Mode.AUTO) || (nbPacmanAdd < 2 && mode == Mode.TWOPLAYERC)) {
 				pacmans.add(FactoryAgent.createPacmanPlayer(position));
-				p++;
+				nbPacmanAdd++;
 			}
-			else
-				pacmans.add(FactoryAgent.createPacmanAstar(position));
+			else {
+				switch(strategyPacman) {
+				case ASTAR:
+					pacmans.add(FactoryAgent.createPacmanAstar(position));
+					break;
+				case BASIC:
+					pacmans.add(FactoryAgent.createPacmanBasic(position));
+					break;
+				case NONE:
+					pacmans.add(FactoryAgent.createPacmanNone(position));
+					break;
+				case RANDOM:
+					pacmans.add(FactoryAgent.createPacmanRandom(position));
+					break;
+				default:
+					break;
+				}
+			}
 		}
+	}
+	
+	private void initializeGhost() {
 		ghosts.clear();
+		boolean isAddPlayer = false;
 		for(PositionAgent position : maze.getGhosts_start()) {
-			if(p < 2 && mode == Mode.TWOPLAYERO) {
+			if(!isAddPlayer && mode == Mode.TWOPLAYERO) {
 				ghosts.add(FactoryAgent.createGhostPlayer(position));
-				p++;
+				isAddPlayer = true;
+			} else {
+				switch(strategyGhost) {
+				case ASTAR:
+					ghosts.add(FactoryAgent.createGhostAstar(position));
+					break;
+				case BASIC:
+					ghosts.add(FactoryAgent.createGhostBasic(position));
+					break;
+				case EXPLORER:
+					ghosts.add(FactoryAgent.createGhostExplorer(position));
+					break;
+				case NONE:
+					ghosts.add(FactoryAgent.createGhostNone(position));
+					break;
+				case RANDOM:
+					ghosts.add(FactoryAgent.createGhostRandom(position));
+					break;
+				default:
+					break;
+				}
 			}
-			else
-				ghosts.add(FactoryAgent.createGhostExplorer(position));
 		}
+	}
+	
+	private void initializeFood() {
 		nbFood = 0;
 		maze.resetFoods();
 		for(int x = 0; x < maze.getSizeX(); x++) {
@@ -222,9 +281,16 @@ public class PacmanGame extends Game {
 			}
 		}
 		maze.resetCapsules();
+	}
+	
+	@Override
+	public void initializeGame() {
+		initializePacman();
+		initializeGhost();
+		initializeFood();
 		score = 0;
 		nbLifePacmans = nbVieMax;
-		winner = Winner.noWinner;
+		winner = Winner.NOWINNER;
 		updatePosition();
 		playSound("res/sounds/pacman_beginning.wav");
 	}
@@ -269,11 +335,11 @@ public class PacmanGame extends Game {
 	@Override
 	public void gameOver() {
 		if(nbFood == 0) {
-			winner = Winner.pacmanWinner;
+			winner = Winner.PACMANWINNER;
 			playSound("res/sounds/pacman_intermission.wav");
 			notifyViews();
 		} else {
-			winner = Winner.ghostWinner;
+			winner = Winner.GHOSTWINNER;
 			playSound("res/sounds/pacman_death.wav");
 			notifyViews();
 		}

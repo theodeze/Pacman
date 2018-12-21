@@ -122,7 +122,7 @@ public class ViewCommande extends JFrame implements View {
 	@Override
 	public void update() {
 		labelNbTurn.setText("Tour : " + game.nbTurn());
-		if(game instanceof PacmanGame && ((PacmanGame)game).winner() != PacmanGame.Winner.noWinner) {
+		if(game instanceof PacmanGame && ((PacmanGame)game).winner() != PacmanGame.Winner.NOWINNER) {
         	btnRun.setEnabled(true);
         	btnPause.setEnabled(false);
             btnStep.setEnabled(false);

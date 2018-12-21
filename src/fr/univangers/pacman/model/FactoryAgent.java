@@ -4,6 +4,7 @@ import fr.univangers.pacman.model.strategy.AstarEscapeStrategy;
 import fr.univangers.pacman.model.strategy.AstarStrategy;
 import fr.univangers.pacman.model.strategy.EscapeStrategy;
 import fr.univangers.pacman.model.strategy.ExplorerStrategy;
+import fr.univangers.pacman.model.strategy.NearestAttackStrategy;
 import fr.univangers.pacman.model.strategy.NoneStrategy;
 import fr.univangers.pacman.model.strategy.PlayerStrategy;
 import fr.univangers.pacman.model.strategy.RandomStrategy;
@@ -22,6 +23,30 @@ public class FactoryAgent {
 	private FactoryAgent() {
 	    throw new IllegalStateException("Factory class");
 	}	
+	
+	public static Agent createPacmanBasic(PositionAgent position) {
+		Agent agt = new Agent(Agent.Type.PACMAN, position);
+		agt.setStrategy(new NearestAttackStrategy(), new EscapeStrategy());
+		return agt;
+	}	
+	
+	public static Agent createPacmanNone(PositionAgent position) {
+		Agent agt = new Agent(Agent.Type.PACMAN, position);
+		agt.setStrategy(new NoneStrategy(), new NoneStrategy());
+		return agt;
+	}
+	
+	public static Agent createGhostNone(PositionAgent position) {
+		Agent agt = new Agent(Agent.Type.GHOST, position);
+		agt.setStrategy(new NoneStrategy(), new NoneStrategy());
+		return agt;
+	}
+	
+	public static Agent createGhostBasic(PositionAgent position) {
+		Agent agt = new Agent(Agent.Type.GHOST, position);
+		agt.setStrategy(new NearestAttackStrategy(), new EscapeStrategy());
+		return agt;
+	}
 	
 	public static Agent createPacmanPlayer(PositionAgent position) {
 		Agent agt = new Agent(Agent.Type.PACMAN, position);

@@ -45,7 +45,7 @@ public class ViewGame extends JFrame implements View, KeyListener {
 		addKeyListener(this);
 		
         setTitle("Pacman");
-        setSize(new Dimension(maze.getSizeX() * 25, maze.getSizeY() * 25 + 80));
+        setSize(new Dimension(maze.getSizeX() * 20, maze.getSizeY() * 20 + 80));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         
@@ -86,16 +86,16 @@ public class ViewGame extends JFrame implements View, KeyListener {
 	        panelPacmanGame.setGhosts_pos(((PacmanGame)game).positionGhosts());
 	        
 	        PacmanGame.Winner winner = ((PacmanGame)game).winner();
-	        if(!reset && winner != PacmanGame.Winner.noWinner) {
+	        if(!reset && winner != PacmanGame.Winner.NOWINNER) {
 	        	String print = "";
-		        if(winner == PacmanGame.Winner.pacmanWinner) {
+		        if(winner == PacmanGame.Winner.PACMANWINNER) {
 		        	print = "Les pacmans ont gagné";
 		        }
-		        else if(winner == PacmanGame.Winner.ghostWinner) {
-		        	print = "Les fantomes ont gagné";
+		        else if(winner == PacmanGame.Winner.GHOSTWINNER) {
+		        	print = "Les fantômes ont gagné";
 		        }	  
 	        	int answer = JOptionPane.showConfirmDialog(this,
-	        			print + "\nRelancer?", "Game Over", JOptionPane.YES_NO_OPTION); 
+	        			print + "\nRelancer ?", "Fin de partie", JOptionPane.YES_NO_OPTION); 
 	        	if(answer == JOptionPane.YES_OPTION) {
 	        		reset = true;
 	        		gameController.restart();
