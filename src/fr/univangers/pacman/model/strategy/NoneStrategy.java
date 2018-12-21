@@ -6,7 +6,7 @@ import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 
 /**
- *	Stratégie au l'agent ne bouge pas
+ *	Stratégie où l'agent ne bouge pas
  */
 
 public class NoneStrategy implements Strategy {

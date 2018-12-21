@@ -7,9 +7,8 @@ import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 
 /**
- * Stratégie de fuites des agents fantômes
+ * Stratégie de fuites
  */
-
 public class EscapeStrategy implements Strategy {
 	
 	private static final long serialVersionUID = 4316826769530063482L;

@@ -9,7 +9,7 @@ import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 
 /**
- * Stratégie de l'aglgorithme A* fuite
+ * Stratégie de l'algorithme A* fuite
  */
 public class AstarEscapeStrategy extends AstarStrategy {
 

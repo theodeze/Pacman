@@ -11,7 +11,7 @@ import java.util.PriorityQueue;
 import fr.univangers.pacman.model.PositionAgent;
 
 /**
- * Stratégie de l'aglgorithme A*
+ * Stratégie de l'algorithme A*
  */
 public abstract class AstarStrategy implements Strategy {
 
