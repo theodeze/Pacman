@@ -7,7 +7,6 @@ import fr.univangers.pacman.model.PositionAgent;
 
 /**
  * Interface pour définir l'Etat d'un agent
- * Appelé dans Life, Vulnerable, Death
  */
 public interface State extends Serializable {
 	

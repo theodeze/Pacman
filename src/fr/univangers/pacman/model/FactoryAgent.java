@@ -15,9 +15,7 @@ import fr.univangers.pacman.model.strategy.RandomStrategy;
  * d'implémenter une stratégie à chaque agent correspondant (elles
  * peuvent dépendre du hasard, de l'algorithme A*, ou permettre la
  * fuite)
- *
  */
-
 public class FactoryAgent {
 
 	private FactoryAgent() {

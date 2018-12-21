@@ -14,19 +14,9 @@ import java.util.List;
  *	Sur la carte, on définit les murs, le placement des capsules et gommes, 
  *	ainsi que les positions des différents agents du jeu au début
  */
-
 public class Maze implements Serializable{
 	
 	private static final long serialVersionUID = 1076456911984437464L;
-	/** 
-	 * Les différentes directions possibles pour les actions et les orientations des agents
-	 */
-	
-	public static int NORTH=0;
-	public static int SOUTH=1;
-	public static int EAST=2;
-	public static int WEST=3;
-	public static int STOP=4;
 	
 	private int size_x;
 	private int size_y;
@@ -34,7 +24,6 @@ public class Maze implements Serializable{
 	/** 
 	 * Les éléments du labyrinthe
 	 */
-	
 	private boolean walls[][];
 	private boolean foods_start[][];
 	private boolean foods[][];
@@ -44,7 +33,6 @@ public class Maze implements Serializable{
 	/** 
 	 * Les positions initiales des agents
 	 */
-	
 	private List<PositionAgent> pacman_start;
 	private List<PositionAgent> ghosts_start;
 

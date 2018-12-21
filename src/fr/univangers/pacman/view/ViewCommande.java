@@ -21,7 +21,6 @@ import fr.univangers.pacman.model.PacmanGame;
  * Classe ViewCommande sert à implémenter l'interface graphique du panneau 
  * de contrôle du jeu
  */
-
 public class ViewCommande extends JFrame implements View {
 
 	private static final long serialVersionUID = -1656969420461892798L;

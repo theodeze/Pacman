@@ -5,9 +5,8 @@ import java.io.Serializable;
 import fr.univangers.pacman.view.View;
 
 /**
- * Interface implémentée dans la classe Abstraite Game
+ * Interface Model équivalent au sujet dans le patern Observer
  */
-
 public interface Model extends Serializable{
 
 	public void addView(View view);

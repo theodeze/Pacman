@@ -7,7 +7,7 @@ import fr.univangers.pacman.model.PositionAgent;
 import fr.univangers.pacman.model.Agent.Type;
 
 /**
- * Vivant représente l'état par défault d'un agent
+ * Vivant représente l'état par défaut d'un agent
  */
 public class Life implements State {
 

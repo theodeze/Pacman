@@ -6,8 +6,7 @@ import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 
 /**
- *	Stratégie utilisée lorsque les fantômes sont morts 
- *	(ne sont pas encore revenus à la vie)
+ *	Stratégie au l'agent ne bouge pas
  */
 
 public class NoneStrategy implements Strategy {

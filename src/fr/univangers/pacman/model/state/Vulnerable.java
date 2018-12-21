@@ -6,7 +6,7 @@ import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.PositionAgent;
 
 /**
- *  Classe qui sert à définir l'état Death
+ *  Classe qui sert à définir l'état Vulnerable
  */
 
 public class Vulnerable implements State {

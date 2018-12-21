@@ -13,9 +13,9 @@ import fr.univangers.pacman.model.PositionAgent;
 public interface Strategy extends Serializable {
 
 
-/**
- * Permet le déplacement de l'agent en fonction des murs et de la position des agents alliés/ennemies
- */
+	/**
+	 * Permet le déplacement de l'agent en fonction des murs et de la position des agents alliés/ennemies
+	 */
 	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls);
 	
 }

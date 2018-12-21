@@ -27,6 +27,9 @@ import fr.univangers.pacman.model.PacmanGame.StrategyPacman;
 import fr.univangers.pacman.model.PacmanGame.StrategyGhost;
 import fr.univangers.pacman.model.PacmanGame.Mode;
 
+/**
+ * Interface qui permet de sélectionner le labyrinthe ainsi que les paramètres de la partie
+ */
 public class ViewSettings extends JFrame {
 	private static final long serialVersionUID = 6791950037033830292L;
 

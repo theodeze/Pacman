@@ -8,9 +8,8 @@ import fr.univangers.pacman.model.PositionAgent;
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
 /**
- * Stratégie appliquée dans le cadre de la recherche du Pacman par les fantômes
+ * Stratégie de déplacement qui choisi une nouvelle position aléatoire parmi celle disponible
  */
-
 public class RandomStrategy implements Strategy {
 
 	private static final long serialVersionUID = 2758435520227921703L;

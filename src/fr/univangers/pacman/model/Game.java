@@ -8,7 +8,6 @@ import fr.univangers.pacman.view.View;
 /**
  * Classe abstraite Game gère les tours et la fin de partie
  */
-
 public abstract class Game implements Model, Runnable {
 
 	private static final long serialVersionUID = -5712731745471369390L;
