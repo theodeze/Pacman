@@ -17,7 +17,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 import fr.univangers.pacman.controller.PacmanGameController;
@@ -49,7 +51,7 @@ public class ViewSettings extends JFrame {
         setLayout(new BorderLayout());
       
         panel = new JPanel();
-        panel.setLayout(new GridLayout(6, 2, 10, 10));
+        panel.setLayout(new GridLayout(8, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         // Liste Maze
@@ -61,13 +63,24 @@ public class ViewSettings extends JFrame {
 				updateMaze((File)listMaze.getSelectedItem());
 			}
 		});
+		
+		panel.add(new JLabel("Votre pseudo :"));
+		JTextField text_pseudo = new JTextField();
+		text_pseudo.setColumns(10);
+		panel.add(text_pseudo);	
+		
+		panel.add(new JLabel("Votre mot de passe :"));
+		JPasswordField text_mdp = new JPasswordField();
+		text_mdp.setColumns(10);
+		panel.add(text_mdp);
+		
 		panel.add(new JLabel("Choix labyrinthe :"));
 		panel.add(listMaze);
 
         try {
         	maze = new Maze(directory.listFiles()[0].toString());
 			panelPreview = new PanelPacmanGame(maze);
-			setSize(new Dimension(maze.getSizeX() * 20, maze.getSizeY() * 20 + 200));
+			setSize(new Dimension(maze.getSizeX() * 20, maze.getSizeY() * 20 + 330));
 			centerView();
 		} catch (Exception e) {
 		}
@@ -228,7 +241,7 @@ public class ViewSettings extends JFrame {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Point centerPoint = ge.getCenterPoint();
         int dx = centerPoint.x - windowSize.width / 2;
-        int dy = centerPoint.y - windowSize.height / 2;
+        int dy = centerPoint.y - windowSize.height / 2 ;
         setLocation(dx, dy);   
 	}
 	
