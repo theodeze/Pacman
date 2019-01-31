@@ -37,6 +37,8 @@ public class ViewSettings extends JFrame {
 	private Maze maze;
 	
 	private JPanel panel;
+	private JTextField pseudo  ;
+	private JPasswordField mdp;
 	private JComboBox<File> listMaze;
 	private JComboBox<String> listMode;
 	private JSpinner nbTurn;
@@ -65,14 +67,14 @@ public class ViewSettings extends JFrame {
 		});
 		
 		panel.add(new JLabel("Votre pseudo :"));
-		JTextField text_pseudo = new JTextField();
-		text_pseudo.setColumns(10);
-		panel.add(text_pseudo);	
+		pseudo = new JTextField();
+		pseudo.setColumns(10);
+		panel.add(pseudo);	
 		
 		panel.add(new JLabel("Votre mot de passe :"));
-		JPasswordField text_mdp = new JPasswordField();
-		text_mdp.setColumns(10);
-		panel.add(text_mdp);
+		mdp = new JPasswordField();
+		mdp.setColumns(10);
+		panel.add(mdp);
 		
 		panel.add(new JLabel("Choix labyrinthe :"));
 		panel.add(listMaze);
@@ -110,7 +112,10 @@ public class ViewSettings extends JFrame {
         
 		JButton buttonLaunch = new JButton("Lancer");
 		buttonLaunch.addActionListener((arg0) -> {
+			
+			// à Supprimer
 			PacmanGame pacmanGame = new PacmanGame(getNbTurn(), getMaze(), getStrategyPacman(), getStrategyGhost(), getMode());
+			
 			PacmanGameController pacmanGameController = new PacmanGameController(pacmanGame);
 			ViewCommande viewCommande = new ViewCommande(pacmanGame); 
 			viewCommande.setGameController(pacmanGameController);
@@ -133,6 +138,14 @@ public class ViewSettings extends JFrame {
         add(panel, BorderLayout.PAGE_END);
         
 		setVisible(true);
+	}
+	
+	public String getPseudo() {
+		return pseudo.getText();
+	}
+	
+	public String getMDP() {
+		return mdp.getPassword().toString();
 	}
 	
 	public Maze getMaze() {
