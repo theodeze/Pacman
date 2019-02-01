@@ -22,6 +22,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
+import fr.univangers.pacman.controller.PacmanClientController;
 import fr.univangers.pacman.controller.PacmanGameController;
 import fr.univangers.pacman.model.Maze;
 import fr.univangers.pacman.model.PacmanGame;
@@ -119,10 +120,11 @@ public class ViewSettings extends JFrame {
 			// à Supprimer
 			PacmanGame pacmanGame = new PacmanGame(getNbTurn(), getMaze(), getStrategyPacman(), getStrategyGhost(), getMode());
 			
-			PacmanGameController pacmanGameController = new PacmanGameController(pacmanGame);
+			//PacmanGameController pacmanGameController = new PacmanGameController(pacmanGame);
+			PacmanClientController pacmanClientController = new PacmanClientController();
 			ViewCommande viewCommande = new ViewCommande(pacmanGame); 
-			viewCommande.setGameController(pacmanGameController);
-			new ViewGame(pacmanGame, pacmanGameController, getMaze());
+			viewCommande.setGameController(pacmanClientController);
+			new ViewGame(pacmanGame, pacmanClientController, getMaze());
 			setVisible(false);
 		});
 		panel.add(buttonLaunch);
