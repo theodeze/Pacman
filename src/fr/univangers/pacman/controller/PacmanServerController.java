@@ -50,12 +50,14 @@ public class PacmanServerController extends PacmanGameController implements Runn
 				setTime(Integer.valueOf(input.readLine()));
 				break;
 			default:
+				LOGGER.warn("Commande incompris " + cmd);
 				break;
 			}
 		} catch (IOException e) {
 			try {
 				so.close();
 			} catch (IOException e1) {
+				LOGGER.warn("Connexion perdus");
 			}
 		}
 	}

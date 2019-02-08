@@ -17,6 +17,20 @@ public class Server implements Runnable {
 	private ServerSocket sso;
 	private final static Logger LOGGER = LogManager.getLogger("Server"); 
 
+	private Server(ServerSocket sso) {
+		this.sso = sso;
+	}
+	
+	public static Server getInstance(int port) {
+		Server server = null;
+		try {
+			server = new Server(new ServerSocket(port));
+		} catch (IOException e) {
+			LOGGER.warn("Le seveur n'a pas démarre");
+		}
+		return server;
+	}
+	
 	@Override
 	public void run() {
 		try {
