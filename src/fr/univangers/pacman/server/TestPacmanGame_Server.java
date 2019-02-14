@@ -2,7 +2,6 @@ package fr.univangers.pacman.server;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
@@ -21,6 +20,7 @@ import fr.univangers.pacman.model.PacmanGame.StrategyPacman;
 
 public class TestPacmanGame_Server {
 	
+		
 	public static synchronized StrategyPacman getStrategyPacman(String stratPacman) {
 		StrategyPacman difficulty;
 		if(stratPacman.equals("BASIC"))
@@ -49,38 +49,36 @@ public class TestPacmanGame_Server {
 		return difficulty;
 		}
 	public static synchronized Mode getMode(String inMode) {
-	Mode mode ;
-    if(inMode.equals("AUTO"))
-    	mode = Mode.AUTO;
-    else if(inMode.equals("TWOPLAYERC"))
-    	mode = Mode.TWOPLAYERC;
-	else if(inMode.equals("TWOPLAYERO"))
-		mode = Mode.TWOPLAYERO;
-	else 
-		mode = Mode.ONEPLAYER;
-    return mode;
+		Mode mode ;
+	    if(inMode.equals("AUTO"))
+	    	mode = Mode.AUTO;
+	    else if(inMode.equals("TWOPLAYERC"))
+	    	mode = Mode.TWOPLAYERC;
+		else if(inMode.equals("TWOPLAYERO"))
+			mode = Mode.TWOPLAYERO;
+		else 
+			mode = Mode.ONEPLAYER;
+	    return mode;
 	}
 					
-		public static synchronized void broadcast(Socket socket, String msg) {
-				try {
-					DataOutputStream sortie = new DataOutputStream(socket.getOutputStream());
-					
-					
-					}catch(SocketException e) {
-						System.out.println("Déconnection d'un client "+ socket);}
+	public static synchronized void broadcast(Socket socket, String msg) {
+		try {
+			DataOutputStream sortie = new DataOutputStream(socket.getOutputStream());			
+		}catch(SocketException e) {
+			System.out.println("Déconnection d'un client "+ socket);}
 												
-					catch(IOException e) {
-						System.out.println("Error Broadcast: "+e);
-					}
+		catch(IOException e) {
+			System.out.println("Error Broadcast: "+e);
 		}
+	}
 			
-		public static void main(String[] args) throws Exception {		
+	public static void main(String[] args) throws Exception {		
 			int p; // le port d’écoute
 			ServerSocket ecoute;
 			Socket so;
-			ObjectMapper mapper = new ObjectMapper();
 			if (args.length == 0) {
 				try {
+					ObjectMapper mapper = new ObjectMapper();	// Pour lecture / écriture en JSON
 					p=10001;
 					//p=Integer.parseInt(args[0]); // on récupère le port
 					ecoute = new ServerSocket(p); // on crée le serveur
@@ -93,12 +91,12 @@ public class TestPacmanGame_Server {
 						String pseudo = ch.split(" ")[0];
 						String MDP = ch.split(" ")[1];
 						int nbTurn = Integer.parseInt(ch.split(" ")[2]);
-						
-						//JSON from file to Object
-						//Maze user = mapper.readValue(new File("./json/maze_vers_serveur.json"), Maze.class);
 
 						//JSON from String to Object
+						System.out.println(ch.split(" ")[3]);
 						Maze maze = mapper.readValue(ch.split(" ")[3], Maze.class);
+						//System.out.println(maze.getWalls());
+						//Maze maze = new Maze("");
 						
 						StrategyPacman stratPacman = getStrategyPacman(ch.split(" ")[4]);
 						StrategyGhost startGhost=getStrategyGhost(ch.split(" ")[5]);			

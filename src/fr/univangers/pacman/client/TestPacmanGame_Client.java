@@ -20,55 +20,59 @@ public class TestPacmanGame_Client {
 
 	public static void main(String[] args) {	
 		Socket so;
-		String s; // le serveur
-		int p; // le port de connexion
+		String host; // le serveur
+		int port; // le port de connexion
 		PrintWriter sortie;
 		DataInputStream entree;
 		boolean connected=false;
 		if (args.length == 0) { // on récupère les paramètres
 			//s=args[0];
 			//p=Integer.parseInt(args[1]);
-			s="localhost";
-			p=10001;
-			
-			ObjectMapper mapper = new ObjectMapper();	// Pour écriture en JSON
-			
+			host="localhost";
+			port=10001;
+						
 			try{// on connecte un socket
-				so = new Socket(s, p);
+				ObjectMapper mapper = new ObjectMapper();	// Pour lecture / écriture en JSON
+				so = new Socket(host, port);
 				sortie = new PrintWriter(so.getOutputStream(), true);
-				entree = new DataInputStream(so.getInputStream());	
-					
+				entree = new DataInputStream(so.getInputStream());		
+				ViewSettings viewSettings = new ViewSettings();
+				String msg; 
+				String jsonInString ; 
+				
 				while(!connected) {
-					ViewSettings viewSettings = new ViewSettings();
-					
-					String msg = viewSettings.getPseudo()+ " ";
-					msg +=viewSettings.getMDP()+" ";
-					msg+=viewSettings.getNbTurn()+ " ";
+					msg = viewSettings.getPseudo()+ " ";
+					msg += viewSettings.getMDP()+" ";
+					msg += viewSettings.getNbTurn()+ " ";
 					Maze maze = viewSettings.getMaze();
 					
 					//Object to JSON en String
-					String jsonInString = mapper.writeValueAsString(maze);
-					msg+=jsonInString+" ";
-					msg+=viewSettings.getStrategyPacman()+ " ";
-					msg+=viewSettings.getStrategyGhost()+" ";
-					msg+= viewSettings.getMode();
+					jsonInString = mapper.writeValueAsString(maze);
+					msg += jsonInString+" ";
+					msg += viewSettings.getStrategyPacman()+ " ";
+					msg += viewSettings.getStrategyGhost()+" ";
+					msg += viewSettings.getMode();
 					
-					if( viewSettings.getPseudo()=="" || viewSettings.getMDP()=="") {
+					
+					if( viewSettings.getPseudo()!="" && viewSettings.getMDP()!="") {
 						sortie.println(msg);
 					}
-					if (true) {
-						connected = true;
+					
+					//if (Server.validateAccount(viewSettings.getPseudo(),viewSettings.getMDP()) {
+					if (viewSettings.getPseudo()!="") {
+						//connected = true;
 						viewSettings.setVisible(false);
 					}
 				}
 								
-				PacmanGame pacmanGame ;
-				
-				PacmanClientController pacmanClientController = new PacmanClientController();
-				
-				//ViewCommande viewCommande = new ViewCommande(pacmanGame); 
-				//viewCommande.setGameController(pacmanClientController);
-				//new ViewGame(pacmanGame, pacmanClientController, viewSettings.getMaze());
+				/*String ch=entree.readUTF();
+				PacmanGame pacmanGame = mapper.readValue(ch.split(" ")[0], PacmanGame.class);	
+				//Maze maze = mapper.readValue(ch.split(" ")[1], Maze.class);				
+
+				PacmanClientController pacmanClientController = new PacmanClientController();				
+				ViewCommande viewCommande = new ViewCommande(pacmanGame); 
+				viewCommande.setGameController(pacmanClientController);
+				//new ViewGame(pacmanGame, pacmanClientController, maze);*/
 				
 				} catch(UnknownHostException e) {System.out.println(e);}
 			catch (IOException e) {System.out.println("Aucun serveur n’est rattaché au port ");}

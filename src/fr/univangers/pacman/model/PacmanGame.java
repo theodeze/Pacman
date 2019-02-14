@@ -210,7 +210,7 @@ public class PacmanGame extends Game {
 	private void initializePacman() {
 		pacmans.clear();
 		int nbPacmanAdd = 0;
-		for(PositionAgent position : maze.getPacman_start()) {
+		for(PositionAgent position : maze.getPacmanStart()) {
 			if((nbPacmanAdd < 1 && mode != Mode.AUTO) || (nbPacmanAdd < 2 && mode == Mode.TWOPLAYERC)) {
 				pacmans.add(FactoryAgent.createPacmanPlayer(position));
 				nbPacmanAdd++;
@@ -239,7 +239,7 @@ public class PacmanGame extends Game {
 	private void initializeGhost() {
 		ghosts.clear();
 		boolean isAddPlayer = false;
-		for(PositionAgent position : maze.getGhosts_start()) {
+		for(PositionAgent position : maze.getGhostsStart()) {
 			if(!isAddPlayer && mode == Mode.TWOPLAYERO) {
 				ghosts.add(FactoryAgent.createGhostPlayer(position));
 				isAddPlayer = true;

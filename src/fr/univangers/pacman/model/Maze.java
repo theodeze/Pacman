@@ -8,33 +8,40 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  *	La classe Maze permet de créer la carte qui sera utilisée 
  *	aussi bien pour la vue des utilisateurs que pour le contrôle du jeu
  *	Sur la carte, on définit les murs, le placement des capsules et gommes, 
  *	ainsi que les positions des différents agents du jeu au début
  */
+
 public class Maze implements Serializable{
 	
 	private static final long serialVersionUID = 1076456911984437464L;
 	
-	private int size_x;
-	private int size_y;
+	private int sizeX;
+	private int sizeY;
 	
 	/** 
 	 * Les éléments du labyrinthe
 	 */
 	private boolean walls[][];
-	private boolean foods_start[][];
+	private boolean foodsStart[][];
 	private boolean foods[][];
-	private boolean capsules_start[][];
+	private boolean capstulesStart[][];
 	private boolean capsules[][];
 
 	/** 
 	 * Les positions initiales des agents
 	 */
-	private List<PositionAgent> pacman_start;
-	private List<PositionAgent> ghosts_start;
+	private List<PositionAgent> pacmanStart;
+	private List<PositionAgent> ghostsStart;
+	
+	public Maze() {
+		super();
+	}
 
 	
 	public Maze(String filename) throws Exception
@@ -59,14 +66,14 @@ public class Maze implements Serializable{
 			System.out.println("### Size of maze is "+nbX+";"+nbY);
 			
 			//Initialisation du labyrinthe
-			size_x=nbX;
-			size_y=nbY;
-			walls=new boolean[size_x][size_y];
-			foods_start=new boolean[size_x][size_y];
-			capsules_start=new boolean[size_x][size_y];
+			sizeX=nbX;
+			sizeY=nbY;
+			walls=new boolean[sizeX][sizeY];
+			foodsStart=new boolean[sizeX][sizeY];
+			capstulesStart=new boolean[sizeX][sizeY];
 			
-			pacman_start =new ArrayList<>();
-			ghosts_start =new ArrayList<>();
+			pacmanStart =new ArrayList<>();
+			ghostsStart =new ArrayList<>();
 			
 			//Lecture du fichier pour mettre a jour le labyrinthe
 			ips=new FileInputStream(filename); 
@@ -80,10 +87,10 @@ public class Maze implements Serializable{
 				for(int x=0;x<ligne.length();x++)
 				{
 					if (ligne.charAt(x)=='%') walls[x][y]=true; else walls[x][y]=false;
-					if (ligne.charAt(x)=='.') foods_start[x][y]=true; else foods_start[x][y]=false;
-					if (ligne.charAt(x)=='o') capsules_start[x][y]=true; else capsules_start[x][y]=false;
-					if (ligne.charAt(x)=='P') {pacman_start.add(new PositionAgent(x,y,PositionAgent.Dir.NORTH));}
-					if (ligne.charAt(x)=='G') {ghosts_start.add(new PositionAgent(x,y,PositionAgent.Dir.NORTH));}
+					if (ligne.charAt(x)=='.') foodsStart[x][y]=true; else foodsStart[x][y]=false;
+					if (ligne.charAt(x)=='o') capstulesStart[x][y]=true; else capstulesStart[x][y]=false;
+					if (ligne.charAt(x)=='P') {pacmanStart.add(new PositionAgent(x,y,PositionAgent.Dir.NORTH));}
+					if (ligne.charAt(x)=='G') {ghostsStart.add(new PositionAgent(x,y,PositionAgent.Dir.NORTH));}
 				}
 				y++;
 			}			
@@ -92,13 +99,13 @@ public class Maze implements Serializable{
 			resetFoods();
 			resetCapsules();
 			
-			if (pacman_start.size()==0)throw new Exception("Wrong input format: must specify a Pacman start");
+			if (pacmanStart.size()==0)throw new Exception("Wrong input format: must specify a Pacman start");
 			
 			//On verifie que le labyrinthe est clos			
-			for(int x=0;x<size_x;x++) if (!walls[x][0]) throw new Exception("Wrong input format: the maze must be closed");
-			for(int x=0;x<size_x;x++) if (!walls[x][size_y-1]) throw new Exception("Wrong input format: the maze must be closed");
-			for(y=0;y<size_y;y++) if (!walls[0][y]) throw new Exception("Wrong input format: the maze must be closed");
-			for(y=0;y<size_y;y++) if (!walls[size_x-1][y]) throw new Exception("Wrong input format: the maze must be closed");
+			for(int x=0;x<sizeX;x++) if (!walls[x][0]) throw new Exception("Wrong input format: the maze must be closed");
+			for(int x=0;x<sizeX;x++) if (!walls[x][sizeY-1]) throw new Exception("Wrong input format: the maze must be closed");
+			for(y=0;y<sizeY;y++) if (!walls[0][y]) throw new Exception("Wrong input format: the maze must be closed");
+			for(y=0;y<sizeY;y++) if (!walls[sizeX-1][y]) throw new Exception("Wrong input format: the maze must be closed");
 			System.out.println("### Maze loaded.");
 			
 		}		
@@ -111,20 +118,20 @@ public class Maze implements Serializable{
 	/**
 	 * Renvoie la taille X du labyrtinhe
 	 */
-	public int getSizeX() {return(size_x);}
+	public int getSizeX() {return(sizeX);}
 
 	/**
 	 * Renvoie la taille Y du labyrinthe
 	 */
-	public int getSizeY() {return(size_y);}
+	public int getSizeY() {return(sizeY);}
 	
 	/**
 	 * Permet de savoir si il y a un mur
 	 */
 	public boolean isWall(int x,int y) 
 	{
-		assert((x>=0) && (x<size_x));
-		assert((y>=0) && (y<size_y));
+		assert((x>=0) && (x<sizeX));
+		assert((y>=0) && (y<sizeY));
 		return(walls[x][y]);
 	}
 	
@@ -133,8 +140,8 @@ public class Maze implements Serializable{
 	 */
 	public boolean isFoods(int x,int y) 
 	{
-		assert((x>=0) && (x<size_x));
-		assert((y>=0) && (y<size_y));
+		assert((x>=0) && (x<sizeX));
+		assert((y>=0) && (y<sizeY));
 		return(foods[x][y]);
 	}
 
@@ -143,17 +150,17 @@ public class Maze implements Serializable{
 	}
 	
 	public void resetFoods() {
-		foods = new boolean[foods_start.length][]; 
-		for(int i = 0; i < foods_start.length; i++)
-			foods[i] = foods_start[i].clone();
+		foods = new boolean[foodsStart.length][]; 
+		for(int i = 0; i < foodsStart.length; i++)
+			foods[i] = foodsStart[i].clone();
 	}
 	
 	/**
 	 * Permet de savoir s'il y a une capsule
 	 */
 	public boolean isCapsule(int x,int y) {
-		assert((x>=0) && (x<size_x));
-		assert((y>=0) && (y<size_y));
+		assert((x>=0) && (x<sizeX));
+		assert((y>=0) && (y<sizeY));
 		return(capsules[x][y]);
 	}
 	
@@ -162,44 +169,46 @@ public class Maze implements Serializable{
 	}
 	
 	public void resetCapsules() {
-		capsules = new boolean[capsules_start.length][]; 
-		for(int i = 0; i < capsules_start.length; i++)
-			capsules[i] = capsules_start[i].clone();
+		capsules = new boolean[capstulesStart.length][]; 
+		for(int i = 0; i < capstulesStart.length; i++)
+			capsules[i] = capstulesStart[i].clone();
 	}
 	
 	/**
 	 * Renvoie le nombre de pacmans
 	 */
+	@JsonIgnore
 	public int getInitNumberOfPacmans() {
-		return(pacman_start.size());	
+		return(pacmanStart.size());	
 	}
 	
 	/**
 	 * Renvoie le nombre de fantomes
 	 */
+	@JsonIgnore
 	public int getInitNumberOfGhosts() 
 	{
-		return(ghosts_start.size());
+		return(ghostsStart.size());
 	}
 	
 	public boolean[][] getWalls() {
 		return walls;
 	}
 	
-	public List<PositionAgent> getPacman_start() {
-		return pacman_start;
+	public List<PositionAgent> getPacmanStart() {
+		return pacmanStart;
 	}
 
-	public void setPacman_start(List<PositionAgent> pacman_start) {
-		this.pacman_start = pacman_start;
+	public void setPacmanStart(List<PositionAgent> pacmanStart) {
+		this.pacmanStart = pacmanStart;
 	}
 
-	public List<PositionAgent> getGhosts_start() {
-		return ghosts_start;
+	public List<PositionAgent> getGhostsStart() {
+		return ghostsStart;
 	}
 
-	public void setGhosts_start(List<PositionAgent> ghosts_start) {
-		this.ghosts_start = ghosts_start;
+	public void setGhostsStart(List<PositionAgent> ghostsStart) {
+		this.ghostsStart = ghostsStart;
 	}
 	
 	

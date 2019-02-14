@@ -46,8 +46,8 @@ public class PanelPacmanGame extends JPanel{
 
 	public PanelPacmanGame(Maze maze) {
 		this.m = maze;
-		pacmans_pos = this.m.getPacman_start();
-		ghosts_pos = this.m.getGhosts_start();
+		pacmans_pos = this.m.getPacmanStart();
+		ghosts_pos = this.m.getGhostsStart();
 		ghostsScarred = new ArrayList<>(Collections.nCopies(ghosts_pos.size(), false));		
 	}
 

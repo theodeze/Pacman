@@ -16,6 +16,10 @@ public class PositionAgent implements Serializable {
 	private int y;
 	private Dir dir;
 	
+	public PositionAgent() {
+		super();
+	}
+	
 	public PositionAgent(int x, int y, Dir dir) {
 		this.x = x;
 		this.y = y;

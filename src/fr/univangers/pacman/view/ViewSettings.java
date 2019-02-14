@@ -174,14 +174,14 @@ public class ViewSettings extends JFrame {
 	
 	private void updateMode() {
 	    Vector<String> modes = new Vector<>();
-	    if(!maze.getPacman_start().isEmpty()) {
+	    if(!maze.getPacmanStart().isEmpty()) {
 	    	modes.add("Auto");
 	    	modes.add("Un joueur");
 	    }
-	    if(maze.getPacman_start().size() >= 2) {
+	    if(maze.getPacmanStart().size() >= 2) {
 	    	modes.add("Deux joueurs (Comperatif)");
 	    }
-	    if((!maze.getPacman_start().isEmpty()) && (!maze.getGhosts_start().isEmpty())) {
+	    if((!maze.getPacmanStart().isEmpty()) && (!maze.getGhostsStart().isEmpty())) {
 	    	modes.add("Deux joueurs (Opposition)");
 	    }
 	    listMode.removeAllItems();
