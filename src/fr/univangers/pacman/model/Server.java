@@ -1,6 +1,8 @@
 package fr.univangers.pacman.model;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -48,11 +50,25 @@ public class Server implements Runnable {
 		}
 	}
 	
+	private boolean connect(Socket so) {
+		try {
+			BufferedReader input = new BufferedReader(new InputStreamReader(so.getInputStream()));
+	        String username = input.readLine();
+	        System.out.println("SERVER SIDE" + username);
+	        String password = input.readLine();
+	        System.out.println("SERVER SIDE" + password);
+		} catch (IOException e) {
+			// TODO Bloc catch généré automatiquement
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
 	private void launchPacmanGame(Socket so) throws Exception {
 		Maze maze = new Maze("res/layouts/bigMaze.lay");
 		PacmanGame pg = new PacmanGame(250, maze, StrategyPacman.ASTAR, StrategyGhost.TRACKING, Mode.ONEPLAYER);
 		PacmanServerController psc = new PacmanServerController(pg, so);
-		ViewGame vg = new ViewGame(pg, psc, maze);
+		new ViewGame(pg, psc, maze);
 		new Thread(psc).start();
 	}
 	
