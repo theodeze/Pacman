@@ -4,22 +4,19 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
 public class PacmanClientController implements GameController {
 
 	private static final long serialVersionUID = -7348810349916899506L;
+	private static final Logger LOGGER = LogManager.getLogger("CLIENT"); 
 	private Socket so;
-	private String host = "localhost";
-	private int port = 5000;
 	
-	public PacmanClientController() {
-		try {
-			so = new Socket(host, port);
-		} catch (IOException e) {
-			System.err.println("Pas de connexion");
-			so = null;
-		}
+	public PacmanClientController(Socket so) {
+		this.so = so;
 	}
 	
 	@Override
@@ -31,9 +28,9 @@ public class PacmanClientController implements GameController {
 	public void sendCommande(Commande cmd) {
 		try {
 			PrintWriter output = new PrintWriter(so.getOutputStream(), true);
-			output.println(cmd);
+			output.println(cmd.toString());
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warn("ICI");
 		}
 	}
 	public void sendCommande(Commande cmd, String value) {
@@ -49,7 +46,6 @@ public class PacmanClientController implements GameController {
 	@Override
 	public void setTime(int time) {
 		sendCommande(Commande.TIME, String.valueOf(time));
-		
 	}
 
 	@Override
@@ -63,7 +59,7 @@ public class PacmanClientController implements GameController {
 	}
 
 	@Override
-	public void run() {
+	public void launch() {
 		sendCommande(Commande.RUN);
 	}
 

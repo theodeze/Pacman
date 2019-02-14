@@ -38,7 +38,7 @@ public class PacmanGameController implements GameController {
 	}
 
 	@Override
-	public void run() {
+	public void launch() {
 		pacmanGame.launch();
 	}
 

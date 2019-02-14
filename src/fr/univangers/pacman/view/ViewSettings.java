@@ -120,11 +120,10 @@ public class ViewSettings extends JFrame {
 			// à Supprimer
 			PacmanGame pacmanGame = new PacmanGame(getNbTurn(), getMaze(), getStrategyPacman(), getStrategyGhost(), getMode());
 			
-			//PacmanGameController pacmanGameController = new PacmanGameController(pacmanGame);
-			PacmanClientController pacmanClientController = new PacmanClientController();
+			PacmanGameController pacmanGameController = new PacmanGameController(pacmanGame);
 			ViewCommande viewCommande = new ViewCommande(pacmanGame); 
-			viewCommande.setGameController(pacmanClientController);
-			new ViewGame(pacmanGame, pacmanClientController, getMaze());
+			viewCommande.setGameController(pacmanGameController);
+			new ViewGame(pacmanGame, pacmanGameController, getMaze());
 			setVisible(false);
 		});
 		panel.add(buttonLaunch);

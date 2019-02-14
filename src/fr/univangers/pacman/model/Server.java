@@ -11,6 +11,7 @@ import fr.univangers.pacman.controller.PacmanServerController;
 import fr.univangers.pacman.model.PacmanGame.Mode;
 import fr.univangers.pacman.model.PacmanGame.StrategyGhost;
 import fr.univangers.pacman.model.PacmanGame.StrategyPacman;
+import fr.univangers.pacman.view.ViewGame;
 
 public class Server implements Runnable {
 
@@ -48,8 +49,10 @@ public class Server implements Runnable {
 	}
 	
 	private void launchPacmanGame(Socket so) throws Exception {
-		PacmanGame pg = new PacmanGame(250, new Maze(""), StrategyPacman.ASTAR, StrategyGhost.TRACKING, Mode.ONEPLAYER);
+		Maze maze = new Maze("res/layouts/bigMaze.lay");
+		PacmanGame pg = new PacmanGame(250, maze, StrategyPacman.ASTAR, StrategyGhost.TRACKING, Mode.ONEPLAYER);
 		PacmanServerController psc = new PacmanServerController(pg, so);
+		ViewGame vg = new ViewGame(pg, psc, maze);
 		new Thread(psc).start();
 	}
 	

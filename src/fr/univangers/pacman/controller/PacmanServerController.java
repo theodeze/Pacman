@@ -41,7 +41,7 @@ public class PacmanServerController extends PacmanGameController implements Runn
 				restart();
 				break;
 			case RUN:
-				run();
+				launch();
 				break;
 			case STEP:
 				step();
