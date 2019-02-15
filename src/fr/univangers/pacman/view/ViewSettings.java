@@ -115,16 +115,13 @@ public class ViewSettings extends JFrame {
 		buttonLaunch.addActionListener((arg0) -> {
 			
 			// à Supprimer
-<<<<<<< HEAD
-			
-=======
+
 			/*
 			PacmanGameController pacmanGameController = new PacmanGameController(pacmanGame);
 			ViewCommande viewCommande = new ViewCommande(pacmanGame); 
 			viewCommande.setGameController(pacmanGameController);
 			new ViewGame(pacmanGame, pacmanGameController, getMaze());
 			setVisible(false);*/
->>>>>>> origin/develop
 		});
 		panel.add(buttonLaunch);
 		
