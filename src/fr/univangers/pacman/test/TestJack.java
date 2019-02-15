@@ -9,7 +9,6 @@ public class TestJack {
 	public static void main(String[] args) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();	// Pour lecture / écriture en JSON
-
 			Maze maze = new Maze("res/layouts/bigMaze.lay");
 			String json = mapper.writeValueAsString(maze);
 			System.out.println(json);

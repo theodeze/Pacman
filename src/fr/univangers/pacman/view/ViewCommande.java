@@ -70,7 +70,7 @@ public class ViewCommande extends JFrame implements View {
         panelBtn.add(btnRestart);
         btnRun = new JButton(new ImageIcon("res/icons/icon_run.png"));
         btnRun.addActionListener(evenement -> { 
-        	gameController.run(); 
+        	gameController.launch(); 
         	btnRun.setEnabled(false);
         	btnPause.setEnabled(true);
             btnStep.setEnabled(false);

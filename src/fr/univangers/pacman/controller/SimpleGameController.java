@@ -28,7 +28,7 @@ public class SimpleGameController implements GameController {
 	}
 
 	@Override
-	public void run() {
+	public void launch() {
 		simpleGame.launch();
 	}
 

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -16,6 +17,8 @@ import fr.univangers.pacman.model.PacmanGame;
 import fr.univangers.pacman.model.PacmanGame.Mode;
 import fr.univangers.pacman.model.PacmanGame.StrategyGhost;
 import fr.univangers.pacman.model.PacmanGame.StrategyPacman;
+import fr.univangers.pacman.view.ViewCommande;
+import fr.univangers.pacman.view.ViewGame;
 
 
 public class TestPacmanGame_Server {
@@ -87,24 +90,34 @@ public class TestPacmanGame_Server {
 						so = ecoute.accept();
 						
 						BufferedReader entree = new BufferedReader(new InputStreamReader(so.getInputStream()));
+						PrintWriter sortie = new PrintWriter(so.getOutputStream(), true);
 						String ch=entree.readLine();
 						String pseudo = ch.split(" ")[0];
 						String MDP = ch.split(" ")[1];
 						int nbTurn = Integer.parseInt(ch.split(" ")[2]);
 
 						//JSON from String to Object
-						System.out.println(ch.split(" ")[3]);
 						Maze maze = mapper.readValue(ch.split(" ")[3], Maze.class);
-						//System.out.println(maze.getWalls());
-						//Maze maze = new Maze("");
+
+						//Maze maze = new Maze("res/layouts/bigMaze.lay");
 						
 						StrategyPacman stratPacman = getStrategyPacman(ch.split(" ")[4]);
 						StrategyGhost startGhost=getStrategyGhost(ch.split(" ")[5]);			
 						Mode mode = getMode(ch.split(" ")[6]);
-												
-						PacmanGame pacmanGame = new PacmanGame(nbTurn, maze, stratPacman, startGhost, mode);
+						if(pseudo.equals("Adann")) {
+							sortie.println("OK");
+						}
+								
+						/*PacmanGame pacmanGame = new PacmanGame(nbTurn, maze, stratPacman, startGhost, mode);
 						PacmanServerController controller = new PacmanServerController(pacmanGame,so);
-						new Thread(controller).start();				
+						new Thread(controller).start();		*/
+						//Maze maze = new Maze("res/layouts/bigMaze.lay");
+						PacmanGame pg = new PacmanGame(nbTurn, maze, stratPacman, startGhost, mode);
+						PacmanServerController psc = new PacmanServerController(pg, so);
+						ViewCommande viewCommande = new ViewCommande(pg); 
+						viewCommande.setGameController(psc);
+						new ViewGame(pg, psc, maze);
+						//new Thread(psc).start();
 					
 				} catch (IOException e) { System.out.println("Problème : "+e); }
 			} else { System.out.println("Syntaxe d’appel java servTexte port\n"); }

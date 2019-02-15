@@ -12,6 +12,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.univangers.pacman.controller.PacmanClientController;
 import fr.univangers.pacman.model.Maze;
 import fr.univangers.pacman.model.PacmanGame;
+import fr.univangers.pacman.model.PacmanGame.Mode;
+import fr.univangers.pacman.model.PacmanGame.StrategyGhost;
+import fr.univangers.pacman.model.PacmanGame.StrategyPacman;
 import fr.univangers.pacman.view.ViewCommande;
 import fr.univangers.pacman.view.ViewGame;
 import fr.univangers.pacman.view.ViewSettings;
@@ -53,27 +56,40 @@ public class TestPacmanGame_Client {
 					msg += viewSettings.getStrategyGhost()+" ";
 					msg += viewSettings.getMode();
 					
+					sortie.flush();
+					sortie.println(msg);
 					
-					if( viewSettings.getPseudo()!="" && viewSettings.getMDP()!="") {
-						sortie.println(msg);
-					}
 					
+					String ch=entree.readUTF();
 					//if (Server.validateAccount(viewSettings.getPseudo(),viewSettings.getMDP()) {
-					if (viewSettings.getPseudo()!="") {
-						//connected = true;
-						viewSettings.setVisible(false);
+					if (ch.split(" ")[0].equals("OK")) {
+						connected = true;
 					}
 				}
-								
-				/*String ch=entree.readUTF();
-				PacmanGame pacmanGame = mapper.readValue(ch.split(" ")[0], PacmanGame.class);	
-				//Maze maze = mapper.readValue(ch.split(" ")[1], Maze.class);				
-
-				PacmanClientController pacmanClientController = new PacmanClientController();				
-				ViewCommande viewCommande = new ViewCommande(pacmanGame); 
-				viewCommande.setGameController(pacmanClientController);
-				//new ViewGame(pacmanGame, pacmanClientController, maze);*/
-				
+					
+					viewSettings.setVisible(false);
+					/*String ch=entree.readUTF();
+					PacmanGame pacmanGame = mapper.readValue(ch.split(" ")[0], PacmanGame.class);
+					Maze maze = viewSettings.getMaze();
+					PacmanClientController pacmanClientController = new PacmanClientController(so);
+					ViewCommande viewCommande = new ViewCommande(pacmanGame); 
+					viewCommande.setGameController(pacmanClientController);
+					new ViewGame(pacmanGame, pacmanClientController, maze);*/
+					
+					
+					Maze maze;
+					try {
+						PacmanClientController pcc = new PacmanClientController(so);
+						maze = new Maze("res/layouts/bigMaze.lay");
+						PacmanGame game = new PacmanGame(999, maze, StrategyPacman.ASTAR, StrategyGhost.BASIC,  Mode.ONEPLAYER);
+						//ViewCommande vc = new ViewCommande(game);
+						//vc.setGameController(pcc);
+						//new ViewGame(game, pcc, maze);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 				} catch(UnknownHostException e) {System.out.println(e);}
 			catch (IOException e) {System.out.println("Aucun serveur n’est rattaché au port ");}
 		} else {System.out.println("Syntaxe d’appel java cliTexte serveur port chaine_de_caractères\n");
