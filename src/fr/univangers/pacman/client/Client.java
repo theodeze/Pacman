@@ -56,7 +56,7 @@ public class Client implements Runnable {
 	public void run() {
 		try {
 			PacmanClientController pcc = new PacmanClientController(so);
-			Maze maze = new Maze("res/layouts/bigMaze.lay");
+			Maze maze = new Maze("res/layouts/contestClassic.lay");
 			PacmanClient game = new PacmanClient(999, so);
 			ViewCommande vc = new ViewCommande(game);
 			vc.setGameController(pcc);

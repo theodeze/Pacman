@@ -29,12 +29,10 @@ public abstract class Game implements Model, Runnable {
 	
 	public void resetNbTurn() {
 		nbTurn = 0;
-		notifyViews();
 	}
 	
 	public void incNbTurn() {
 		nbTurn++;
-		notifyViews();
 	}
 	
 	public void setTime(int time) {

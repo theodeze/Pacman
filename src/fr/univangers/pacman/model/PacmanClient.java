@@ -47,24 +47,24 @@ public class PacmanClient extends Game implements PacmanGameGetter {
 			String[] datas = input.readLine().split("///");
 			String typeData = datas[0];
 			String data = datas[1];
-			LOGGER.info("Réception données (client) " + typeData + "\n" + data);
-		    Type listType = new TypeToken<List<PositionAgent>>(){}.getType();
+		    Type listPos = new TypeToken<List<PositionAgent>>(){}.getType();
+		    Type listBol = new TypeToken<List<Boolean>>(){}.getType();
 		    
 			switch(TypeData.valueOf(typeData)) {
 			case GHOSTS_SCARRED:
-				ghostsScarred = new Gson().fromJson(data, listType);
+				ghostsScarred = new Gson().fromJson(data, listBol);
 				break;
 			case NB_LIFE_PACMANS:
 				nbLifePacmans = new Gson().fromJson(data, int.class);
 				break;
 			case POSITION_FOODS:
-				positionFoods = new Gson().fromJson(data, listType);
+				positionFoods = new Gson().fromJson(data, listPos);
 				break;
 			case POSITION_GHOSTS:
-				positionGhosts = new Gson().fromJson(data, listType);
+				positionGhosts = new Gson().fromJson(data, listPos);
 				break;
 			case POSITION_PACMANS:
-				positionPacmans = new Gson().fromJson(data, listType);
+				positionPacmans = new Gson().fromJson(data, listPos);
 				break;
 			case SCORE:
 				score = new Gson().fromJson(data, int.class);

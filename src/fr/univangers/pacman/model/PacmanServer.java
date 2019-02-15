@@ -27,21 +27,27 @@ public class PacmanServer extends PacmanGame {
 		if(so != null && !so.isClosed()) {
 			try {
 				PrintWriter output = new PrintWriter(so.getOutputStream(), true);
-				output.println(
-						TypeData.GHOSTS_SCARRED.toString() + "///" +
-						new Gson().toJson(getGhostsScarred()));
+				output.println(TypeData.GHOSTS_SCARRED.toString() + "///" +
+					new Gson().toJson(getGhostsScarred()));
+				output.flush();
 				output.println(TypeData.NB_LIFE_PACMANS.toString() + "///" +
 					new Gson().toJson(getNbLifePacmans()));
+				output.flush();
 				output.println(TypeData.POSITION_FOODS.toString() + "///" +
 					new Gson().toJson(getPositionFoods()));
+				output.flush();
 				output.println(TypeData.POSITION_GHOSTS.toString()  + "///" +
 					new Gson().toJson(getPositionGhosts()));
+				output.flush();
 				output.println(TypeData.POSITION_PACMANS.toString() + "///" +
 					new Gson().toJson(getPositionPacmans()));
+				output.flush();
 				output.println(TypeData.SCORE.toString()  + "///" +
 					new Gson().toJson(getScore()));
+				output.flush();
 				output.println(TypeData.WINNER.toString() + "///" +
 					new Gson().toJson(getWinner()));
+				output.flush();
 			} catch (IOException e) {
 				LOGGER.warn("Erreur envoie");
 			}

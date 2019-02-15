@@ -67,8 +67,8 @@ public class Server implements Runnable {
 	}
 	
 	private void launchPacmanGame(Socket so) throws Exception {
-		Maze maze = new Maze("res/layouts/bigMaze.lay");
-		PacmanServer ps = new PacmanServer(250, maze, StrategyPacman.ASTAR, StrategyGhost.TRACKING, Mode.ONEPLAYER, so);
+		Maze maze = new Maze("res/layouts/contestClassic.lay");
+		PacmanServer ps = new PacmanServer(250, maze, StrategyPacman.ASTAR, StrategyGhost.TRACKING, Mode.AUTO, so);
 		PacmanServerController psc = new PacmanServerController(ps, so);
 		new Thread(psc).start();
 	}
