@@ -1,4 +1,4 @@
-package fr.univangers.pacman.model;
+package fr.univangers.pacman.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,9 +10,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import fr.univangers.pacman.controller.PacmanServerController;
-import fr.univangers.pacman.model.PacmanGame.Mode;
-import fr.univangers.pacman.model.PacmanGame.StrategyGhost;
-import fr.univangers.pacman.model.PacmanGame.StrategyPacman;
+import fr.univangers.pacman.model.Maze;
+import fr.univangers.pacman.model.PacmanGame;
+import fr.univangers.pacman.model.PacmanGameGetter.Mode;
+import fr.univangers.pacman.model.PacmanGameGetter.StrategyGhost;
+import fr.univangers.pacman.model.PacmanGameGetter.StrategyPacman;
+import fr.univangers.pacman.model.PacmanServer;
 import fr.univangers.pacman.view.ViewGame;
 
 public class Server implements Runnable {
@@ -40,6 +43,8 @@ public class Server implements Runnable {
 			while(!sso.isClosed()) {
 				Socket so = sso.accept();
 				try {
+					if(!connect(so))
+						so.close();
 					launchPacmanGame(so);
 				} catch (Exception e) {
 					LOGGER.warn("Problème lors du lancement du pacman");
@@ -54,21 +59,17 @@ public class Server implements Runnable {
 		try {
 			BufferedReader input = new BufferedReader(new InputStreamReader(so.getInputStream()));
 	        String username = input.readLine();
-	        System.out.println("SERVER SIDE" + username);
 	        String password = input.readLine();
-	        System.out.println("SERVER SIDE" + password);
 		} catch (IOException e) {
-			// TODO Bloc catch généré automatiquement
-			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}
 	
 	private void launchPacmanGame(Socket so) throws Exception {
 		Maze maze = new Maze("res/layouts/bigMaze.lay");
-		PacmanGame pg = new PacmanGame(250, maze, StrategyPacman.ASTAR, StrategyGhost.TRACKING, Mode.ONEPLAYER);
-		PacmanServerController psc = new PacmanServerController(pg, so);
-		new ViewGame(pg, psc, maze);
+		PacmanServer ps = new PacmanServer(250, maze, StrategyPacman.ASTAR, StrategyGhost.TRACKING, Mode.ONEPLAYER, so);
+		PacmanServerController psc = new PacmanServerController(ps, so);
 		new Thread(psc).start();
 	}
 	

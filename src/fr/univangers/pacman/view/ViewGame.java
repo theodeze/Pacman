@@ -17,6 +17,7 @@ import fr.univangers.pacman.controller.GameController;
 import fr.univangers.pacman.model.Game;
 import fr.univangers.pacman.model.Maze;
 import fr.univangers.pacman.model.PacmanGame;
+import fr.univangers.pacman.model.PacmanGameGetter;
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
 /**
@@ -61,10 +62,10 @@ public class ViewGame extends JFrame implements View, KeyListener {
         
         labelCurrentTurn = new JLabel("Tour " + game.nbTurn(), SwingConstants.CENTER);
         panelInfo.add(labelCurrentTurn);
-		if(game instanceof PacmanGame) {
-			labelLife = new JLabel("Vie " + ((PacmanGame)game).getNbLifePacmans(), SwingConstants.CENTER);
+		if(game instanceof PacmanGameGetter) {
+			labelLife = new JLabel("Vie " + ((PacmanGameGetter)game).getNbLifePacmans(), SwingConstants.CENTER);
 			panelInfo.add(labelLife);
-			labelScore = new JLabel("Score " + ((PacmanGame)game).score(), SwingConstants.CENTER);
+			labelScore = new JLabel("Score " + ((PacmanGameGetter)game).getScore(), SwingConstants.CENTER);
 			panelInfo.add(labelScore);
 		}
 		add(panelInfo, BorderLayout.NORTH);
@@ -78,14 +79,14 @@ public class ViewGame extends JFrame implements View, KeyListener {
 	@Override
 	public void update() {
         labelCurrentTurn.setText("Tour " + game.nbTurn());
-		if(game instanceof PacmanGame) {
-			labelLife.setText("Vie " + ((PacmanGame)game).getNbLifePacmans());
-			labelScore.setText("Score " + ((PacmanGame)game).score());
-	        panelPacmanGame.setGhostsScarred(((PacmanGame)game).ghostsScarred());
-	        panelPacmanGame.setPacmans_pos(((PacmanGame)game).positionPacmans());
-	        panelPacmanGame.setGhosts_pos(((PacmanGame)game).positionGhosts());
+		if(game instanceof PacmanGameGetter) {
+			labelLife.setText("Vie " + ((PacmanGameGetter)game).getNbLifePacmans());
+			labelScore.setText("Score " + ((PacmanGameGetter)game).getScore());
+	        panelPacmanGame.setGhostsScarred(((PacmanGameGetter)game).getGhostsScarred());
+	        panelPacmanGame.setPacmans_pos(((PacmanGameGetter)game).getPositionPacmans());
+	        panelPacmanGame.setGhosts_pos(((PacmanGameGetter)game).getPositionGhosts());
 	        
-	        PacmanGame.Winner winner = ((PacmanGame)game).winner();
+	        PacmanGame.Winner winner = ((PacmanGameGetter)game).getWinner();
 	        if(!reset && winner != PacmanGame.Winner.NOWINNER) {
 	        	String print = "";
 		        if(winner == PacmanGame.Winner.PACMANWINNER) {

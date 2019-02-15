@@ -12,7 +12,7 @@ import fr.univangers.pacman.model.PositionAgent.Dir;
 public class PacmanClientController implements GameController {
 
 	private static final long serialVersionUID = -7348810349916899506L;
-	private static final Logger LOGGER = LogManager.getLogger("CLIENT"); 
+	private static final Logger LOGGER = LogManager.getLogger("Client"); 
 	private Socket so;
 	
 	public PacmanClientController(Socket so) {
@@ -27,19 +27,22 @@ public class PacmanClientController implements GameController {
 	
 	public void sendCommande(Commande cmd) {
 		try {
+			LOGGER.info("Commande " + cmd.toString() + " envoyé");
 			PrintWriter output = new PrintWriter(so.getOutputStream(), true);
 			output.println(cmd.toString());
 		} catch (IOException e) {
-			LOGGER.warn("ICI");
+			LOGGER.warn("Envoie commande");
 		}
 	}
+	
 	public void sendCommande(Commande cmd, String value) {
 		try {
+			LOGGER.info("Commande " + cmd.toString() + " envoyé");
 			PrintWriter output = new PrintWriter(so.getOutputStream(), true);
 			output.println(cmd);
 			output.println(value);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warn("Envoie commande avec valeur");
 		}
 	}
 	

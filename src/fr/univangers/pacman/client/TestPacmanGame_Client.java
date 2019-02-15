@@ -64,7 +64,7 @@ public class TestPacmanGame_Client {
 								
 				PacmanGame pacmanGame ;
 				
-				PacmanClientController pacmanClientController = new PacmanClientController();
+				//PacmanClientController pacmanClientController = new PacmanClientController();
 				
 				//ViewCommande viewCommande = new ViewCommande(pacmanGame); 
 				//viewCommande.setGameController(pacmanClientController);

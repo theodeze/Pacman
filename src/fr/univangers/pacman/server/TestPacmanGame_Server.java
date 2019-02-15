@@ -14,9 +14,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.univangers.pacman.controller.PacmanServerController;
 import fr.univangers.pacman.model.Maze;
 import fr.univangers.pacman.model.PacmanGame;
-import fr.univangers.pacman.model.PacmanGame.Mode;
-import fr.univangers.pacman.model.PacmanGame.StrategyGhost;
-import fr.univangers.pacman.model.PacmanGame.StrategyPacman;
+import fr.univangers.pacman.model.PacmanGameGetter.Mode;
+import fr.univangers.pacman.model.PacmanGameGetter.StrategyGhost;
+import fr.univangers.pacman.model.PacmanGameGetter.StrategyPacman;
 
 
 public class TestPacmanGame_Server {

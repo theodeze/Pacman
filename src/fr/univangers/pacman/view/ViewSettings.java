@@ -22,13 +22,10 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
-import fr.univangers.pacman.controller.PacmanClientController;
-import fr.univangers.pacman.controller.PacmanGameController;
 import fr.univangers.pacman.model.Maze;
-import fr.univangers.pacman.model.PacmanGame;
-import fr.univangers.pacman.model.PacmanGame.StrategyPacman;
-import fr.univangers.pacman.model.PacmanGame.StrategyGhost;
-import fr.univangers.pacman.model.PacmanGame.Mode;
+import fr.univangers.pacman.model.PacmanGameGetter.StrategyPacman;
+import fr.univangers.pacman.model.PacmanGameGetter.StrategyGhost;
+import fr.univangers.pacman.model.PacmanGameGetter.Mode;
 
 /**
  * Interface qui permet de sélectionner le labyrinthe ainsi que les paramètres de la partie
@@ -118,12 +115,12 @@ public class ViewSettings extends JFrame {
 		buttonLaunch.addActionListener((arg0) -> {
 			
 			// à Supprimer
-			
+			/*
 			PacmanGameController pacmanGameController = new PacmanGameController(pacmanGame);
 			ViewCommande viewCommande = new ViewCommande(pacmanGame); 
 			viewCommande.setGameController(pacmanGameController);
 			new ViewGame(pacmanGame, pacmanGameController, getMaze());
-			setVisible(false);
+			setVisible(false);*/
 		});
 		panel.add(buttonLaunch);
 		

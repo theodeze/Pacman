@@ -13,11 +13,7 @@ public class PacmanGameController implements GameController {
 	
 	private static final long serialVersionUID = 7744355889303690019L;
 	private PacmanGame pacmanGame;
-	
-	/**
-	 * 
-	 * @param pacmanGame
-	 */
+
 	public PacmanGameController(PacmanGame pacmanGame) {
 		this.pacmanGame = pacmanGame;
 	}

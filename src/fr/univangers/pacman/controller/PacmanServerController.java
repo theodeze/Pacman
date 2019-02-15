@@ -29,6 +29,7 @@ public class PacmanServerController extends PacmanGameController implements Runn
 			String cmd = input.readLine();
 			if(cmd == null)
 				throw new IOException();
+			LOGGER.info("Commande " + cmd + " reçus");
 			switch(Commande.valueOf(cmd)) {
 			case MOVE1:
 				movePlayer1(Dir.valueOf(input.readLine()));
