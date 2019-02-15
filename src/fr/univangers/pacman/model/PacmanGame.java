@@ -18,37 +18,10 @@ import fr.univangers.pacman.model.PositionAgent.Dir;
  * les différents scores et agents ainsi que leur position
  */
 
-public class PacmanGame extends Game {
-	public enum Mode {
-		AUTO,
-		ONEPLAYER,
-		TWOPLAYERC,
-		TWOPLAYERO
-	}
-	
-	public enum StrategyPacman {
-		ASTAR,
-		RANDOM,
-		BASIC,
-		NONE
-	}
-	
-	public enum StrategyGhost {
-		ASTAR,
-		TRACKING,
-		RANDOM,
-		BASIC,
-		NONE
-	}
-	
-	public enum Winner {
-		NOWINNER,
-		GHOSTWINNER,
-		PACMANWINNER
-	}
+public class PacmanGame extends Game implements PacmanGameGetter {
 	
 	private static final long serialVersionUID = 998416452804755455L;
-	private static final int nbVieMax = 3;
+	private static final int NB_VIE_MAX = 3;
 	
 	private Maze maze;
 	private int score = 0;
@@ -57,6 +30,7 @@ public class PacmanGame extends Game {
 	private List<Agent> ghosts = new ArrayList<>();
 	private List<PositionAgent> positionGhosts = new ArrayList<>();
 	private List<PositionAgent> positionFoods = new ArrayList<>();
+	private List<Boolean> ghostsScarred = new ArrayList<>();
 	private int nbLifePacmans;
 	private int nbFood = 0;
 	private int scorePerGhosts = 200;
@@ -64,28 +38,34 @@ public class PacmanGame extends Game {
 	private StrategyPacman strategyPacman;
 	private StrategyGhost strategyGhost;
 	private Winner winner;
-	
+
+	@Override
 	public int getNbLifePacmans() {
 		return nbLifePacmans;
 	}
-	
-	public int score() {
+
+	@Override
+	public int getScore() {
 		return score;
 	}
-	
-	public Winner winner() {
+
+	@Override
+	public Winner getWinner() {
 		return winner;
 	}
 	
-	public List<PositionAgent> positionPacmans() {
+	@Override
+	public List<PositionAgent> getPositionPacmans() {
 		return positionPacmans;
 	}
-	
-	public List<PositionAgent> positionGhosts() {
+
+	@Override
+	public List<PositionAgent> getPositionGhosts() {
 		return positionGhosts;
 	}
-	
-	public List<PositionAgent> positionFoods() {
+
+	@Override
+	public List<PositionAgent> getPositionFoods() {
 		return positionFoods;
 	}
 	
@@ -107,8 +87,9 @@ public class PacmanGame extends Game {
 	 *  Fonction prenant le cas où les fantômes sont effrayés s'ils sont vulnérables
 	 */
 	
-	public List<Boolean> ghostsScarred() {
-		List<Boolean> ghostsScarred = new ArrayList<>();
+	@Override
+	public List<Boolean> getGhostsScarred() {
+		ghostsScarred.clear();
 		for(Agent ghost : ghosts) {
 			if(!ghost.isDeath())
 				ghostsScarred.add(ghost.isVulnerable());
@@ -123,7 +104,7 @@ public class PacmanGame extends Game {
 		this.strategyGhost = strategyGhost;
 		this.mode = mode;
 		this.winner = Winner.NOWINNER;
-		this.nbLifePacmans = nbVieMax;
+		this.nbLifePacmans = NB_VIE_MAX;
 		init();
 	}
 	
@@ -197,7 +178,7 @@ public class PacmanGame extends Game {
 	}
 	
 	public void moveAgent(Agent agent) {
-		agent.action(positionPacmans(), positionGhosts(), positionFoods(), maze.getWalls());
+		agent.action(getPositionPacmans(), getPositionGhosts(), getPositionFoods(), maze.getWalls());
 	}
 	
 	public void resetPosition() {
@@ -285,7 +266,7 @@ public class PacmanGame extends Game {
 		initializeGhost();
 		initializeFood();
 		score = 0;
-		nbLifePacmans = nbVieMax;
+		nbLifePacmans = NB_VIE_MAX;
 		winner = Winner.NOWINNER;
 		updatePosition();
 		playSound("res/sounds/pacman_beginning.wav");

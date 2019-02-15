@@ -1,6 +1,6 @@
 package fr.univangers.pacman.test;
 
-import fr.univangers.pacman.model.Client;
+import fr.univangers.pacman.client.Client;
 
 public class TestPacmanClient {
 
