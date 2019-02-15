@@ -12,7 +12,7 @@ public class TestJack {
 			Maze maze = new Maze("res/layouts/bigMaze.lay");
 			String json = mapper.writeValueAsString(maze);
 			System.out.println(json);
-			Maze maze2 = mapper.readValue(json, Maze.class);
+			//Maze maze2 = mapper.readValue(json, Maze.class);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
