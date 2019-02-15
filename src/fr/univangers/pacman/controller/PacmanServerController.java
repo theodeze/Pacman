@@ -27,6 +27,8 @@ public class PacmanServerController extends PacmanGameController implements Runn
 			BufferedReader input = new BufferedReader(
 					new InputStreamReader(so.getInputStream()));
 			String cmd = input.readLine();
+			if(cmd == null)
+				throw new IOException();
 			switch(Commande.valueOf(cmd)) {
 			case MOVE1:
 				movePlayer1(Dir.valueOf(input.readLine()));
