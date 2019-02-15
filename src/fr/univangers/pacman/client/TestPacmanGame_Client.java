@@ -36,13 +36,13 @@ public class TestPacmanGame_Client {
 			try{// on connecte un socket
 				ObjectMapper mapper = new ObjectMapper();	// Pour lecture / écriture en JSON
 				so = new Socket(host, port);
-				sortie = new PrintWriter(so.getOutputStream(), true);
+				/*sortie = new PrintWriter(so.getOutputStream(), true);
 				entree = new DataInputStream(so.getInputStream());		
 				ViewSettings viewSettings = new ViewSettings();
 				String msg; 
-				String jsonInString ; 
+				String jsonInString ; *
 				
-				while(!connected) {
+				/*while(!connected) {
 					msg = viewSettings.getPseudo()+ " ";
 					msg += viewSettings.getMDP()+" ";
 					msg += viewSettings.getNbTurn()+ " ";
@@ -64,9 +64,9 @@ public class TestPacmanGame_Client {
 					if (ch.split(" ")[0].equals("OK")) {
 						connected = true;
 					}
-				}
+				}*/
 					
-					viewSettings.setVisible(false);
+					//viewSettings.setVisible(false);
 					/*String ch=entree.readUTF();
 					PacmanGame pacmanGame = mapper.readValue(ch.split(" ")[0], PacmanGame.class);
 					Maze maze = viewSettings.getMaze();
@@ -81,9 +81,11 @@ public class TestPacmanGame_Client {
 						PacmanClientController pcc = new PacmanClientController(so);
 						maze = new Maze("res/layouts/bigMaze.lay");
 						PacmanGame game = new PacmanGame(999, maze, StrategyPacman.ASTAR, StrategyGhost.BASIC,  Mode.ONEPLAYER);
-						//ViewCommande vc = new ViewCommande(game);
-						//vc.setGameController(pcc);
-						//new ViewGame(game, pcc, maze);
+						ViewCommande vc = new ViewCommande(game);
+						vc.setGameController(pcc);
+						new ViewGame(game, pcc, maze);
+						
+						
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

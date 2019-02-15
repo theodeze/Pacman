@@ -89,9 +89,9 @@ public class TestPacmanGame_Server {
 					//le serveur va attendre qu’une connexion arrive
 						so = ecoute.accept();
 						
-						BufferedReader entree = new BufferedReader(new InputStreamReader(so.getInputStream()));
-						PrintWriter sortie = new PrintWriter(so.getOutputStream(), true);
-						String ch=entree.readLine();
+						//BufferedReader entree = new BufferedReader(new InputStreamReader(so.getInputStream()));
+						//PrintWriter sortie = new PrintWriter(so.getOutputStream(), true);
+						/*String ch=entree.readLine();
 						String pseudo = ch.split(" ")[0];
 						String MDP = ch.split(" ")[1];
 						int nbTurn = Integer.parseInt(ch.split(" ")[2]);
@@ -106,18 +106,17 @@ public class TestPacmanGame_Server {
 						Mode mode = getMode(ch.split(" ")[6]);
 						if(pseudo.equals("Adann")) {
 							sortie.println("OK");
-						}
+						}*/
 								
 						/*PacmanGame pacmanGame = new PacmanGame(nbTurn, maze, stratPacman, startGhost, mode);
 						PacmanServerController controller = new PacmanServerController(pacmanGame,so);
-						new Thread(controller).start();		*/
+						new Thread(controller).start();	*/
 						//Maze maze = new Maze("res/layouts/bigMaze.lay");
-						PacmanGame pg = new PacmanGame(nbTurn, maze, stratPacman, startGhost, mode);
+						Maze maze = new Maze("res/layouts/bigMaze.lay");
+						PacmanGame pg = new PacmanGame(250, maze, StrategyPacman.ASTAR, StrategyGhost.TRACKING, Mode.ONEPLAYER);
 						PacmanServerController psc = new PacmanServerController(pg, so);
-						ViewCommande viewCommande = new ViewCommande(pg); 
-						viewCommande.setGameController(psc);
 						new ViewGame(pg, psc, maze);
-						//new Thread(psc).start();
+						new Thread(psc).start();
 					
 				} catch (IOException e) { System.out.println("Problème : "+e); }
 			} else { System.out.println("Syntaxe d’appel java servTexte port\n"); }
