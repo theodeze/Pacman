@@ -12,7 +12,7 @@ import fr.univangers.pacman.model.PositionAgent;
 public class Vulnerable implements State {
 
 	private static final long serialVersionUID = -8735708242622564562L;
-	private static final int endTurnVulnerable = 20;
+	private static final int END_TURN_VUNERABLE = 20;
 	private int nbTurnVulnerable = 0;
 	Agent agent;
 
@@ -33,7 +33,7 @@ public class Vulnerable implements State {
 	@Override
 	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, 
 			List<PositionAgent> positionFoods, boolean[][] walls) {
-		if(nbTurnVulnerable >=  endTurnVulnerable) {
+		if(nbTurnVulnerable >=  END_TURN_VUNERABLE) {
 			resetTurnVulnerable();
 			agent.alive();
 		} else {

@@ -6,10 +6,10 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Vector;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -17,29 +17,33 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
-import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import fr.univangers.pacman.controller.PacmanGameController;
 import fr.univangers.pacman.model.Maze;
-import fr.univangers.pacman.model.PacmanGameGetter.StrategyPacman;
-import fr.univangers.pacman.model.PacmanGameGetter.StrategyGhost;
-import fr.univangers.pacman.model.PacmanGameGetter.Mode;
+import fr.univangers.pacman.model.game.PacmanGame;
+import fr.univangers.pacman.model.gamestate.PacmanGameState.Mode;
+import fr.univangers.pacman.model.gamestate.PacmanGameState.StrategyGhost;
+import fr.univangers.pacman.model.gamestate.PacmanGameState.StrategyPacman;
 
 /**
  * Interface qui permet de sélectionner le labyrinthe ainsi que les paramètres de la partie
  */
-public class ViewSettings extends JFrame {
+public class ViewSettings implements Serializable {
+	
 	private static final long serialVersionUID = 6791950037033830292L;
+	private static final Logger LOGGER = LogManager.getLogger("View"); 
 
 	private PanelPacmanGame panelPreview;
 	
 	private Maze maze;
 	
+	private JFrame frame;
 	private JPanel panel;
-	private JTextField pseudo  ;
-	private JPasswordField mdp;
 	private JComboBox<File> listMaze;
 	private JComboBox<String> listMode;
 	private JSpinner nbTurn;
@@ -49,9 +53,10 @@ public class ViewSettings extends JFrame {
 	public ViewSettings() {
 		super();
 
-        setTitle("Configuration");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+		frame = new JFrame();
+		frame.setTitle("Configuration");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(new BorderLayout());
       
         panel = new JPanel();
         panel.setLayout(new GridLayout(8, 2, 10, 10));
@@ -60,22 +65,7 @@ public class ViewSettings extends JFrame {
         // Liste Maze
 		File directory = new File("res/layouts");
 		listMaze = new JComboBox<>(directory.listFiles());
-		listMaze.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				updateMaze((File)listMaze.getSelectedItem());
-			}
-		});
-		
-		panel.add(new JLabel("Votre pseudo :"));
-		pseudo = new JTextField();
-		pseudo.setColumns(10);
-		panel.add(pseudo);	
-		
-		panel.add(new JLabel("Votre mot de passe :"));
-		mdp = new JPasswordField();
-		mdp.setColumns(10);
-		panel.add(mdp);
+		listMaze.addActionListener(arg0 -> updateMaze((File)listMaze.getSelectedItem()));
 		
 		panel.add(new JLabel("Choix labyrinthe :"));
 		panel.add(listMaze);
@@ -83,9 +73,10 @@ public class ViewSettings extends JFrame {
         try {
         	maze = new Maze(directory.listFiles()[0].toString());
 			panelPreview = new PanelPacmanGame(maze);
-			setSize(new Dimension(maze.getSizeX() * 20, maze.getSizeY() * 20 + 330));
+			frame.setSize(new Dimension(maze.getSizeX() * 20, maze.getSizeY() * 20 + 330));
 			centerView();
 		} catch (Exception e) {
+			LOGGER.warn("Problème chargement du labyrinthe");
 		}
         
 		// Liste Mode
@@ -112,40 +103,30 @@ public class ViewSettings extends JFrame {
 		panel.add(listStrategyGhost);
         
 		JButton buttonLaunch = new JButton("Lancer");
-		buttonLaunch.addActionListener((arg0) -> {
-			
-			// à Supprimer
-			/*
+		buttonLaunch.addActionListener(arg0 -> {
+			PacmanGame pacmanGame = new PacmanGame(getNbTurn(), getMaze(), getStrategyPacman(), getStrategyGhost(), getMode());
 			PacmanGameController pacmanGameController = new PacmanGameController(pacmanGame);
 			ViewCommande viewCommande = new ViewCommande(pacmanGame); 
 			viewCommande.setGameController(pacmanGameController);
 			new ViewGame(pacmanGame, pacmanGameController, getMaze());
-			setVisible(false);*/
+			frame.setVisible(false);
 		});
 		panel.add(buttonLaunch);
 		
 		JButton buttonClose = new JButton("Fermer");
-		buttonClose.addActionListener((arg0) -> System.exit(0));
+		buttonClose.addActionListener(arg0 -> System.exit(0));
 		panel.add(buttonClose);
 		
 		JLabel labelPreview = new JLabel("Menu");
 		labelPreview.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 25));
-		labelPreview.setHorizontalAlignment((int)JLabel.CENTER_ALIGNMENT);;
-		add(labelPreview, BorderLayout.PAGE_START);
+		labelPreview.setHorizontalAlignment((int)JLabel.CENTER_ALIGNMENT);
+		frame.add(labelPreview, BorderLayout.PAGE_START);
 		
-        add(panelPreview, BorderLayout.CENTER);
+		frame.add(panelPreview, BorderLayout.CENTER);
 
-        add(panel, BorderLayout.PAGE_END);
+		frame.add(panel, BorderLayout.PAGE_END);
         
-		setVisible(true);
-	}
-	
-	public String getPseudo() {
-		return pseudo.getText();
-	}
-	
-	public String getMDP() {
-		return mdp.getPassword().toString();
+		frame.setVisible(true);
 	}
 	
 	public Maze getMaze() {
@@ -157,33 +138,32 @@ public class ViewSettings extends JFrame {
 	}
 	
 	private void updateMaze(File file) {
-		System.out.println(file.toString());
 		try {
         	maze = new Maze(file.toString());
-        	remove(panelPreview);
+        	frame.remove(panelPreview);
         	
 			panelPreview = new PanelPacmanGame(maze);
-			setSize(new Dimension(20*maze.getSizeX(), 20*maze.getSizeY() + 280));
+			frame.setSize(new Dimension(20*maze.getSizeX(), 20*maze.getSizeY() + 280));
 			centerView();
-			add(panelPreview, BorderLayout.CENTER);
-        	revalidate();
-        	repaint();
+			frame.add(panelPreview, BorderLayout.CENTER);
+			frame.revalidate();
+        	frame.repaint();
 		} catch (Exception e) {
-			
+			LOGGER.warn("Problème chargement du labyrinthe");
 		}
 		updateMode();
 	}
 	
 	private void updateMode() {
-	    Vector<String> modes = new Vector<>();
-	    if(!maze.getPacman_start().isEmpty()) {
+	    List<String> modes = new ArrayList<>();
+	    if(!maze.getPacmanStart().isEmpty()) {
 	    	modes.add("Auto");
 	    	modes.add("Un joueur");
 	    }
-	    if(maze.getPacman_start().size() >= 2) {
+	    if(maze.getPacmanStart().size() >= 2) {
 	    	modes.add("Deux joueurs (Comperatif)");
 	    }
-	    if((!maze.getPacman_start().isEmpty()) && (!maze.getGhosts_start().isEmpty())) {
+	    if((!maze.getPacmanStart().isEmpty()) && (!maze.getGhostsStart().isEmpty())) {
 	    	modes.add("Deux joueurs (Opposition)");
 	    }
 	    listMode.removeAllItems();
@@ -203,7 +183,7 @@ public class ViewSettings extends JFrame {
 	}
 	
 	private void updateStrategyPacman() {
-	    Vector<String> difficulties = new Vector<>();
+		List<String> difficulties = new ArrayList<>();
 	    difficulties.add("A*");
 	    difficulties.add("Basique");
 	    difficulties.add("Aléatoire");
@@ -214,7 +194,7 @@ public class ViewSettings extends JFrame {
 	}
 	
 	private void updateStrategyGhost() {
-	    Vector<String> difficulties = new Vector<>();
+		List<String> difficulties = new ArrayList<>();
 	    difficulties.add("A* (Difficile)");
 	    difficulties.add("Pister (Normale)");
 	    difficulties.add("Basique (Facile)");
@@ -250,12 +230,12 @@ public class ViewSettings extends JFrame {
 	}
 	
 	public void centerView() {
-        Dimension windowSize = getSize();
+        Dimension windowSize = frame.getSize();
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Point centerPoint = ge.getCenterPoint();
         int dx = centerPoint.x - windowSize.width / 2;
         int dy = centerPoint.y - windowSize.height / 2 ;
-        setLocation(dx, dy);   
+        frame.setLocation(dx, dy);   
 	}
 	
 }

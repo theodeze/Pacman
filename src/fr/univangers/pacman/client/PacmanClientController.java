@@ -1,4 +1,4 @@
-package fr.univangers.pacman.controller;
+package fr.univangers.pacman.client;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -7,6 +7,7 @@ import java.net.Socket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import fr.univangers.pacman.controller.GameController;
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
 public class PacmanClientController implements GameController {
@@ -17,12 +18,6 @@ public class PacmanClientController implements GameController {
 	
 	public PacmanClientController(Socket so) {
 		this.so = so;
-	}
-	
-	@Override
-	protected void finalize() throws Throwable {
-		so.close();
-		super.finalize();
 	}
 	
 	public void sendCommande(Commande cmd) {

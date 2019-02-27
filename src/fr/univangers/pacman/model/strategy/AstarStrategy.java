@@ -18,7 +18,14 @@ public abstract class AstarStrategy implements Strategy {
 	private static final long serialVersionUID = 6882118649697899327L;
 	private List<List<Double>> gScore = new ArrayList<>();
     private List<List<Double>> fScore = new ArrayList<>();
-
+    private List<PositionAgent> closedList = new ArrayList<>();
+    private PriorityQueue<PositionAgent> openList = new PriorityQueue<>((p1, p2) -> {
+    	int compare = compareFScore(p1, p2);
+    	if(compare == 0)
+    		compare = compareGScore(p1, p2);
+    	return compare;
+    });
+    
     private double getGScore(PositionAgent p) {
         return gScore.get(p.getX()).get(p.getY());
     }
@@ -138,16 +145,9 @@ public abstract class AstarStrategy implements Strategy {
     		return 1;
     }
     
-    private int compare(PositionAgent p1, PositionAgent p2) {
-    	int compare = compareFScore(p1, p2);
-    	if(compare == 0)
-    		compare = compareGScore(p1, p2);
-    	return compare;
-    }
-
     protected Map.Entry<Double, PositionAgent> findPath(PositionAgent start, List<PositionAgent> goals, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {    	
-        PriorityQueue<PositionAgent> openList = new PriorityQueue<>((p1, p2) -> compare(p1, p2));
-        List<PositionAgent> closedList = new ArrayList<>();
+    	openList.clear();
+        closedList.clear();
         
         Map<PositionAgent, PositionAgent> cameFrom = new HashMap<>();
 

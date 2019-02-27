@@ -14,20 +14,21 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 
 import fr.univangers.pacman.controller.GameController;
-import fr.univangers.pacman.model.Game;
-import fr.univangers.pacman.model.PacmanGame;
-import fr.univangers.pacman.model.PacmanGameGetter;
+import fr.univangers.pacman.model.game.Game;
+import fr.univangers.pacman.model.game.PacmanGame;
+import fr.univangers.pacman.model.gamestate.PacmanGameState.Winner;
 
 /**
  * Classe ViewCommande sert à implémenter l'interface graphique du panneau 
  * de contrôle du jeu
  */
-public class ViewCommande extends JFrame implements View {
+public class ViewCommande implements View {
 
 	private static final long serialVersionUID = -1656969420461892798L;
 	private Game game;
 	private GameController gameController;
 	
+	private JFrame frame;
 	private JPanel panelBtn;
 	private JButton btnRestart;
 	private JButton btnRun;
@@ -48,17 +49,18 @@ public class ViewCommande extends JFrame implements View {
 		this.game = game;
 		this.game.addView(this);
 		
-        setTitle("Commandes");
-        setSize(new Dimension(700, 300));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(2,1));
+		frame = new JFrame();
+		frame.setTitle("Commandes");
+		frame.setSize(new Dimension(700, 300));
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(new GridLayout(2,1));
 
-        Dimension windowSize = getSize();
+        Dimension windowSize = frame.getSize();
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Point centerPoint = ge.getCenterPoint();
         int dx = centerPoint.x - windowSize.width / 2 ;
         int dy = centerPoint.y - windowSize.height / 2 - 350;
-        setLocation(dx, dy);   
+        frame.setLocation(dx, dy);   
         
         panelBtn = new JPanel();
         panelBtn.setLayout(new GridLayout(1,4));
@@ -95,7 +97,7 @@ public class ViewCommande extends JFrame implements View {
         });
         btnPause.setEnabled(false);
         panelBtn.add(btnPause);
-        add(panelBtn);
+        frame.add(panelBtn);
         
         panelInfo = new JPanel();
         panelTime = new JPanel();
@@ -111,18 +113,18 @@ public class ViewCommande extends JFrame implements View {
         panelTime.add(sliderTime);
         panelInfo.add(panelTime);
         panelInfo.setLayout(new GridLayout(1,2));
-        labelNbTurn = new JLabel("Turn : " + game.nbTurn(), SwingConstants.CENTER);
+        labelNbTurn = new JLabel("Turn : " + game.getState().getNbTurn(), SwingConstants.CENTER);
         panelInfo.add(labelNbTurn);
-        add(panelInfo);
+        frame.add(panelInfo);
         
-		setVisible(true);
+        frame.setVisible(true);
 	}
 	
 	
 	@Override
 	public void update() {
-		labelNbTurn.setText("Tour : " + game.nbTurn());
-		if(game instanceof PacmanGameGetter && ((PacmanGameGetter)game).getWinner() != PacmanGame.Winner.NOWINNER) {
+		labelNbTurn.setText("Tour : " + game.getState().getNbTurn());
+		if(game instanceof PacmanGame && ((PacmanGame)game).getState().getWinner() != Winner.NOWINNER) {
         	btnRun.setEnabled(true);
         	btnPause.setEnabled(false);
             btnStep.setEnabled(false);

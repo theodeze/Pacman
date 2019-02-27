@@ -1,4 +1,4 @@
-package fr.univangers.pacman.controller;
+package fr.univangers.pacman.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,13 +8,14 @@ import java.net.Socket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import fr.univangers.pacman.model.PacmanGame;
+import fr.univangers.pacman.controller.PacmanGameController;
 import fr.univangers.pacman.model.PositionAgent.Dir;
+import fr.univangers.pacman.model.game.PacmanGame;
 
 public class PacmanServerController extends PacmanGameController implements Runnable {
 
 	private static final long serialVersionUID = -3141416675700419097L;
-	private final static Logger LOGGER = LogManager.getLogger("Server"); 
+	private static final Logger LOGGER = LogManager.getLogger("Server"); 
 	private Socket so;
 	
 	public PacmanServerController(PacmanGame pacmanGame, Socket so) {

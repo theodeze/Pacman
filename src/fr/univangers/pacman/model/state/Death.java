@@ -13,7 +13,7 @@ import fr.univangers.pacman.model.PositionAgent;
 public class Death implements State {
 
 	private static final long serialVersionUID = 3749566683811598L;
-	private static final int endTurnDeath = 20;
+	private static final int END_TURN_DEATH = 20;
 	private int nbTurnDeath = 0;
 	Agent agent;
 		
@@ -35,7 +35,7 @@ public class Death implements State {
 	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, 
 			List<PositionAgent> positionFoods, boolean[][] walls) {
 		if(agent.type() == Type.GHOST) {
-			if(nbTurnDeath >= endTurnDeath) {
+			if(nbTurnDeath >= END_TURN_DEATH) {
 				resetTurnDeath();
 				agent.resetPosition();
 				agent.dead();

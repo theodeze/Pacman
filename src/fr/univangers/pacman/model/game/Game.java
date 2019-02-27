@@ -1,8 +1,10 @@
-package fr.univangers.pacman.model;
+package fr.univangers.pacman.model.game;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.univangers.pacman.model.Model;
+import fr.univangers.pacman.model.gamestate.GameState;
 import fr.univangers.pacman.view.View;
 
 /**
@@ -16,23 +18,15 @@ public abstract class Game implements Model, Runnable {
 	private boolean isRunning = false;
 	private boolean isOver = false;
 	private int time = 1000;
-	private int nbTurn = 0;
+	private GameState state = new GameState();
 	private int maxTurn;
 	
 	public void over() {
 		isOver=true;
 	}
 	
-	public int nbTurn() {
-		return nbTurn;
-	}
-	
-	public void resetNbTurn() {
-		nbTurn = 0;
-	}
-	
-	public void incNbTurn() {
-		nbTurn++;
+	public GameState getState() {
+		return state;
 	}
 	
 	public void setTime(int time) {
@@ -46,13 +40,13 @@ public abstract class Game implements Model, Runnable {
 	// Méthodes concrètes 
 	
 	public void init() {
-		resetNbTurn();
+		getState().setNbTurn(0);
 		initializeGame();
 	}
 	
 	public void step() {
-		if(nbTurn < maxTurn) {
-			incNbTurn();
+		if(state.getNbTurn() < maxTurn) {
+			getState().incNbTurn(1);
 			takeTurn();
 		} else {
 			isOver = true;
