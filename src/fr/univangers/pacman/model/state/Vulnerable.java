@@ -3,7 +3,7 @@ package fr.univangers.pacman.model.state;
 import java.util.List;
 
 import fr.univangers.pacman.model.Agent;
-import fr.univangers.pacman.model.PositionAgent;
+import fr.univangers.pacman.model.Position;
 
 /**
  *  Classe qui sert à définir l'état Vulnerable
@@ -31,8 +31,8 @@ public class Vulnerable implements State {
 	 * L'agent ce déplace et quite l'état vulnerable au bout d'un certain nombre de tours
 	 */
 	@Override
-	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, 
-			List<PositionAgent> positionFoods, boolean[][] walls) {
+	public void action(List<Position> positionPacmans, List<Position> positionGhosts, 
+			List<Position> positionFoods, List<List<Boolean>> walls) {
 		if(nbTurnVulnerable >=  END_TURN_VUNERABLE) {
 			resetTurnVulnerable();
 			agent.alive();

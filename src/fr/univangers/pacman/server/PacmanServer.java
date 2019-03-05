@@ -10,14 +10,10 @@ import java.net.URL;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.gson.Gson;
-
 import fr.univangers.pacman.model.Maze;
+import fr.univangers.pacman.model.beans.PacmanGameSettings;
+import fr.univangers.pacman.model.beans.PacmanGameState.Winner;
 import fr.univangers.pacman.model.game.PacmanGame;
-import fr.univangers.pacman.model.gamestate.PacmanGameState.Mode;
-import fr.univangers.pacman.model.gamestate.PacmanGameState.StrategyGhost;
-import fr.univangers.pacman.model.gamestate.PacmanGameState.StrategyPacman;
-import fr.univangers.pacman.model.gamestate.PacmanGameState.Winner;
 
 public class PacmanServer extends PacmanGame {
 
@@ -28,9 +24,8 @@ public class PacmanServer extends PacmanGame {
 	private Socket so;
 	private String token;
 	
-	public PacmanServer(int maxTurn, Maze maze, StrategyPacman strategyPacman, 
-			StrategyGhost strategyGhost, Mode mode, Socket so, String token) {
-		super(maxTurn, maze, strategyPacman, strategyGhost, mode);
+	public PacmanServer(PacmanGameSettings settings, Maze maze, Socket so, String token) {
+		super(settings, maze);
 		this.so = so;
 		this.token = token;
 	}
@@ -75,7 +70,7 @@ public class PacmanServer extends PacmanGame {
 		if(so != null && !so.isClosed()) {
 			try {
 				PrintWriter output = new PrintWriter(so.getOutputStream(), true);
-				output.println(new Gson().toJson(state));
+				output.println(state.toJson());
 				state.setCurrentSong("");
 			} catch (IOException e) {
 				LOGGER.warn("Erreur envoie");

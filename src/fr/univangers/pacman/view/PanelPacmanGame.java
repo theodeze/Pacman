@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import fr.univangers.pacman.model.Maze;
+import fr.univangers.pacman.model.Position;
 import fr.univangers.pacman.model.PositionAgent;
 
 /**
@@ -38,9 +39,9 @@ public class PanelPacmanGame extends JPanel{
 	Maze m;
 	
 	private List<PositionAgent> pacmansPos;
-	private List<PositionAgent> ghostsPos;
-	private List<PositionAgent> foodsPos;
-	private List<PositionAgent> capsulesPos;
+	private List<Position> ghostsPos;
+	private List<Position> foodsPos;
+	private List<Position> capsulesPos;
 	
 	private List<Boolean> ghostsScarred;
 	
@@ -49,8 +50,8 @@ public class PanelPacmanGame extends JPanel{
 		this.m = maze;
 		pacmansPos = this.m.getPacmanStart();
 		ghostsPos = this.m.getGhostsStart();
-		foodsPos =  new ArrayList<>();
-		capsulesPos =  new ArrayList<>();
+		foodsPos =  this.m.getFoodsStart();
+		capsulesPos =  this.m.getCapsulesStart();
 		ghostsScarred = new ArrayList<>(Collections.nCopies(ghostsPos.size(), false));		
 	}
 
@@ -89,11 +90,11 @@ public class PanelPacmanGame extends JPanel{
 			posx+=stepx;
 		}
 		
-		for(PositionAgent pos : capsulesPos) {
+		for(Position pos : capsulesPos) {
 			drawCapsules(g, pos.getX(), pos.getY(), colorCapsule);	
 		}
 		
-		for(PositionAgent pos : foodsPos) {
+		for(Position pos : foodsPos) {
 			drawFoods(g, pos.getX(), pos.getY(), colorFood);	
 		}
 
@@ -102,7 +103,7 @@ public class PanelPacmanGame extends JPanel{
 		}
 
 		for(int i = 0; i < ghostsPos.size(); i++) {
-			PositionAgent pos = ghostsPos.get(i);
+			Position pos = ghostsPos.get(i);
 			if(ghostsScarred.get(i)) {
 				drawGhosts(g, pos.getX(), pos.getY(), ghostScarredColor);	
 			} else {
@@ -236,27 +237,27 @@ public class PanelPacmanGame extends JPanel{
 		this.pacmansPos = pacmansPos;
 	}
 
-	public List<PositionAgent> getGhostsPos() {
+	public List<Position> getGhostsPos() {
 		return ghostsPos;
 	}
 
-	public void setGhostsPos(List<PositionAgent> ghostsPos) {
+	public void setGhostsPos(List<Position> ghostsPos) {
 		this.ghostsPos = ghostsPos;
 	}
 
-	public List<PositionAgent> getFoodsPos() {
+	public List<Position> getFoodsPos() {
 		return foodsPos;
 	}
 
-	public void setFoodsPos(List<PositionAgent> foodsPos) {
+	public void setFoodsPos(List<Position> foodsPos) {
 		this.foodsPos = foodsPos;
 	}
 
-	public List<PositionAgent> getCapsulesPos() {
+	public List<Position> getCapsulesPos() {
 		return capsulesPos;
 	}
 
-	public void setCapsulesPos(List<PositionAgent> capsulesPos) {
+	public void setCapsulesPos(List<Position> capsulesPos) {
 		this.capsulesPos = capsulesPos;
 	}
 

@@ -3,7 +3,7 @@ package fr.univangers.pacman.model.state;
 import java.io.Serializable;
 import java.util.List;
 
-import fr.univangers.pacman.model.PositionAgent;
+import fr.univangers.pacman.model.Position;
 
 /**
  * Interface pour définir l'Etat d'un agent
@@ -14,9 +14,9 @@ public interface State extends Serializable {
 	 * Action à effectuer
 	 * @param positionPacmans
 	 * @param positionGhosts
-	 * @param walls
+	 * @param list
 	 */
-	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, List<PositionAgent> positionFoods, boolean[][] walls);
+	public void action(List<Position> positionPacmans, List<Position> positionGhosts, List<Position> positionFoods, List<List<Boolean>> list);
 	
 	/**
 	 * Passe le status de l'agent à vunerable

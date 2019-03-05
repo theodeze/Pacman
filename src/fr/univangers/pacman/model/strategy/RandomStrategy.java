@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import fr.univangers.pacman.model.Agent;
+import fr.univangers.pacman.model.Position;
 import fr.univangers.pacman.model.PositionAgent;
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
@@ -16,7 +17,8 @@ public class RandomStrategy implements Strategy {
 	private Random random = new Random();
 
 	@Override
-	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {
+	public void move(Agent agent, List<Position> targets, List<Position> friends, 
+			List<Position> enemies, List<List<Boolean>> walls) {
 		PositionAgent position = agent.position();
 		PositionAgent newPosition = new PositionAgent(position.getX(), position.getY(), position.getDir());
 		do {
@@ -44,7 +46,7 @@ public class RandomStrategy implements Strategy {
 			default:
 				break;
 			}
-		} while(walls[newPosition.getX()][newPosition.getY()]);
+		} while(walls.get(newPosition.getY()).get(newPosition.getX()));
 		agent.setPosition(newPosition);
 	}
 

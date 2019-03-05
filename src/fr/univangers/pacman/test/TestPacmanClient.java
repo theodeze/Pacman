@@ -8,7 +8,6 @@ public class TestPacmanClient {
 		Client client = Client.getInstance();
 		if(client != null)
 			new Thread(client).start();
-		
 	}
 	
 }

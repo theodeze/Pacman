@@ -9,13 +9,13 @@ import java.util.stream.Stream;
 import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.FactoryAgent;
 import fr.univangers.pacman.model.Maze;
+import fr.univangers.pacman.model.Position;
 import fr.univangers.pacman.model.PositionAgent;
 import fr.univangers.pacman.model.PositionAgent.Dir;
-import fr.univangers.pacman.model.gamestate.PacmanGameState;
-import fr.univangers.pacman.model.gamestate.PacmanGameState.Mode;
-import fr.univangers.pacman.model.gamestate.PacmanGameState.StrategyGhost;
-import fr.univangers.pacman.model.gamestate.PacmanGameState.StrategyPacman;
-import fr.univangers.pacman.model.gamestate.PacmanGameState.Winner;
+import fr.univangers.pacman.model.beans.PacmanGameSettings;
+import fr.univangers.pacman.model.beans.PacmanGameState;
+import fr.univangers.pacman.model.beans.PacmanGameSettings.Mode;
+import fr.univangers.pacman.model.beans.PacmanGameState.Winner;
 
 /**
  * PacmanGame est la classe principale du jeu 
@@ -34,63 +34,45 @@ public class PacmanGame extends Game {
 	private List<Agent> ghosts = new ArrayList<>();
 
 	protected PacmanGameState state = new PacmanGameState();
+	protected PacmanGameSettings settings = new PacmanGameSettings();
 	
 	private int nbFood = 0;
 	private int scorePerGhosts = 200;
-	private Mode mode;
-	private StrategyPacman strategyPacman;
-	private StrategyGhost strategyGhost;
 
 	@Override
 	public PacmanGameState getState() {
 		return state;
 	}
 	
-	public PacmanGame(int maxTurn, Maze maze, StrategyPacman strategyPacman, StrategyGhost strategyGhost, Mode mode) {
-		super(maxTurn);
+	public PacmanGame(PacmanGameSettings settings, Maze maze) {
+		super(settings.getMaxTurn());
 		this.maze = maze;
-		this.strategyPacman = strategyPacman;
-		this.strategyGhost = strategyGhost;
-		this.mode = mode;
+		this.settings = settings;
 		state.setWinner(Winner.NOWINNER);
 		state.setNbLifePacmans(NB_VIE_MAX);
 		init();
 	}
 	
 	private void updatePacmans() {
-		state.clearPositionPacmans();
+		state.getPositionPacmans().clear();
 		for(Agent pacman : pacmans) {
 			if(!pacman.isDeath())
-				state.addPositionPacmans(pacman.position());
+				state.getPositionPacmans().add(pacman.position());
 		}
 	}
 	
 	private void updateGhosts() {
-		state.clearPositionGhosts();
+		state.getPositionGhosts().clear();
 		for(Agent ghost : ghosts) {
 			if(!ghost.isDeath())
-				state.addPositionGhosts(ghost.position());
-		}
-	}
-	
-	private void updateFoodsCapsules() {
-		state.clearPositionFoods();
-		state.clearPositionCapsules();
-		for(int x = 0; x < maze.getSizeX(); x++) {
-			for(int y = 0; y < maze.getSizeY(); y++) {
-				if(maze.isFoods(x, y))
-					state.addPositionFoods(new PositionAgent(x, y));
-				if(maze.isCapsule(x, y))
-					state.addPositionCapsules(new PositionAgent(x, y));
-			}
+				state.getPositionGhosts().add(ghost.position());
 		}
 	}
 	
 	private void updatePosition() {
 		updatePacmans();
 		updateGhosts();
-		updateFoodsCapsules();
-		state.clearGhostsScarred();
+		state.getGhostsScarred().clear();
 		for(Agent ghost : ghosts) {
 			if(!ghost.isDeath())
 				state.addGhostsScarred(ghost.isVulnerable());
@@ -100,7 +82,7 @@ public class PacmanGame extends Game {
 	
 	public void movePacmanPlayer1(Dir dir) {
 		Agent p1 = pacmans.get(0);
-		if(mode == Mode.AUTO)
+		if(settings.getMode() == Mode.AUTO)
 			return;
 		switch(dir) {
 		case EAST:
@@ -122,9 +104,9 @@ public class PacmanGame extends Game {
 	
 	public void movePacmanPlayer2(Dir dir) {
 		Agent p2 = null;
-		if(mode == Mode.TWOPLAYERC)
+		if(settings.getMode() == Mode.TWOPLAYERC)
 			p2 = pacmans.get(1);
-		else if(mode == Mode.TWOPLAYERO)
+		else if(settings.getMode() == Mode.TWOPLAYERO)
 			p2 = ghosts.get(0);
 		if(p2 == null)
 			return;
@@ -146,8 +128,15 @@ public class PacmanGame extends Game {
 		}	
 	}
 	
+	public List<Position> getPositionPacmans() {
+		List<Position> positions = new ArrayList<>();
+		for(PositionAgent position : state.getPositionPacmans())
+			positions.add(position.toPosition());
+		return positions;
+	}
+	
 	public void moveAgent(Agent agent) {
-		agent.action(state.getPositionPacmans(), state.getPositionGhosts(), 
+		agent.action(getPositionPacmans(), state.getPositionGhosts(), 
 				Stream.concat(state.getPositionFoods().stream(), state.getPositionCapsules().stream())
                 .collect(Collectors.toList()), maze.getWalls());
 	}
@@ -163,12 +152,12 @@ public class PacmanGame extends Game {
 		pacmans.clear();
 		int nbPacmanAdd = 0;
 		for(PositionAgent position : maze.getPacmanStart()) {
-			if((nbPacmanAdd < 1 && mode != Mode.AUTO) || (nbPacmanAdd < 2 && mode == Mode.TWOPLAYERC)) {
+			if((nbPacmanAdd < 1 && settings.getMode() != Mode.AUTO) || (nbPacmanAdd < 2 && settings.getMode() == Mode.TWOPLAYERC)) {
 				pacmans.add(FactoryAgent.createPacmanPlayer(position));
 				nbPacmanAdd++;
 			}
 			else {
-				switch(strategyPacman) {
+				switch(settings.getStrategyPacman()) {
 				case ASTAR:
 					pacmans.add(FactoryAgent.createPacmanAstar(position));
 					break;
@@ -191,12 +180,12 @@ public class PacmanGame extends Game {
 	private void initializeGhost() {
 		ghosts.clear();
 		boolean isAddPlayer = false;
-		for(PositionAgent position : maze.getGhostsStart()) {
-			if(!isAddPlayer && mode == Mode.TWOPLAYERO) {
+		for(Position position : maze.getGhostsStart()) {
+			if(!isAddPlayer && settings.getMode() == Mode.TWOPLAYERO) {
 				ghosts.add(FactoryAgent.createGhostPlayer(position));
 				isAddPlayer = true;
 			} else {
-				switch(strategyGhost) {
+				switch(settings.getStrategyGhost()) {
 				case ASTAR:
 					ghosts.add(FactoryAgent.createGhostAstar(position));
 					break;
@@ -220,15 +209,9 @@ public class PacmanGame extends Game {
 	}
 	
 	private void initializeFood() {
-		nbFood = 0;
-		maze.resetFoods();
-		for(int x = 0; x < maze.getSizeX(); x++) {
-			for(int y = 0; y < maze.getSizeY(); y++) {
-				nbFood += maze.isFoods(x, y) ? 1 : 0;
-				nbFood += maze.isCapsule(x, y) ? 1 : 0;
-			}
-		}
-		maze.resetCapsules();
+		state.setPositionFoods(new ArrayList<>(maze.getFoodsStart()));
+		state.setPositionCapsules(new ArrayList<>(maze.getCapsulesStart()));
+		nbFood = state.getPositionFoods().size() + state.getPositionCapsules().size();
 	}
 	
 	@Override
@@ -252,14 +235,14 @@ public class PacmanGame extends Game {
 		for(Agent pacman : pacmans) {
 			moveAgent(pacman);
 			deadAgents(pacman);
-			if(maze.isFoods(pacman.position().getX(), pacman.position().getY())) {
-				maze.setFoods(pacman.position().getX(), pacman.position().getY(), false);
+			if(state.getPositionFoods().contains(pacman.position().toPosition())) {
+				state.getPositionFoods().remove(pacman.position());
 				state.incScore(10);
 				nbFood--;
 				state.setCurrentSong("res/sounds/pacman_chomp.wav");
 			}
-			if(maze.isCapsule(pacman.position().getX(), pacman.position().getY())) {
-				maze.setCapsule(pacman.position().getX(), pacman.position().getY(), false);
+			if(state.getPositionCapsules().contains(pacman.position().toPosition())) {
+				state.getPositionCapsules().remove(pacman.position().toPosition());
 				for (Agent ghost : ghosts) {
 					ghost.vulnerability();
 				}
@@ -348,12 +331,8 @@ public class PacmanGame extends Game {
 	}
 	
 	public void isOver() {
-		if(state.getNbLifePacmans() == 0) {
+		if(state.getNbLifePacmans() == 0 || nbFood == 0)
 			over();
-		}
-		if(nbFood == 0) {
-			over();
-		}
 	}
 	
 }

@@ -1,50 +1,38 @@
-package fr.univangers.pacman.model.gamestate;
+package fr.univangers.pacman.model.beans;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+
+import fr.univangers.pacman.model.Position;
 import fr.univangers.pacman.model.PositionAgent;
 
 public class PacmanGameState extends GameState {
-
-	public enum Mode {
-		AUTO,
-		ONEPLAYER,
-		TWOPLAYERC,
-		TWOPLAYERO
-	}
-	
-	public enum StrategyPacman {
-		ASTAR,
-		RANDOM,
-		BASIC,
-		NONE
-	}
-	
-	public enum StrategyGhost {
-		ASTAR,
-		TRACKING,
-		RANDOM,
-		BASIC,
-		NONE
-	}
-	
 	public enum Winner {
 		NOWINNER,
 		GHOSTWINNER,
 		PACMANWINNER
 	}
 	
-	private static final long serialVersionUID = 7036825388150731904L;
 	private int nbLifePacmans = 3;
 	private Winner winner = Winner.NOWINNER;
 	private int score = 0;
 	private List<PositionAgent> positionPacmans = new ArrayList<>();
-	private List<PositionAgent> positionGhosts = new ArrayList<>();
-	private List<PositionAgent> positionFoods = new ArrayList<>();
-	private List<PositionAgent> positionCapsules = new ArrayList<>();
+	private List<Position> positionGhosts = new ArrayList<>();
+	private List<Position> positionFoods = new ArrayList<>();
+	private List<Position> positionCapsules = new ArrayList<>();
 	private List<Boolean> ghostsScarred = new ArrayList<>();
 	private String currentSong;
+
+	@Override
+	public String toJson() {
+		return new Gson().toJson(this);
+	}
+
+	public static PacmanGameState fromJson(String json) {
+		return new Gson().fromJson(json, PacmanGameState.class);
+	}
 	
 	public int getNbLifePacmans() {
 		return nbLifePacmans;
@@ -82,63 +70,31 @@ public class PacmanGameState extends GameState {
 		return positionPacmans;
 	}
 	
-	public void addPositionPacmans(PositionAgent position) {
-		positionPacmans.add(position);
-	}
-	
-	public void clearPositionPacmans() {
-		positionPacmans.clear();
-	}
-	
 	public void setPositionPacmans(List<PositionAgent> positionPacmans) {
 		this.positionPacmans = positionPacmans;
 	}
 	
-	public List<PositionAgent> getPositionGhosts() {
+	public List<Position> getPositionGhosts() {
 		return positionGhosts;
 	}
 	
-	public void addPositionGhosts(PositionAgent position) {
-		positionGhosts.add(position);
-	}
-	
-	public void clearPositionGhosts() {
-		positionGhosts.clear();
-	}
-	
-	public void setPositionGhosts(List<PositionAgent> positionGhosts) {
+	public void setPositionGhosts(List<Position> positionGhosts) {
 		this.positionGhosts = positionGhosts;
 	}
 	
-	public List<PositionAgent> getPositionFoods() {
+	public List<Position> getPositionFoods() {
 		return positionFoods;
 	}
 	
-	public void addPositionFoods(PositionAgent position) {
-		positionFoods.add(position);
-	}
-	
-	public void clearPositionFoods() {
-		positionFoods.clear();
-	}
-	
-	public void setPositionFoods(List<PositionAgent> positionFoods) {
+	public void setPositionFoods(List<Position> positionFoods) {
 		this.positionFoods = positionFoods;
 	}
 	
-	public List<PositionAgent> getPositionCapsules() {
+	public List<Position> getPositionCapsules() {
 		return positionCapsules;
 	}
 	
-	public void addPositionCapsules(PositionAgent position) {
-		positionCapsules.add(position);
-	}
-	
-	public void clearPositionCapsules() {
-		positionCapsules.clear();
-	}
-	
-	public void setPositionCapsules(List<PositionAgent> positionCapsules) {
+	public void setPositionCapsules(List<Position> positionCapsules) {
 		this.positionCapsules = positionCapsules;
 	}
 	
@@ -148,10 +104,6 @@ public class PacmanGameState extends GameState {
 	
 	public void addGhostsScarred(boolean isScarred) {
 		ghostsScarred.add(isScarred);
-	}
-	
-	public void clearGhostsScarred() {
-		ghostsScarred.clear();
 	}
 	
 	public void setGhostsScarred(List<Boolean> ghostsScarred) {

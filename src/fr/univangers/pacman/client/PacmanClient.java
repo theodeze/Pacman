@@ -8,10 +8,8 @@ import java.net.Socket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.gson.Gson;
-
+import fr.univangers.pacman.model.beans.PacmanGameState;
 import fr.univangers.pacman.model.game.Game;
-import fr.univangers.pacman.model.gamestate.PacmanGameState;
 
 public class PacmanClient extends Game {
 	
@@ -36,8 +34,8 @@ public class PacmanClient extends Game {
 	private void readData() {
 		try {
 			BufferedReader input = new BufferedReader(new InputStreamReader(so.getInputStream()));
-			String data = input.readLine();
-			state = new Gson().fromJson(data, PacmanGameState.class);
+			String json = input.readLine();
+			state = PacmanGameState.fromJson(json);
 		} catch (IOException e) {
 			LOGGER.warn("Données incorrectes");
 		}

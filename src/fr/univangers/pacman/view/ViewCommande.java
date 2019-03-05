@@ -14,9 +14,9 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 
 import fr.univangers.pacman.controller.GameController;
+import fr.univangers.pacman.model.beans.PacmanGameState;
+import fr.univangers.pacman.model.beans.PacmanGameState.Winner;
 import fr.univangers.pacman.model.game.Game;
-import fr.univangers.pacman.model.game.PacmanGame;
-import fr.univangers.pacman.model.gamestate.PacmanGameState.Winner;
 
 /**
  * Classe ViewCommande sert à implémenter l'interface graphique du panneau 
@@ -124,11 +124,14 @@ public class ViewCommande implements View {
 	@Override
 	public void update() {
 		labelNbTurn.setText("Tour : " + game.getState().getNbTurn());
-		if(game instanceof PacmanGame && ((PacmanGame)game).getState().getWinner() != Winner.NOWINNER) {
-        	btnRun.setEnabled(true);
-        	btnPause.setEnabled(false);
-            btnStep.setEnabled(false);
-        	btnRestart.setEnabled(false);
+		if(game.getState() instanceof PacmanGameState) {
+			PacmanGameState state = (PacmanGameState) game.getState();
+			if(state.getWinner() != Winner.NOWINNER) {
+	        	btnRun.setEnabled(true);
+	        	btnPause.setEnabled(false);
+	            btnStep.setEnabled(false);
+	        	btnRestart.setEnabled(false);
+			}
 		}
 	}
 

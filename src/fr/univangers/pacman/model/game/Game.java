@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.univangers.pacman.model.Model;
-import fr.univangers.pacman.model.gamestate.GameState;
+import fr.univangers.pacman.model.beans.GameState;
 import fr.univangers.pacman.view.View;
 
 /**
@@ -45,7 +45,7 @@ public abstract class Game implements Model, Runnable {
 	}
 	
 	public void step() {
-		if(state.getNbTurn() < maxTurn) {
+		if(getState().getNbTurn() < maxTurn) {
 			getState().incNbTurn(1);
 			takeTurn();
 		} else {

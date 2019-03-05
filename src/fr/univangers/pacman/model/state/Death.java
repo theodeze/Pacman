@@ -4,7 +4,7 @@ import java.util.List;
 
 import fr.univangers.pacman.model.Agent;
 import fr.univangers.pacman.model.Agent.Type;
-import fr.univangers.pacman.model.PositionAgent;
+import fr.univangers.pacman.model.Position;
 
 /**
  * Classe qui sert à définir l'état Death
@@ -32,8 +32,8 @@ public class Death implements State {
 	 * Si l'agent est un fantome alors l'agent attend un nombre de tours avant de revivre 
 	 */
 	@Override
-	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, 
-			List<PositionAgent> positionFoods, boolean[][] walls) {
+	public void action(List<Position> positionPacmans, List<Position> positionGhosts, 
+			List<Position> positionFoods, List<List<Boolean>> walls) {
 		if(agent.type() == Type.GHOST) {
 			if(nbTurnDeath >= END_TURN_DEATH) {
 				resetTurnDeath();

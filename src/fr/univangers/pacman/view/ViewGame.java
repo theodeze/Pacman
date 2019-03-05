@@ -21,9 +21,9 @@ import javax.swing.SwingConstants;
 import fr.univangers.pacman.controller.GameController;
 import fr.univangers.pacman.model.Maze;
 import fr.univangers.pacman.model.PositionAgent.Dir;
+import fr.univangers.pacman.model.beans.PacmanGameState;
+import fr.univangers.pacman.model.beans.PacmanGameState.Winner;
 import fr.univangers.pacman.model.game.Game;
-import fr.univangers.pacman.model.gamestate.PacmanGameState;
-import fr.univangers.pacman.model.gamestate.PacmanGameState.Winner;
 
 /**
  *	Classe ViewGame permet d'afficher le jeu dans une interface graphique

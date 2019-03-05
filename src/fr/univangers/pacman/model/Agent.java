@@ -56,7 +56,17 @@ public class Agent implements AgentAction, Serializable {
 		this.death = new Death(this);
 		this.vunerable = new Vulnerable(this);
 		alive();	
-		}
+	}
+	
+	public Agent(Type type, Position position) {
+		this.type = type;
+		this.positionInit = new PositionAgent(position);
+		this.position = new PositionAgent(position);
+		this.life = new Life(this);
+		this.death = new Death(this);
+		this.vunerable = new Vulnerable(this);
+		alive();	
+	}
 	
 	public void setStrategy(Strategy lifeStrategy, Strategy vunerableStrategy) {
 		this.currentStrategy = lifeStrategy;
@@ -82,9 +92,15 @@ public class Agent implements AgentAction, Serializable {
 		this.position=position;
 	}
 	
-	public void action(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, 
-			List<PositionAgent> positionFoods, boolean[][] walls) {
-		currentState.action(positionPacmans, positionGhosts, positionFoods, walls);
+	public void setPosition(Position position) {
+		PositionAgent p = new PositionAgent(position);
+		p.updateDir(this.position);
+		this.position = p;
+	}
+	
+	public void action(List<Position> positionPacmans, List<Position> positionGhosts, 
+			List<Position> positionFoods, List<List<Boolean>> list) {
+		currentState.action(positionPacmans, positionGhosts, positionFoods, list);
 	}
 	
 	public void vulnerability() {
@@ -104,8 +120,8 @@ public class Agent implements AgentAction, Serializable {
 	}
 	
 	@Override
-	public void move(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, 
-			List<PositionAgent> positionFoods, boolean[][] walls) {
+	public void move(List<Position> positionPacmans, List<Position> positionGhosts, 
+			List<Position> positionFoods, List<List<Boolean>> walls) {
 		switch(type) {
 		case GHOST:
 			if(isDeath())

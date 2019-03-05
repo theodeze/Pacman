@@ -1,6 +1,5 @@
 package fr.univangers.pacman.server;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
@@ -18,9 +17,6 @@ import java.net.URL;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 import org.apache.logging.log4j.LogManager;
@@ -29,19 +25,20 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.Gson;
 
 import fr.univangers.pacman.model.Maze;
-import fr.univangers.pacman.model.gamestate.PacmanGameState.Mode;
-import fr.univangers.pacman.model.gamestate.PacmanGameState.StrategyGhost;
-import fr.univangers.pacman.model.gamestate.PacmanGameState.StrategyPacman;
+import fr.univangers.pacman.model.beans.LoginInformation;
+import fr.univangers.pacman.model.beans.PacmanGameSettings;
+import fr.univangers.pacman.model.beans.ServerInformation;
+import fr.univangers.pacman.view.dialog.DialogServer;
 
 public class Server implements Runnable {
-
-	private ServerSocket sso;
 	private static final Logger LOGGER = LogManager.getLogger("Server"); 
 	private static final String TITLE = "Serveur Pacman";
 	private static final String USER_AGENT = "Mozilla/5.0";
 	private static final int MAX_TRY = 3;
+	private ServerSocket sso;
+	private ServerInformation serverInformation;
 
-	private Server(ServerSocket sso) {
+	private Server(ServerSocket sso, ServerInformation serverInformation) {
 		JFrame frame = new JFrame();
 		frame.setTitle(TITLE);
 		frame.setSize(new Dimension(360, 80));
@@ -59,6 +56,7 @@ public class Server implements Runnable {
         frame.setVisible(true);
 		
 		this.sso = sso;
+		this.serverInformation = serverInformation;
 	}
 	
 	public static Server getInstance() {
@@ -66,7 +64,8 @@ public class Server implements Runnable {
 		int nTry = MAX_TRY;
 		while(server == null && nTry-- > 0) {
 			try {
-				server = new Server(new ServerSocket(whichPort()));
+				ServerInformation serverInformation = DialogServer.show();
+				server = new Server(new ServerSocket(serverInformation.getPort()), serverInformation);
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Le seveur n'a pas démarre\n" + e.getLocalizedMessage(), 
 						TITLE, JOptionPane.ERROR_MESSAGE);
@@ -76,26 +75,6 @@ public class Server implements Runnable {
 		return server;
 	}
 	
-	private static int whichPort() {
-	    JPanel panel = new JPanel(new BorderLayout(5, 5));
-	    panel.add(new JLabel("Paramètre du serveur", SwingConstants.RIGHT), BorderLayout.NORTH);
-
-	    JPanel label = new JPanel(new GridLayout(0, 1, 2, 2));
-	    label.add(new JLabel("Port", SwingConstants.RIGHT));
-	    panel.add(label, BorderLayout.WEST);
-
-	    JPanel controls = new JPanel(new GridLayout(0, 1, 2, 2)); 
-	   
-	    JSpinner port = new JSpinner(new SpinnerNumberModel(4400,0,65535,1));
-	    controls.add(port);
-	    
-	    panel.add(controls, BorderLayout.CENTER);
-
-	    JOptionPane.showMessageDialog(new JFrame(), panel, TITLE, JOptionPane.QUESTION_MESSAGE);
-
-	    return (int) port.getValue();
-	}
-	
 	@Override
 	public void run() {
 		try {
@@ -103,12 +82,14 @@ public class Server implements Runnable {
 				Socket so = sso.accept();
 				String token = connect(so);
 				PrintWriter output = new PrintWriter(so.getOutputStream(), true);
-				if(token.isEmpty()) {
+				BufferedReader input = new BufferedReader(new InputStreamReader(so.getInputStream()));
+				if(token.isEmpty() && serverInformation.isNeedAuthentication()) {
 					output.println(false);
 					so.close();
 				} else {
 					output.println(true);
-					launchPacmanGame(so, token);
+					PacmanGameSettings settings = PacmanGameSettings.fromJson(input.readLine());
+					launchPacmanGame(so, token, settings);
 				}
 			}
 		} catch(IOException e) {
@@ -120,8 +101,7 @@ public class Server implements Runnable {
 		String token = "";
 		try {
 			BufferedReader input = new BufferedReader(new InputStreamReader(so.getInputStream()));
-	        String username = input.readLine();
-	        String password = input.readLine();
+			LoginInformation login = LoginInformation.fromJson(input.readLine());
 	        
 	        String url = "http://localhost:8080/Pacman_Score/Authentification";
 			URL obj = new URL(url);
@@ -131,8 +111,8 @@ public class Server implements Runnable {
 			con.setRequestProperty("User-Agent", USER_AGENT);
 			
 			String urlParameters = 
-					  "username=" + username + "&"
-					+ "password=" + password;
+					  "username=" + login.getUsername() + "&"
+					+ "password=" + login.getPassword();
 			
 			con.setDoOutput(true);
 			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
@@ -163,10 +143,10 @@ public class Server implements Runnable {
 		return token;
 	}
 	
-	private void launchPacmanGame(Socket so, String token) {
+	private void launchPacmanGame(Socket so, String token, PacmanGameSettings settings) {
 		try {
-			Maze maze = new Maze("res/layouts/bigSearch_onePacman_oneGhost.lay");
-			PacmanServer ps = new PacmanServer(250, maze, StrategyPacman.ASTAR, StrategyGhost.TRACKING, Mode.AUTO, so, token);
+			Maze maze = new Maze(settings.getNameMaze());
+			PacmanServer ps = new PacmanServer(settings, maze, so, token);
 			PacmanServerController psc = new PacmanServerController(ps, so);
 			new Thread(psc).start();
 		} catch (Exception e) {
