@@ -5,14 +5,11 @@ import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URL;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,8 +18,6 @@ import javax.swing.SwingConstants;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import com.google.gson.Gson;
 
 import fr.univangers.pacman.model.Maze;
 import fr.univangers.pacman.model.beans.LoginInformation;
@@ -33,7 +28,6 @@ import fr.univangers.pacman.view.dialog.DialogServer;
 public class Server implements Runnable {
 	private static final Logger LOGGER = LogManager.getLogger("Server"); 
 	private static final String TITLE = "Serveur Pacman";
-	private static final String USER_AGENT = "Mozilla/5.0";
 	private static final int MAX_TRY = 3;
 	private ServerSocket sso;
 	private ServerInformation serverInformation;
@@ -80,9 +74,12 @@ public class Server implements Runnable {
 		try {
 			while(!sso.isClosed()) {
 				Socket so = sso.accept();
-				String token = connect(so);
 				PrintWriter output = new PrintWriter(so.getOutputStream(), true);
 				BufferedReader input = new BufferedReader(new InputStreamReader(so.getInputStream()));
+				LoginInformation login = LoginInformation.fromJson(input.readLine());
+				String token = "";
+				if(serverInformation.isNeedAuthentication())
+					token = PostRequest.getToken(login);
 				if(token.isEmpty() && serverInformation.isNeedAuthentication()) {
 					output.println(false);
 					so.close();
@@ -95,52 +92,6 @@ public class Server implements Runnable {
 		} catch(IOException e) {
 			LOGGER.error("Serveur à crash");
 		}
-	}
-	
-	private String connect(Socket so) {
-		String token = "";
-		try {
-			BufferedReader input = new BufferedReader(new InputStreamReader(so.getInputStream()));
-			LoginInformation login = LoginInformation.fromJson(input.readLine());
-	        
-	        String url = "http://localhost:8080/Pacman_Score/Authentification";
-			URL obj = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-			con.setRequestMethod("POST");
-			con.setRequestProperty("User-Agent", USER_AGENT);
-			
-			String urlParameters = 
-					  "username=" + login.getUsername() + "&"
-					+ "password=" + login.getPassword();
-			
-			con.setDoOutput(true);
-			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-			wr.writeBytes(urlParameters);
-			wr.flush();
-			wr.close();
-			
-			int responseCode = con.getResponseCode();
-			if(responseCode == 200) {
-				BufferedReader in = new BufferedReader(
-				        new InputStreamReader(con.getInputStream()));
-				String inputLine;
-				StringBuilder response = new StringBuilder();
-				
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-				in.close();
-
-		        LOGGER.info(token);
-				token = new Gson().fromJson(response.toString(), String.class);
-			} else {
-				LOGGER.warn("Mots de passe ou identifiant incorrect");
-			}
-		} catch (IOException e) {
-			LOGGER.warn("Erreur lecture mot de passe/identifiant");
-		}
-		return token;
 	}
 	
 	private void launchPacmanGame(Socket so, String token, PacmanGameSettings settings) {
