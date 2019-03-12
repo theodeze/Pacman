@@ -1,8 +1,12 @@
-package fr.univangers.pacman.model;
+package fr.univangers.pacman.model.game;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SimpleGame extends Game {
 
 	private static final long serialVersionUID = -2434019721506786915L;
+	private static final Logger LOGGER = LogManager.getLogger("Game"); 
 
 	public SimpleGame(int maxTurn) {
 		super(maxTurn);
@@ -10,17 +14,17 @@ public class SimpleGame extends Game {
 
 	@Override
 	public void initializeGame() {
-		System.out.println("Initialize Game");
+		LOGGER.info("Initialize Game");
 	}
 
 	@Override
 	public void takeTurn() {
-		System.out.println("Take Turn");
+		LOGGER.info("Take Turn");
 	}
 
 	@Override
 	public void gameOver() {
-		System.out.println("Game Over");
+		LOGGER.info("Game Over");
 	}
 
 }

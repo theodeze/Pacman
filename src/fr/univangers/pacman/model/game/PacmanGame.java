@@ -1,15 +1,21 @@
-package fr.univangers.pacman.model;
+package fr.univangers.pacman.model.game;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
+import fr.univangers.pacman.model.Agent;
+import fr.univangers.pacman.model.FactoryAgent;
+import fr.univangers.pacman.model.Maze;
+import fr.univangers.pacman.model.Position;
+import fr.univangers.pacman.model.PositionAgent;
 import fr.univangers.pacman.model.PositionAgent.Dir;
+import fr.univangers.pacman.model.beans.PacmanGameSettings;
+import fr.univangers.pacman.model.beans.PacmanGameState;
+import fr.univangers.pacman.model.beans.PacmanGameSettings.Mode;
+import fr.univangers.pacman.model.beans.PacmanGameState.Winner;
 
 /**
  * PacmanGame est la classe principale du jeu 
@@ -18,120 +24,65 @@ import fr.univangers.pacman.model.PositionAgent.Dir;
  * les différents scores et agents ainsi que leur position
  */
 
-public class PacmanGame extends Game implements PacmanGameGetter {
+public class PacmanGame extends Game {
 	
 	private static final long serialVersionUID = 998416452804755455L;
 	private static final int NB_VIE_MAX = 3;
 	
 	private Maze maze;
-	private int score = 0;
 	private List<Agent> pacmans = new ArrayList<>();
-	private List<PositionAgent> positionPacmans = new ArrayList<>();
 	private List<Agent> ghosts = new ArrayList<>();
-	private List<PositionAgent> positionGhosts = new ArrayList<>();
-	private List<PositionAgent> positionFoods = new ArrayList<>();
-	private List<Boolean> ghostsScarred = new ArrayList<>();
-	private int nbLifePacmans;
+
+	protected PacmanGameState state = new PacmanGameState();
+	protected PacmanGameSettings settings = new PacmanGameSettings();
+	
 	private int nbFood = 0;
 	private int scorePerGhosts = 200;
-	private Mode mode;
-	private StrategyPacman strategyPacman;
-	private StrategyGhost strategyGhost;
-	private Winner winner;
 
 	@Override
-	public int getNbLifePacmans() {
-		return nbLifePacmans;
-	}
-
-	@Override
-	public int getScore() {
-		return score;
-	}
-
-	@Override
-	public Winner getWinner() {
-		return winner;
+	public PacmanGameState getState() {
+		return state;
 	}
 	
-	@Override
-	public List<PositionAgent> getPositionPacmans() {
-		return positionPacmans;
-	}
-
-	@Override
-	public List<PositionAgent> getPositionGhosts() {
-		return positionGhosts;
-	}
-
-	@Override
-	public List<PositionAgent> getPositionFoods() {
-		return positionFoods;
-	}
-	
-	private void playSound(String filename) {
-		try {
-	        AudioInputStream audioIn;
-			audioIn = AudioSystem.getAudioInputStream(new File(filename));
-	        Clip clip = AudioSystem.getClip();
-	        clip.stop();
-	        clip.setFramePosition(0);
-	        clip.open(audioIn);
-	        clip.start();
-		} catch (Exception e) {
-			// Cas où il n'y a pas de sons
-		}
-	}
-	
-	/**
-	 *  Fonction prenant le cas où les fantômes sont effrayés s'ils sont vulnérables
-	 */
-	
-	@Override
-	public List<Boolean> getGhostsScarred() {
-		ghostsScarred.clear();
-		for(Agent ghost : ghosts) {
-			if(!ghost.isDeath())
-				ghostsScarred.add(ghost.isVulnerable());
-		}
-		return ghostsScarred;
-	}
-	
-	public PacmanGame(int maxTurn, Maze maze, StrategyPacman strategyPacman, StrategyGhost strategyGhost, Mode mode) {
-		super(maxTurn);
+	public PacmanGame(PacmanGameSettings settings, Maze maze) {
+		super(settings.getMaxTurn());
 		this.maze = maze;
-		this.strategyPacman = strategyPacman;
-		this.strategyGhost = strategyGhost;
-		this.mode = mode;
-		this.winner = Winner.NOWINNER;
-		this.nbLifePacmans = NB_VIE_MAX;
+		this.settings = settings;
+		state.setWinner(Winner.NOWINNER);
+		state.setNbLifePacmans(NB_VIE_MAX);
 		init();
 	}
 	
-	private void updatePosition() {
-		positionPacmans.clear();
+	private void updatePacmans() {
+		state.getPositionPacmans().clear();
 		for(Agent pacman : pacmans) {
 			if(!pacman.isDeath())
-				positionPacmans.add(pacman.position());
+				state.getPositionPacmans().add(pacman.position());
 		}
-		positionGhosts.clear();
+	}
+	
+	private void updateGhosts() {
+		state.getPositionGhosts().clear();
 		for(Agent ghost : ghosts) {
 			if(!ghost.isDeath())
-				positionGhosts.add(ghost.position());
+				state.getPositionGhosts().add(ghost.position());
 		}
-		positionFoods.clear();
-		for(int x = 0; x < maze.getSizeX(); x++) {
-			for(int y = 0; y < maze.getSizeY(); y++) {
-				if(maze.isFoods(x, y) || maze.isCapsule(x, y))
-					positionFoods.add(new PositionAgent(x, y));
-			}
+	}
+	
+	private void updatePosition() {
+		updatePacmans();
+		updateGhosts();
+		state.getGhostsScarred().clear();
+		for(Agent ghost : ghosts) {
+			if(!ghost.isDeath())
+				state.addGhostsScarred(ghost.isVulnerable());
 		}
 		notifyViews();
 	}
 	
 	public void movePacmanPlayer1(Dir dir) {
 		Agent p1 = pacmans.get(0);
-		if(mode == Mode.AUTO)
+		if(settings.getMode() == Mode.AUTO)
 			return;
 		switch(dir) {
 		case EAST:
@@ -153,9 +104,9 @@ public class PacmanGame extends Game implements PacmanGameGetter {
 	
 	public void movePacmanPlayer2(Dir dir) {
 		Agent p2 = null;
-		if(mode == Mode.TWOPLAYERC)
+		if(settings.getMode() == Mode.TWOPLAYERC)
 			p2 = pacmans.get(1);
-		else if(mode == Mode.TWOPLAYERO)
+		else if(settings.getMode() == Mode.TWOPLAYERO)
 			p2 = ghosts.get(0);
 		if(p2 == null)
 			return;
@@ -177,8 +128,17 @@ public class PacmanGame extends Game implements PacmanGameGetter {
 		}	
 	}
 	
+	public List<Position> getPositionPacmans() {
+		List<Position> positions = new ArrayList<>();
+		for(PositionAgent position : state.getPositionPacmans())
+			positions.add(position.toPosition());
+		return positions;
+	}
+	
 	public void moveAgent(Agent agent) {
-		agent.action(getPositionPacmans(), getPositionGhosts(), getPositionFoods(), maze.getWalls());
+		agent.action(getPositionPacmans(), state.getPositionGhosts(), 
+				Stream.concat(state.getPositionFoods().stream(), state.getPositionCapsules().stream())
+                .collect(Collectors.toList()), maze.getWalls());
 	}
 	
 	public void resetPosition() {
@@ -192,12 +152,12 @@ public class PacmanGame extends Game implements PacmanGameGetter {
 		pacmans.clear();
 		int nbPacmanAdd = 0;
 		for(PositionAgent position : maze.getPacmanStart()) {
-			if((nbPacmanAdd < 1 && mode != Mode.AUTO) || (nbPacmanAdd < 2 && mode == Mode.TWOPLAYERC)) {
+			if((nbPacmanAdd < 1 && settings.getMode() != Mode.AUTO) || (nbPacmanAdd < 2 && settings.getMode() == Mode.TWOPLAYERC)) {
 				pacmans.add(FactoryAgent.createPacmanPlayer(position));
 				nbPacmanAdd++;
 			}
 			else {
-				switch(strategyPacman) {
+				switch(settings.getStrategyPacman()) {
 				case ASTAR:
 					pacmans.add(FactoryAgent.createPacmanAstar(position));
 					break;
@@ -220,12 +180,12 @@ public class PacmanGame extends Game implements PacmanGameGetter {
 	private void initializeGhost() {
 		ghosts.clear();
 		boolean isAddPlayer = false;
-		for(PositionAgent position : maze.getGhostsStart()) {
-			if(!isAddPlayer && mode == Mode.TWOPLAYERO) {
+		for(Position position : maze.getGhostsStart()) {
+			if(!isAddPlayer && settings.getMode() == Mode.TWOPLAYERO) {
 				ghosts.add(FactoryAgent.createGhostPlayer(position));
 				isAddPlayer = true;
 			} else {
-				switch(strategyGhost) {
+				switch(settings.getStrategyGhost()) {
 				case ASTAR:
 					ghosts.add(FactoryAgent.createGhostAstar(position));
 					break;
@@ -249,15 +209,9 @@ public class PacmanGame extends Game implements PacmanGameGetter {
 	}
 	
 	private void initializeFood() {
-		nbFood = 0;
-		maze.resetFoods();
-		for(int x = 0; x < maze.getSizeX(); x++) {
-			for(int y = 0; y < maze.getSizeY(); y++) {
-				nbFood += maze.isFoods(x, y) ? 1 : 0;
-				nbFood += maze.isCapsule(x, y) ? 1 : 0;
-			}
-		}
-		maze.resetCapsules();
+		state.setPositionFoods(new ArrayList<>(maze.getFoodsStart()));
+		state.setPositionCapsules(new ArrayList<>(maze.getCapsulesStart()));
+		nbFood = state.getPositionFoods().size() + state.getPositionCapsules().size();
 	}
 	
 	@Override
@@ -265,11 +219,11 @@ public class PacmanGame extends Game implements PacmanGameGetter {
 		initializePacman();
 		initializeGhost();
 		initializeFood();
-		score = 0;
-		nbLifePacmans = NB_VIE_MAX;
-		winner = Winner.NOWINNER;
+		state.setScore(0);
+		state.setNbLifePacmans(NB_VIE_MAX);
+		state.setWinner(Winner.NOWINNER);
 		updatePosition();
-		playSound("res/sounds/pacman_beginning.wav");
+		state.setCurrentSong("res/sounds/pacman_beginning.wav");
 	}
 
 	@Override
@@ -281,20 +235,20 @@ public class PacmanGame extends Game implements PacmanGameGetter {
 		for(Agent pacman : pacmans) {
 			moveAgent(pacman);
 			deadAgents(pacman);
-			if(maze.isFoods(pacman.position().getX(), pacman.position().getY())) {
-				maze.setFoods(pacman.position().getX(), pacman.position().getY(), false);
-				score += 10;
+			if(state.getPositionFoods().contains(pacman.position().toPosition())) {
+				state.getPositionFoods().remove(pacman.position());
+				state.incScore(10);
 				nbFood--;
-				playSound("res/sounds/pacman_chomp.wav");
+				state.setCurrentSong("res/sounds/pacman_chomp.wav");
 			}
-			if(maze.isCapsule(pacman.position().getX(), pacman.position().getY())) {
-				maze.setCapsule(pacman.position().getX(), pacman.position().getY(), false);
+			if(state.getPositionCapsules().contains(pacman.position().toPosition())) {
+				state.getPositionCapsules().remove(pacman.position().toPosition());
 				for (Agent ghost : ghosts) {
 					ghost.vulnerability();
 				}
-				score += 50;
+				state.incScore(50);
 				nbFood--;
-				playSound("res/sounds/pacman_extrapac.wav");
+				state.setCurrentSong("res/sounds/pacman_extrapac.wav");
 			}
 		}
 		
@@ -312,12 +266,12 @@ public class PacmanGame extends Game implements PacmanGameGetter {
 	@Override
 	public void gameOver() {
 		if(nbFood == 0) {
-			winner = Winner.PACMANWINNER;
-			playSound("res/sounds/pacman_intermission.wav");
+			state.setWinner(Winner.PACMANWINNER);
+			state.setCurrentSong("res/sounds/pacman_intermission.wav");
 			notifyViews();
 		} else {
-			winner = Winner.GHOSTWINNER;
-			playSound("res/sounds/pacman_death.wav");
+			state.setWinner(Winner.GHOSTWINNER);
+			state.setCurrentSong("res/sounds/pacman_death.wav");
 			notifyViews();
 		}
 	}
@@ -331,9 +285,9 @@ public class PacmanGame extends Game implements PacmanGameGetter {
 		Iterator<Agent> iter = pacmans.iterator();
 		while(iter.hasNext()) {
 			Agent pacman = iter.next();
-			if(pacman.isDeath() && nbLifePacmans > 0) {
+			if(pacman.isDeath() && state.getNbLifePacmans() > 0) {
 				pacman.alive();
-				nbLifePacmans--;
+				state.incNbLifePacmans(1);
 				resetPosition();
 			}
 		}
@@ -365,26 +319,20 @@ public class PacmanGame extends Game implements PacmanGameGetter {
 		if(ghost.position().equals(pacman.position())) {
 			if (ghost.isVulnerable()) {
 				ghost.dead();
-				score += scorePerGhosts;
+				state.incScore(scorePerGhosts);
 				scorePerGhosts *= 2;
-				playSound("res/sounds/pacman_eatghost.wav");
+				state.setCurrentSong("res/sounds/pacman_eatghost.wav");
 			} else if (ghost.isLife()) {
 				pacman.dead();
 				lifeAgents();
-				playSound("res/sounds/pacman_death.wav");
+				state.setCurrentSong("res/sounds/pacman_death.wav");
 			}
 		}
 	}
 	
-	
 	public void isOver() {
-		if(nbLifePacmans == 0) {
+		if(state.getNbLifePacmans() == 0 || nbFood == 0)
 			over();
-		}
-		if(nbFood == 0) {
-			over();
-		}
 	}
-	
 	
 }

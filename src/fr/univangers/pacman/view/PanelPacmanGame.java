@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import fr.univangers.pacman.model.Maze;
+import fr.univangers.pacman.model.Position;
 import fr.univangers.pacman.model.PositionAgent;
 
 /**
@@ -37,20 +38,24 @@ public class PanelPacmanGame extends JPanel{
 
 	Maze m;
 	
-	private List<PositionAgent> pacmans_pos;
-	private List<PositionAgent> ghosts_pos;
-	
+	private List<PositionAgent> pacmansPos;
+	private List<Position> ghostsPos;
+	private List<Position> foodsPos;
+	private List<Position> capsulesPos;
 	
 	private List<Boolean> ghostsScarred;
 	
 
 	public PanelPacmanGame(Maze maze) {
 		this.m = maze;
-		pacmans_pos = this.m.getPacmanStart();
-		ghosts_pos = this.m.getGhostsStart();
-		ghostsScarred = new ArrayList<>(Collections.nCopies(ghosts_pos.size(), false));		
+		pacmansPos = this.m.getPacmanStart();
+		ghostsPos = this.m.getGhostsStart();
+		foodsPos =  this.m.getFoodsStart();
+		capsulesPos =  this.m.getCapsulesStart();
+		ghostsScarred = new ArrayList<>(Collections.nCopies(ghostsPos.size(), false));		
 	}
 
+	@Override
 	public void paint(Graphics g){
 		
 		int dx=getSize().width;
@@ -80,36 +85,25 @@ public class PanelPacmanGame extends JPanel{
 					double npy=(stepy-nsy)/2.0;
 					g.fillRect((int)(npx+posx),(int)(npy+posy),(int)(nsx),(int)nsy);						
 				}
-				if (m.isFoods(x, y))
-				{
-					g.setColor(colorFood);
-					double nsx=stepx*sizeFood;
-					double nsy=stepy*sizeFood;
-					double npx=(stepx-nsx)/2.0;
-					double npy=(stepy-nsy)/2.0;
-					g.fillOval((int)(npx+posx),(int)(npy+posy),(int)(nsx),(int)nsy);
-				}
-				if (m.isCapsule(x, y))
-				{
-					g.setColor(colorCapsule);
-					double nsx=stepx*sizeCapsule;
-					double nsy=stepy*sizeCapsule;
-					double npx=(stepx-nsx)/2.0;
-					double npy=(stepy-nsy)/2.0;
-					g.fillOval((int)(npx+posx),(int)(npy+posy),(int)(nsx),(int)nsy);
-				}
 				posy+=stepy;				
 			}
 			posx+=stepx;
 		}
+		
+		for(Position pos : capsulesPos) {
+			drawCapsules(g, pos.getX(), pos.getY(), colorCapsule);	
+		}
+		
+		for(Position pos : foodsPos) {
+			drawFoods(g, pos.getX(), pos.getY(), colorFood);	
+		}
 
-		for(int i = 0; i < pacmans_pos.size(); i++){
-			PositionAgent pos = pacmans_pos.get(i);
+		for(PositionAgent pos : pacmansPos) {
 			drawPacmans(g, pos.getX(), pos.getY(), pos.getDir(), pacmansColor);	
 		}
 
-		for(int i = 0; i < ghosts_pos.size(); i++){
-			PositionAgent pos = ghosts_pos.get(i);
+		for(int i = 0; i < ghostsPos.size(); i++) {
+			Position pos = ghostsPos.get(i);
 			if(ghostsScarred.get(i)) {
 				drawGhosts(g, pos.getX(), pos.getY(), ghostScarredColor);	
 			} else {
@@ -118,10 +112,52 @@ public class PanelPacmanGame extends JPanel{
 		}
 		
 	}
+	
+	void drawCapsules(Graphics g, int px, int py, Color color) {
+		int dx = getSize().width;
+		int dy = getSize().height;
+		
 
-	void drawPacmans(Graphics g, int px, int py, PositionAgent.Dir pacmanDirection, Color color)
-	{
+		int sx=m.getSizeX();
+		int sy=m.getSizeY();
+		double stepx=dx/(double)sx;
+		double stepy=dy/(double)sy;
 
+		double posx=px*stepx;
+		double posy=py*stepy;
+		
+		g.setColor(color);
+		double nsx=stepx*sizeCapsule;
+		double nsy=stepy*sizeCapsule;
+		double npx=(stepx-nsx)/2.0;
+		double npy=(stepy-nsy)/2.0;
+		
+		g.fillOval((int)(npx+posx),(int)(npy+posy),(int)(nsx),(int)nsy);
+	}
+	
+	void drawFoods(Graphics g, int px, int py, Color color) {
+		int dx = getSize().width;
+		int dy = getSize().height;
+		
+
+		int sx=m.getSizeX();
+		int sy=m.getSizeY();
+		double stepx=dx/(double)sx;
+		double stepy=dy/(double)sy;
+
+		double posx=px*stepx;
+		double posy=py*stepy;
+		
+		g.setColor(color);
+		double nsx=stepx*sizeFood;
+		double nsy=stepy*sizeFood;
+		double npx=(stepx-nsx)/2.0;
+		double npy=(stepy-nsy)/2.0;
+		
+		g.fillOval((int)(npx+posx),(int)(npy+posy),(int)(nsx),(int)nsy);
+	}
+
+	void drawPacmans(Graphics g, int px, int py, PositionAgent.Dir pacmanDirection, Color color) {
 		int dx = getSize().width;
 		int dy = getSize().height;
 
@@ -141,31 +177,24 @@ public class PanelPacmanGame extends JPanel{
 		int sa=0;
 		int fa=0;
 		
-		if (pacmanDirection==PositionAgent.Dir.NORTH)
-		{
+		if (pacmanDirection==PositionAgent.Dir.NORTH) {
 			sa=70; fa=-320;
 		}
-		if (pacmanDirection==PositionAgent.Dir.SOUTH)
-		{
+		if (pacmanDirection==PositionAgent.Dir.SOUTH) {
 			sa=250; fa=-320;
 		}
-		if (pacmanDirection==PositionAgent.Dir.EAST)
-		{
+		if (pacmanDirection==PositionAgent.Dir.EAST) {
 			sa=340; fa=-320;				
 		}
-		if (pacmanDirection==PositionAgent.Dir.WEST)
-		{
+		if (pacmanDirection==PositionAgent.Dir.WEST) {
 			sa=160; fa=-320;
 		}
 
 		g.fillArc((int)(npx+posx),(int)(npy+posy),(int)(nsx),(int)nsy,sa,fa);
-		
 	}
 
 	
-	void drawGhosts(Graphics g, int px, int py, Color color){
-
-
+	void drawGhosts(Graphics g, int px, int py, Color color) {
 		int dx=getSize().width;
 		int dy=getSize().height;
 
@@ -191,7 +220,6 @@ public class PanelPacmanGame extends JPanel{
 		g.fillOval((int)(posx+npx+3*nsx/5.0),(int)(npy+posy+nsy/3.0),4,4);
 
 		g.setColor(Color.black);
-
 	}
 
 
@@ -201,21 +229,36 @@ public class PanelPacmanGame extends JPanel{
 	}
 	
 
-	public List<PositionAgent> getPacmans_pos() {
-		return pacmans_pos;
+	public List<PositionAgent> getPacmansPos() {
+		return pacmansPos;
 	}
 
-	public void setPacmans_pos(List<PositionAgent> pacmans_pos) {
-		this.pacmans_pos = pacmans_pos;
+	public void setPacmansPos(List<PositionAgent> pacmansPos) {
+		this.pacmansPos = pacmansPos;
 	}
 
-	public List<PositionAgent> getGhosts_pos() {
-		return ghosts_pos;
+	public List<Position> getGhostsPos() {
+		return ghostsPos;
 	}
 
-	public void setGhosts_pos(List<PositionAgent> ghosts_pos) {
-		this.ghosts_pos = ghosts_pos;
+	public void setGhostsPos(List<Position> ghostsPos) {
+		this.ghostsPos = ghostsPos;
 	}
 
+	public List<Position> getFoodsPos() {
+		return foodsPos;
+	}
+
+	public void setFoodsPos(List<Position> foodsPos) {
+		this.foodsPos = foodsPos;
+	}
+
+	public List<Position> getCapsulesPos() {
+		return capsulesPos;
+	}
+
+	public void setCapsulesPos(List<Position> capsulesPos) {
+		this.capsulesPos = capsulesPos;
+	}
 
 }

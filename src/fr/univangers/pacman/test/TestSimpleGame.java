@@ -2,7 +2,7 @@ package fr.univangers.pacman.test;
 
 import fr.univangers.pacman.controller.SimpleGameController;
 import fr.univangers.pacman.model.Maze;
-import fr.univangers.pacman.model.SimpleGame;
+import fr.univangers.pacman.model.game.SimpleGame;
 import fr.univangers.pacman.view.ViewCommande;
 import fr.univangers.pacman.view.ViewGame;
 

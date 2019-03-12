@@ -34,13 +34,13 @@ public class FactoryAgent {
 		return agt;
 	}
 	
-	public static Agent createGhostNone(PositionAgent position) {
+	public static Agent createGhostNone(Position position) {
 		Agent agt = new Agent(Agent.Type.GHOST, position);
 		agt.setStrategy(new NoneStrategy(), new NoneStrategy());
 		return agt;
 	}
 	
-	public static Agent createGhostBasic(PositionAgent position) {
+	public static Agent createGhostBasic(Position position) {
 		Agent agt = new Agent(Agent.Type.GHOST, position);
 		agt.setStrategy(new NearestAttackStrategy(), new EscapeStrategy());
 		return agt;
@@ -52,7 +52,7 @@ public class FactoryAgent {
 		return agt;
 	}
 
-	public static Agent createGhostPlayer(PositionAgent position) {
+	public static Agent createGhostPlayer(Position position) {
 		Agent agt = new Agent(Agent.Type.GHOST, position);
 		agt.setStrategy(new PlayerStrategy(), new PlayerStrategy());
 		return agt;
@@ -64,7 +64,7 @@ public class FactoryAgent {
 		return agt;
 	}
 	
-	public static Agent createGhostRandom(PositionAgent position) {
+	public static Agent createGhostRandom(Position position) {
 		Agent agt = new Agent(Agent.Type.GHOST, position);
 		agt.setStrategy(new RandomStrategy(), new RandomStrategy());
 		return agt;
@@ -76,13 +76,13 @@ public class FactoryAgent {
 		return agt;
 	}
 	
-	public static Agent createGhostTracking(PositionAgent position) {
+	public static Agent createGhostTracking(Position position) {
 		Agent agt = new Agent(Agent.Type.GHOST, position);
 		agt.setStrategy(new TrackingStrategy(), new AstarEscapeStrategy());
 		return agt;
 	}
 	
-	public static Agent createGhostAstar(PositionAgent position) {
+	public static Agent createGhostAstar(Position position) {
 		Agent agt = new Agent(Agent.Type.GHOST, position);
 		agt.setStrategy(new AstarAttackStrategy(), new AstarEscapeStrategy());
 		return agt;

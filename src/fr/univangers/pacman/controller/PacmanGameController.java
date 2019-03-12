@@ -1,7 +1,7 @@
 package fr.univangers.pacman.controller;
 
-import fr.univangers.pacman.model.PacmanGame;
 import fr.univangers.pacman.model.PositionAgent.Dir;
+import fr.univangers.pacman.model.game.PacmanGame;
 
 /**
  * Classe qui permet de lier l'interface graphique du Pacman et le jeu Pacman
