@@ -48,7 +48,7 @@ public class DialogLogin {
 		loginInformation.setHost(host.getText());
 		loginInformation.setPort((int) port.getValue());
 		loginInformation.setUsername(username.getText());
-		loginInformation.setPassword(Arrays.toString(password.getPassword()));
+		loginInformation.setPassword(String.valueOf(password.getPassword()));
 		return loginInformation;
 	}
 	

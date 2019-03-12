@@ -22,7 +22,7 @@ public class PostRequest {
 	
 	private PostRequest() {}
 	
-	public static String sendPost(String url, String urlParameters) {
+	public static String sendPost(String url, String urlParameters, boolean result) {
 		String stringResponse = "";
 		try {
 			URL obj = new URL(url);
@@ -47,8 +47,8 @@ public class PostRequest {
 					response.append(inputLine);
 				}
 				in.close();
-
-				stringResponse = new Gson().fromJson(response.toString(), String.class);
+				if(result)
+					stringResponse = new Gson().fromJson(response.toString(), String.class);
 			} else {
 				LOGGER.warn("Refusé");
 			}
@@ -58,21 +58,21 @@ public class PostRequest {
 		return stringResponse;
 	}
 	
-	public static String sendPartie(PacmanGameState state, String token) {
-		String url = "http://localhost:8080/Pacman_Score/Partie";
+	public static void sendPartie(PacmanGameState state, String token) {
+		String url = "http://localhost:8080/PacmanScore/Partie";
 		String urlParameters = 
 				  "victoire=" + (state.getWinner() == Winner.PACMANWINNER) + "&"
 				+ "score=" + state.getScore() + "&"
 				+ "token=" + token;
-		return sendPost(url, urlParameters);
+		sendPost(url, urlParameters, false);
 	}
 	
 	public static String getToken(LoginInformation login) {
-        String url = "http://localhost:8080/Pacman_Score/Authentification";
+        String url = "http://localhost:8080/PacmanScore/Authentification";
 		String urlParameters = 
 				  "username=" + login.getUsername() + "&"
 				+ "password=" + login.getPassword();
-		return sendPost(url, urlParameters);
+		return sendPost(url, urlParameters, true);
 	}
 	
 }
