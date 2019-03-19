@@ -22,11 +22,12 @@ public class NearestAttackStrategy implements Strategy {
 		Position nearest = targets.get(0);
 		int currentDistance = Math.abs(position.getX() - nearest.getX()) 
 				+ Math.abs(position.getY() - nearest.getY());
-		int testDistance = 0;
+		int testDistance = currentDistance;
 		
 		for(Position target : targets) {
 			testDistance = Math.abs(position.getX() - target.getX()) 
 					+ Math.abs(position.getY() - target.getY());
+			System.out.println(testDistance + " < " + currentDistance);
 			if(testDistance < currentDistance) {
 				currentDistance = testDistance;
 				nearest = target;

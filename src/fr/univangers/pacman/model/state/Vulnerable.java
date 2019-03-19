@@ -47,7 +47,7 @@ public class Vulnerable implements State {
 	 */
 	@Override
 	public void vulnerability() {
-		//
+		resetTurnVulnerable();
 	}
 	
 	/**

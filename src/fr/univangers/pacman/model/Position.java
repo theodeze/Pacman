@@ -22,6 +22,11 @@ public class Position {
 	}
 
 	@Override
+	public String toString() {
+		return "Position [x=" + x + ", y=" + y + "]";
+	}
+
+	@Override
 	public int hashCode() {
 		return Objects.hash(x,y);
 	}
@@ -40,7 +45,7 @@ public class Position {
 	}
 	
 	public boolean near(Position p) {
-		return distance(p) <= 2;
+		return distance(p) <= 1;
 	}
 
 	public int getX() {

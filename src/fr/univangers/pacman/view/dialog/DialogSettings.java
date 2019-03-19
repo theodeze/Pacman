@@ -45,6 +45,7 @@ public class DialogSettings {
 	    JPanel preview = new JPanel(new BorderLayout()); 
 	    
 	    listNameMaze = new JComboBox<>(new File("res/layouts").listFiles());
+	    listNameMaze.setSelectedIndex(6);
 	    listNameMaze.addActionListener(
 	    		arg -> {
 					try {

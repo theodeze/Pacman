@@ -17,31 +17,30 @@ import fr.univangers.pacman.model.Position;
  * la "trace".
  */
 public class TrackingStrategy implements Strategy {
-
 	private static final long serialVersionUID = -3703352132989593376L;
 	private static List<List<Double>> maze = new ArrayList<>();
 	
 	private void iniMaze(List<List<Boolean>> walls) {
-		int xSize = walls.size();
-		int ySize = walls.get(0).size();
-        for(int x = 0; x < xSize; x++) {
-        	maze.add(new ArrayList<>(Collections.nCopies(ySize, 0.0)));
-        	for(int y = 0; y < ySize; y++)
+		int ySize = walls.size();
+		int xSize = walls.get(0).size();
+        for(int y = 0; y < ySize; y++) {
+        	maze.add(new ArrayList<>(Collections.nCopies(xSize, 0.0)));
+        	for(int x = 0; x < xSize; x++)
         		if(walls.get(y).get(x))
         			setMaze(x, y, Double.POSITIVE_INFINITY);
         }
 	}
 	
 	private double getMaze(int x, int y) {
-		return maze.get(x).get(y);
+		return maze.get(y).get(x);
 	}
 	
 	private void setMaze(int x, int y, double value) {
-		maze.get(x).set(y, value);
+		maze.get(y).set(x, value);
 	}
 	
 	private void incMaze(int x, int y) {
-		maze.get(x).set(y, getMaze(x, y) + 1);
+		maze.get(y).set(x, getMaze(x, y) + 1);
 	}
 	
 	private void incMaze(List<Position> targets) {
@@ -50,13 +49,13 @@ public class TrackingStrategy implements Strategy {
 	}
 	
 	private void incAllMaze() {
-        for(int x = 0; x < maze.size(); x++)
-        	for(int y = 0; y < maze.get(0).size(); y++)
+        for(int x = 0; x < maze.get(0).size(); x++)
+        	for(int y = 0; y < maze.size(); y++)
         		incMaze(x, y);
 	}
 	
 	private void clearMaze(List<Position> targets) {
-		for(Position target : targets)
+		for(Position target : targets) 
 			setMaze(target.getX(), target.getY(), 0);
 	}
 	

@@ -21,8 +21,8 @@ public class PacmanGameSettings {
 	
 	public enum StrategyPacman {
 		ASTAR("A*"),
-		RANDOM("Basique"),
-		BASIC("Aléatoire"),
+		BASIC("Basique"),
+		RANDOM("Aléatoire"),
 		NONE("Rien");
 
 	    private final String text;
@@ -38,8 +38,8 @@ public class PacmanGameSettings {
 	public enum StrategyGhost {
 		ASTAR("A* (Difficile)"),
 		TRACKING("Pister (Normale)"),
-		RANDOM("Basique (Facile)"),
-		BASIC("Aléatoire (Facile)"),
+		BASIC("Basique (Facile)"),
+		RANDOM("Aléatoire (Facile)"),
 		NONE("Rien (Paisible)");
 
 	    private final String text;

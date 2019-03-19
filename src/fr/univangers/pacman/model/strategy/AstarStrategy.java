@@ -58,23 +58,23 @@ public abstract class AstarStrategy implements Strategy {
     }
     
     /**
-     * Vérifie que la case n'est pas occupé par un ennemie 
+     * Vérifie que la case n'est pas occupé par un ennemi 
      */
     private boolean isNotOccupiedByEnemies(Position me, List<Position> enemies, Position p) {
-    	for(Position enemie : enemies)
-    		// Verifie que l'agent n'est pas l'enemie ou si un enemie est proche
-    		if(!enemie.equals(me) && enemie.near(p))
+    	for(Position enemy : enemies)
+    		// Verifie que l'agent n'est pas l'ennemi ou si un ennemi est proche
+    		if(!enemy.equals(me) && enemy.near(p))
     			return false;
     	return true;
     }
     
     /**
-     * Vérifie que la case n'est pas occupé par un amie
+     * Vérifie que la case n'est pas occupé par un ami
      */
     private boolean isNotOccupiedByFriends(Position me, List<Position> enemies, Position p) {
-    	for(Position enemie : enemies)
-    		// Verifie que l'agent n'est pas l'amie ou si un amie est proche
-    		if(!enemie.equals(me) && enemie.equals(p))
+    	for(Position enemy : enemies)
+    		// Verifie que l'agent n'est pas l'ami ou si un ami est proche
+    		if(!enemy.equals(me) && enemy.equals(p))
     			return false;
     	return true;
     }
@@ -163,7 +163,7 @@ public abstract class AstarStrategy implements Strategy {
         while(!openList.isEmpty()) {
         	Position current = openList.poll();
 
-            // arrivé
+            // Arrivée
         	for(Position goal : goals)
 	            if(current.equals(goal))
 	                return new AbstractMap.SimpleImmutableEntry<>(
