@@ -63,6 +63,8 @@ public class PacmanServerController extends PacmanGameController implements Runn
 			} catch (IOException e1) {
 				LOGGER.warn("Connexion perdus");
 			}
+		} catch (IllegalArgumentException e) {
+			LOGGER.warn("Commande incomprise");
 		}
 	}
 

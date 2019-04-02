@@ -27,7 +27,6 @@ public class NearestAttackStrategy implements Strategy {
 		for(Position target : targets) {
 			testDistance = Math.abs(position.getX() - target.getX()) 
 					+ Math.abs(position.getY() - target.getY());
-			System.out.println(testDistance + " < " + currentDistance);
 			if(testDistance < currentDistance) {
 				currentDistance = testDistance;
 				nearest = target;

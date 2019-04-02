@@ -5,6 +5,8 @@ package fr.univangers.pacman.model;
  */
 public class PositionAgent extends Position {
 
+	private static final long serialVersionUID = 664647103831526780L;
+
 	public enum Dir { NORTH, SOUTH, EAST, WEST }
 	
 	private Dir dir;

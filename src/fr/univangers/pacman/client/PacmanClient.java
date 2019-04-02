@@ -8,6 +8,8 @@ import java.net.Socket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.gson.JsonSyntaxException;
+
 import fr.univangers.pacman.model.beans.PacmanGameState;
 import fr.univangers.pacman.model.game.Game;
 
@@ -38,6 +40,8 @@ public class PacmanClient extends Game {
 			state = PacmanGameState.fromJson(json);
 		} catch (IOException e) {
 			LOGGER.warn("Données incorrectes");
+		} catch (JsonSyntaxException e) {
+			LOGGER.warn("Problème json");
 		}
 	}
 

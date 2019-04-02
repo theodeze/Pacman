@@ -1,8 +1,11 @@
 package fr.univangers.pacman.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Position {
+public class Position implements Serializable{
+	
+	private static final long serialVersionUID = 2427909326969919352L;
 	int x;
 	int y;
 	

@@ -3,7 +3,6 @@ package fr.univangers.pacman.view.dialog;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.util.Arrays;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
