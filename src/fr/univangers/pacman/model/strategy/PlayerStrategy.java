@@ -3,6 +3,7 @@ package fr.univangers.pacman.model.strategy;
 import java.util.List;
 
 import fr.univangers.pacman.model.Agent;
+import fr.univangers.pacman.model.Position;
 import fr.univangers.pacman.model.PositionAgent;
 
 /**
@@ -14,7 +15,9 @@ public class PlayerStrategy implements Strategy {
 	private static final long serialVersionUID = -3421485434310896297L;
 
 	@Override
-	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {		PositionAgent position = agent.position();
+	public void move(Agent agent, List<Position> targets, List<Position> friends, 
+			List<Position> enemies, List<List<Boolean>> walls) {		
+		PositionAgent position = agent.position();
 		PositionAgent newPosition = new PositionAgent(position.getX(), position.getY(), position.getDir());
 		switch(position.getDir()) {
 		case EAST:
@@ -32,7 +35,7 @@ public class PlayerStrategy implements Strategy {
 		default:
 			break;	
 		}
-		agent.setPosition(walls[newPosition.getX()][newPosition.getY()] ? position : newPosition);
+		agent.setPosition(walls.get(newPosition.getY()).get(newPosition.getX()) ? position : newPosition);
 	}
 
 }

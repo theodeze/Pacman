@@ -3,6 +3,7 @@ package fr.univangers.pacman.model.strategy;
 import java.util.List;
 
 import fr.univangers.pacman.model.Agent;
+import fr.univangers.pacman.model.Position;
 import fr.univangers.pacman.model.PositionAgent;
 import fr.univangers.pacman.model.PositionAgent.Dir;
 
@@ -14,16 +15,16 @@ public class NearestAttackStrategy implements Strategy {
 
 	private static final long serialVersionUID = 1704735151191179215L;
 
-	private PositionAgent nearest(PositionAgent position, List<PositionAgent> targets) {
+	private Position nearest(PositionAgent position, List<Position> targets) {
 		if(targets.isEmpty())
 			return position;
 		
-		PositionAgent nearest = targets.get(0);
+		Position nearest = targets.get(0);
 		int currentDistance = Math.abs(position.getX() - nearest.getX()) 
 				+ Math.abs(position.getY() - nearest.getY());
-		int testDistance = 0;
+		int testDistance = currentDistance;
 		
-		for(PositionAgent target : targets) {
+		for(Position target : targets) {
 			testDistance = Math.abs(position.getX() - target.getX()) 
 					+ Math.abs(position.getY() - target.getY());
 			if(testDistance < currentDistance) {
@@ -36,24 +37,25 @@ public class NearestAttackStrategy implements Strategy {
 	}
 	
 	@Override
-	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {
+	public void move(Agent agent, List<Position> targets, List<Position> friends, 
+			List<Position> enemies, List<List<Boolean>> walls) {
 		PositionAgent position = agent.position();
 		PositionAgent newPosition = new PositionAgent(position.getX(), position.getY(), position.getDir());
-		PositionAgent target = nearest(position, targets);
+		Position target = nearest(position, targets);
 		
-		if((target.getX() > position.getX()) && (!walls[position.getX() + 1][position.getY()])) {
+		if((target.getX() > position.getX()) && (!walls.get(position.getY()).get(position.getX() + 1))) {
 			newPosition.setX(position.getX() + 1);
 			newPosition.setY(position.getY());
 			newPosition.setDir(Dir.EAST);
-		} else if ((target.getY() < position.getY()) && (!walls[position.getX()][position.getY() - 1])) {
+		} else if ((target.getY() < position.getY()) && (!walls.get(position.getY() - 1).get(position.getX()))) {
 			newPosition.setX(position.getX());
 			newPosition.setY(position.getY() - 1);
 			newPosition.setDir(Dir.NORTH);
-		} else if ((target.getY() > position.getY()) && (!walls[position.getX()][position.getY() + 1])) {
+		} else if ((target.getY() > position.getY()) && (!walls.get(position.getY() + 1).get(position.getX()))) {
 			newPosition.setX(position.getX());
 			newPosition.setY(position.getY() + 1);
 			newPosition.setDir(Dir.SOUTH);
-		} else if ((target.getX() < position.getX()) && (!walls[position.getX() - 1][position.getY()])) {
+		} else if ((target.getX() < position.getX()) && (!walls.get(position.getY()).get(position.getX() - 1))) {
 			newPosition.setX(position.getX() - 1);
 			newPosition.setY(position.getY());
 			newPosition.setDir(Dir.WEST);

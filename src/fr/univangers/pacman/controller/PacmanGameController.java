@@ -1,7 +1,7 @@
 package fr.univangers.pacman.controller;
 
-import fr.univangers.pacman.model.PacmanGame;
 import fr.univangers.pacman.model.PositionAgent.Dir;
+import fr.univangers.pacman.model.game.PacmanGame;
 
 /**
  * Classe qui permet de lier l'interface graphique du Pacman et le jeu Pacman
@@ -13,11 +13,7 @@ public class PacmanGameController implements GameController {
 	
 	private static final long serialVersionUID = 7744355889303690019L;
 	private PacmanGame pacmanGame;
-	
-	/**
-	 * 
-	 * @param pacmanGame
-	 */
+
 	public PacmanGameController(PacmanGame pacmanGame) {
 		this.pacmanGame = pacmanGame;
 	}
@@ -38,7 +34,7 @@ public class PacmanGameController implements GameController {
 	}
 
 	@Override
-	public void run() {
+	public void launch() {
 		pacmanGame.launch();
 	}
 

@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import fr.univangers.pacman.model.Agent;
-import fr.univangers.pacman.model.PositionAgent;
+import fr.univangers.pacman.model.Position;
 
 /**
  * Stratégie pister pour les fantomes
@@ -17,66 +17,65 @@ import fr.univangers.pacman.model.PositionAgent;
  * la "trace".
  */
 public class TrackingStrategy implements Strategy {
-
 	private static final long serialVersionUID = -3703352132989593376L;
 	private static List<List<Double>> maze = new ArrayList<>();
 	
-	private void iniMaze(boolean[][] walls) {
-		int xSize = walls.length;
-		int ySize = walls[0].length;
-        for(int x = 0; x < xSize; x++) {
-        	maze.add(new ArrayList<>(Collections.nCopies(ySize, 0.0)));
-        	for(int y = 0; y < ySize; y++)
-        		if(walls[x][y])
+	private void iniMaze(List<List<Boolean>> walls) {
+		int ySize = walls.size();
+		int xSize = walls.get(0).size();
+        for(int y = 0; y < ySize; y++) {
+        	maze.add(new ArrayList<>(Collections.nCopies(xSize, 0.0)));
+        	for(int x = 0; x < xSize; x++)
+        		if(walls.get(y).get(x))
         			setMaze(x, y, Double.POSITIVE_INFINITY);
         }
 	}
 	
 	private double getMaze(int x, int y) {
-		return maze.get(x).get(y);
+		return maze.get(y).get(x);
 	}
 	
 	private void setMaze(int x, int y, double value) {
-		maze.get(x).set(y, value);
+		maze.get(y).set(x, value);
 	}
 	
 	private void incMaze(int x, int y) {
-		maze.get(x).set(y, getMaze(x, y) + 1);
+		maze.get(y).set(x, getMaze(x, y) + 1);
 	}
 	
-	private void incMaze(List<PositionAgent> targets) {
-		for(PositionAgent target : targets)
+	private void incMaze(List<Position> targets) {
+		for(Position target : targets)
 			incMaze(target.getX(), target.getY());
 	}
 	
 	private void incAllMaze() {
-        for(int x = 0; x < maze.size(); x++)
-        	for(int y = 0; y < maze.get(0).size(); y++)
+        for(int x = 0; x < maze.get(0).size(); x++)
+        	for(int y = 0; y < maze.size(); y++)
         		incMaze(x, y);
 	}
 	
-	private void clearMaze(List<PositionAgent> targets) {
-		for(PositionAgent target : targets)
+	private void clearMaze(List<Position> targets) {
+		for(Position target : targets) 
 			setMaze(target.getX(), target.getY(), 0);
 	}
 	
-	private PositionAgent nextPosition(PositionAgent pAgent) {
-		PositionAgent newPosition = new PositionAgent(pAgent);
+	private Position nextPosition(Position pAgent) {
+		Position newPosition = new Position(pAgent);
 		double min = Double.POSITIVE_INFINITY;
-		List<PositionAgent> positions = new ArrayList<>();
-		PositionAgent cp1 = new PositionAgent(pAgent);
+		List<Position> positions = new ArrayList<>();
+		Position cp1 = new Position(pAgent);
 		cp1.setX(cp1.getX() + 1);
 		positions.add(cp1);
-		PositionAgent cp2 = new PositionAgent(pAgent);
+		Position cp2 = new Position(pAgent);
 		cp2.setX(cp2.getX() - 1);
 		positions.add(cp2);
-		PositionAgent cp3 = new PositionAgent(pAgent);
+		Position cp3 = new Position(pAgent);
 		cp3.setY(cp3.getY() + 1);
 		positions.add(cp3);
-		PositionAgent cp4 = new PositionAgent(pAgent);
+		Position cp4 = new Position(pAgent);
 		cp4.setY(cp4.getY() - 1);
 		positions.add(cp4);
-		for(PositionAgent currentPosition : positions)	
+		for(Position currentPosition : positions)	
 			if(getMaze(currentPosition.getX(), currentPosition.getY()) < min) {
 				min = getMaze(currentPosition.getX(), currentPosition.getY());
 				newPosition = currentPosition;
@@ -85,11 +84,11 @@ public class TrackingStrategy implements Strategy {
 	}
 	
 	@Override
-	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies,
-			boolean[][] walls) {
+	public void move(Agent agent, List<Position> targets, List<Position> friends, 
+			List<Position> enemies, List<List<Boolean>> walls) {
 		if(maze.isEmpty())
 			iniMaze(walls);
-		PositionAgent pAgent = agent.position();
+		Position pAgent = agent.position();
 		// incremente la position actuelle de l'agent
 		incMaze(pAgent.getX(), pAgent.getY());
 		incMaze(friends);

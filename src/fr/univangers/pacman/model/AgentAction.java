@@ -8,7 +8,8 @@ import java.util.List;
  */
 public interface AgentAction extends Serializable {
 	
-	public void move(List<PositionAgent> positionPacmans, List<PositionAgent> positionGhosts, List<PositionAgent> positionFoods, boolean[][] walls);
+	public void move(List<Position> positionPacmans, List<Position> positionGhosts, List<Position> positionFoods, 
+			List<List<Boolean>> walls);
 	public void goUp();
 	public void goLeft();
 	public void goDown();

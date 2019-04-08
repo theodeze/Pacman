@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.univangers.pacman.model.Agent;
+import fr.univangers.pacman.model.Position;
 import fr.univangers.pacman.model.PositionAgent;
 
 /**
@@ -16,9 +17,9 @@ public class EscapeStrategy implements Strategy {
 	/**
 	 * Calcul des distances vis-à-vis des enemies pour s'en éloigner le plus possible
 	 */
-	private int averageDistanceEnemies(PositionAgent position, List<PositionAgent> enemies) {
+	private int averageDistanceEnemies(PositionAgent position, List<Position> enemies) {
 		int averageDistance = 0;
-		for(PositionAgent enemie : enemies) {
+		for(Position enemie : enemies) {
 			averageDistance += Math.abs(position.getX() - enemie.getX()) 
 					+ Math.abs(position.getY() - enemie.getY());
 		}
@@ -26,7 +27,8 @@ public class EscapeStrategy implements Strategy {
 	}
 	
 	@Override
-	public void move(Agent agent, List<PositionAgent> targets, List<PositionAgent> friends, List<PositionAgent> enemies, boolean[][] walls) {
+	public void move(Agent agent, List<Position> targets, List<Position> friends, 
+			List<Position> enemies, List<List<Boolean>> walls) {
 		PositionAgent position = agent.position();
 		int currentAverageDistance = averageDistanceEnemies(position, enemies);
 		int testAverageDistancePacman = 0;
@@ -47,7 +49,7 @@ public class EscapeStrategy implements Strategy {
 		cp4.setY(cp4.getY() - 1);
 		positions.add(cp4);
 		for(PositionAgent currentPosition : positions)	
-			if(!walls[position.getX()][position.getY()]) {
+			if(!walls.get(position.getY()).get(position.getX())) {
 				testAverageDistancePacman = averageDistanceEnemies(currentPosition, enemies);
 				if(currentAverageDistance < testAverageDistancePacman) {
 					currentAverageDistance = testAverageDistancePacman;

@@ -1,7 +1,7 @@
 package fr.univangers.pacman.controller;
 
 import fr.univangers.pacman.model.PositionAgent.Dir;
-import fr.univangers.pacman.model.SimpleGame;
+import fr.univangers.pacman.model.game.SimpleGame;
 
 public class SimpleGameController implements GameController {
 
@@ -28,7 +28,7 @@ public class SimpleGameController implements GameController {
 	}
 
 	@Override
-	public void run() {
+	public void launch() {
 		simpleGame.launch();
 	}
 
